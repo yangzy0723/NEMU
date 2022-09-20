@@ -49,7 +49,7 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
-  return -1;
+  return 0;
 }
 
 static int cmd_help(char *args);
@@ -98,6 +98,7 @@ void sdb_set_batch_mode() {
 
 void sdb_mainloop() {
   if (is_batch_mode) {
+
     cmd_c(NULL);
     return;
   }
