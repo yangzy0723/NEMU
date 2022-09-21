@@ -134,7 +134,7 @@ static int cmd_info(char *args)
 	if(strlen(args) == 1)
 	{
 		if(*args == 'r') isa_reg_display();
-		else if(*args == 'w')	printf("unfinished");
+		else if(*args == 'w')	printf("unfinished\n");
 		else	printf("Unknown command '%s'\n", args);
 	}
 	else
