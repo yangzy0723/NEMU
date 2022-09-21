@@ -55,6 +55,8 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -63,6 +65,7 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+	{ "si", "Let the progam execute N instructions and then suspend the execution. When N is not given, it defaults to 1", cmd_si }
 
   /* TODO: Add more commands */
 
@@ -93,6 +96,28 @@ static int cmd_help(char *args) {
   return 0;
 }
 
+static int cmd_si(char *args){
+	
+	char *arg = strtok(NULL, " ");
+
+	if(arg == NULL){
+		cpu_exec(1);	
+	}
+
+	else{
+		int length = strlen(arg);
+		int num = 0;
+		for(int i = 0; i < length; i++){
+			num = num * 10 + (*arg - '0');
+			arg++;
+		}
+		cpu_exec(num);
+	}
+
+	return 0;
+
+}
+
 void sdb_set_batch_mode() {
   is_batch_mode = true;
 }
@@ -102,6 +127,7 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
+
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
