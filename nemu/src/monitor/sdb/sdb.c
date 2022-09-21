@@ -99,7 +99,6 @@ void sdb_set_batch_mode() {
 
 void sdb_mainloop() {
   if (is_batch_mode) {
-		printf("1");
     cmd_c(NULL);
     return;
   }
@@ -108,7 +107,7 @@ void sdb_mainloop() {
 
     /* extract the first token as the command */
     char *cmd = strtok(str, " ");
-    if (cmd == NULL) { continue; }
+    if (cmd == NULL) {printf("yzy"); continue; }
 
     /* treat the remaining string as the arguments,
      * which may need further parsing
