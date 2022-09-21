@@ -133,7 +133,7 @@ static int cmd_info(char *args)
 {
 	if(args == NULL)
 	{
-		printf("Unknown command");//此处未传入参数，直接视为无效指令。
+		printf("Unknown command\n");//此处未传入参数，直接视为无效指令。
 		return 0;
 	}
 	if(strlen(args) == 1)
