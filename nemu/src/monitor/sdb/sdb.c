@@ -49,7 +49,7 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
-  nemu_state.state = NEMU_QUIT;
+  nemu_state.state = NEMU_QUIT;//更改nemu_state状态，安全退出，见utlis/state.c
   return -1;
 }
 
@@ -118,7 +118,7 @@ static int cmd_si(char *args)
 			{	
 				if_leagl_cmd = 0;
 				break;
-			}
+			}//若传入无效参数，空格，字母啥的，直接返回Unknown command。
 		}
 		if(if_leagl_cmd == 1)
 			cpu_exec(num);
@@ -131,6 +131,8 @@ static int cmd_si(char *args)
 /* cmd_info */
 static int cmd_info(char *args)
 {
+	if(args == NULL)
+		printf("Unknown command");//此处未传入参数，直接视为无效指令。
 	if(strlen(args) == 1)
 	{
 		if(*args == 'r') isa_reg_display();
