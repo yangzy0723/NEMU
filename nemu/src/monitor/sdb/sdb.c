@@ -104,6 +104,7 @@ static int cmd_si(char *args)
 
 	else
 	{
+		char* record = args;
 		int length = strlen(args);
 		int num = 0;
 		int if_leagl_cmd = 1;
@@ -122,7 +123,7 @@ static int cmd_si(char *args)
 		if(if_leagl_cmd == 1)
 			cpu_exec(num);
 		else
-			printf("Unknown command '%s'\n", args);
+			printf("Unknown command '%s'\n", record);
 	}
 	return 0;
 }
