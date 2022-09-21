@@ -57,6 +57,8 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args);
 
+static int cmd_info(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -65,8 +67,8 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-	{ "si", "si [N]:Let the progam execute N instructions and then suspend the execution. When N is not given, it defaults to 1", cmd_si }
-
+	{ "si", "si [N]:Let the progam execute N instructions and then suspend the execution. When N is not given, it defaults to 1", cmd_si },
+	{ "info", "info r: print register status; info w: print watch point information", cmd_info }
   /* TODO: Add more commands */
 
 };
@@ -123,6 +125,20 @@ static int cmd_si(char *args)
 		else
 			printf("Unknown command '%s'\n", record);
 	}
+	return 0;
+}
+
+/* cmd_info */
+static int cmd_info(char *args)
+{
+	if(strlen(args) == 1)
+	{
+		if(*args == 'r') isa_reg_display();
+		else if(*args == 'w')	printf("unfinished");
+		else	printf("Unknown command '%s'\n", args);
+	}
+	else
+		printf("Unknown command '%s'\n", args);
 	return 0;
 }
 
