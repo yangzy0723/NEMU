@@ -97,32 +97,32 @@ static int cmd_help(char *args) {
 }
 
 /* cmd_si */
-static int cmd_si(char *args){
-	
-	char *arg = strtok(NULL, " ");
-
-	if(arg == NULL)
+static int cmd_si(char *args)
+{
+	if(args == NULL)
 		cpu_exec(1);	
 
 	else
 	{
-		int length = strlen(arg);
+		int length = strlen(args);
 		int num = 0;
 		int if_leagl_cmd = 1;
-		for(int i = 0; i < length; i++)
+		for(int i = 0; i < length; i++, args++)
 		{
-			if('0' <= *arg && *arg <= '9')
+			if('0' <= *args && *args <= '9')
 			{
-				num = num * 10 + (*arg - '0');
-				arg++;
+				num = num * 10 + (*args - '0');
 			}
 			else
+			{	
 				if_leagl_cmd = 0;
+				break;
+			}
 		}
 		if(if_leagl_cmd == 1)
 			cpu_exec(num);
 		else
-			printf("Unknown command '%s'\n", arg);
+			printf("Unknown command '%s'\n", args);
 	}
 	return 0;
 }
