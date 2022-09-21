@@ -25,7 +25,7 @@ const char *regs[] = {
 
 void isa_reg_display() {
 	for(int i = 0; i < 32; i++)
-		printf("%s\t%#X\n", reg_name(i, -1), gpr(i));
+		printf("%s\t%#x\n", reg_name(i, -1), gpr(i));
 	//reg_name(int x, int width)是reg.h的函数，调用它返回寄存器名称，因为第二个参数不知道有什么用，暂时传入-1;gpr(int x)是reg.h里的宏定义。
 }
 
