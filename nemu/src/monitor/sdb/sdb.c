@@ -111,9 +111,7 @@ static int cmd_si(char *args)
 		for(int i = 0; i < length; i++, args++)
 		{
 			if('0' <= *args && *args <= '9')
-			{
 				num = num * 10 + (*args - '0');
-			}
 			else
 			{	
 				if_leagl_cmd = 0;
