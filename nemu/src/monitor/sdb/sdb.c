@@ -96,26 +96,35 @@ static int cmd_help(char *args) {
   return 0;
 }
 
+/* cmd_si */
 static int cmd_si(char *args){
 	
 	char *arg = strtok(NULL, " ");
 
-	if(arg == NULL){
+	if(arg == NULL)
 		cpu_exec(1);	
-	}
 
-	else{
+	else
+	{
 		int length = strlen(arg);
 		int num = 0;
-		for(int i = 0; i < length; i++){
-			num = num * 10 + (*arg - '0');
-			arg++;
+		int if_leagl_cmd = 1;
+		for(int i = 0; i < length; i++)
+		{
+			if('0' <= *arg && *arg <= '9')
+			{
+				num = num * 10 + (*arg - '0');
+				arg++;
+			}
+			else
+				if_leagl_cmd = 0;
 		}
-		cpu_exec(num);
+		if(if_leagl_cmd == 1)
+			cpu_exec(num);
+		else
+			printf("Unknown command '%s'\n", arg);
 	}
-
 	return 0;
-
 }
 
 void sdb_set_batch_mode() {
