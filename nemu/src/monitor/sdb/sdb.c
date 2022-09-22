@@ -170,11 +170,10 @@ static int cmd_x(char *args)
 		int num = 0;
 		for(; *arg != 0; arg++)
 			num = num * 10 + *arg - '0';
-		printf("%d",num);
 		char* address_start = strtok(NULL, " ");
 		char* record = address_start;
 		int where = 0;
-		while(address_start != NULL && address_start + 2 != 0)
+		while(address_start != NULL && *(address_start + 2) != 0)
 		{
 			char* position = address_start + 2;
 			if(*position >= '0' && *position <= '9')
