@@ -171,7 +171,7 @@ static int cmd_x(char *args)
 		int num = 0;
 		for(int i = 0; *(arg + i) != 0; i++)
 			if(*(arg + i) >= '0' && *(arg + i) <= '9')
-				num = num * 10 + *(arg + 1) - '0';
+				num = num * 10 + *(arg + i) - '0';
 			else
 			{
 				printf("Unknown command '%s'\n", arg);
