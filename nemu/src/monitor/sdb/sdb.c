@@ -193,7 +193,7 @@ static int cmd_x(char *args)
 			{
 				printf("Unknown command '%s'\n", address_start);
 				return 0;
-			}
+			}//数字命令不合法，打印报错信息。
 		}
 		for(int i = 0; i < num; i++)
 			printf("%#X\t%#X\n",where+i, vaddr_read(where, 4));
