@@ -159,7 +159,8 @@ static int cmd_x(char *args)
 		printf("Unknown command\n");//此处未传入参数，直接视为无效指令。
 		return 0;
 	}
-	char* arg = strtok(args, " ");
+
+	char* arg = strtok(args, " ");	
 	if(arg == NULL)
 	{
 		printf("Unknown command\n");//无参数，直接视为无效指令。
@@ -168,20 +169,31 @@ static int cmd_x(char *args)
 	else
 	{
 		int num = 0;
-		for(; *arg != 0; arg++)
-			num = num * 10 + *arg - '0';
+		for(int i = 0; *(arg + i) != 0; i++)
+			if(*(arg + i) >= '0' && *(arg + i) <= '9')
+				num = num * 10 + *(arg + 1) - '0';
+			else
+			{
+				printf("Unknown command '%s'\n", arg);
+				return 0;
+			}//第一个数字命令出现错误，打印。
+
 		char* address_start = strtok(NULL, " ");
 		int where = 0;
-		while(address_start != NULL && *(address_start + 2) != 0)
+		for(int i = 0; address_start != NULL && *(address_start + i + 2) != 0; i++)
 		{
-			char* position = address_start + 2;
+			char* position = address_start + 2 + i;
 			if(*position >= '0' && *position <= '9')
 				where = where*16 + *position - '0';
 			else if(*position >= 'a' && *position <= 'f')
 				where = where*16 + *position - 'a' + 10;
 			else if(*position >= 'A' && *position <= 'F')
 				where = where*16 + *position - 'A' + 10;
-			address_start++;
+			else
+			{
+				printf("Unknown command '%s'\n", address_start);
+				return 0;
+			}
 		}
 		for(int i = 0; i < num; i++)
 			printf("%#X\t%#X\n",where+i, vaddr_read(where, 4));
