@@ -171,7 +171,6 @@ static int cmd_x(char *args)
 		for(; *arg != 0; arg++)
 			num = num * 10 + *arg - '0';
 		char* address_start = strtok(NULL, " ");
-		char* record = address_start;
 		int where = 0;
 		while(address_start != NULL && *(address_start + 2) != 0)
 		{
@@ -185,7 +184,7 @@ static int cmd_x(char *args)
 			address_start++;
 		}
 		for(int i = 0; i < num; i++)
-			printf("%s\t%#X\n",record+i, vaddr_read(where, 4));
+			printf("%#X\t%#X\n",where+i, vaddr_read(where, 4));
 	}
 	return 0;
 }
