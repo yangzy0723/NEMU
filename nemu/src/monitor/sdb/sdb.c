@@ -196,7 +196,7 @@ static int cmd_x(char *args)
 			}//数字命令不合法，打印报错信息。
 		}
 		for(int i = 0; i < num; i++)
-			printf("%#X\t%#X\n",where+i, vaddr_read(where+i*4, 4));
+			printf("%#X\t%#08X\n",where+i, vaddr_read(where+i*4, 4));
 	}
 	return 0;
 }
