@@ -185,7 +185,7 @@ static int cmd_x(char *args)
 			address_start++;
 		}
 		for(int i = 0; i < num; i++)
-			printf("%s\t%#X\n",record, vaddr_read(where, 4));
+			printf("%s\t%#X\n",record+i, vaddr_read(where, 4));
 	}
 	return 0;
 }
