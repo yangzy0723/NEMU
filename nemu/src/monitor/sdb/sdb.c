@@ -160,7 +160,6 @@ static int cmd_x(char *args)
 		return 0;
 	}
 	char* arg = strtok(args, " ");
-	printf("%s",arg);
 	if(arg == NULL)
 	{
 		printf("Unknown command\n");//无参数，直接视为无效指令。
@@ -171,6 +170,7 @@ static int cmd_x(char *args)
 		int num = 0;
 		for(; *arg != 0; arg++)
 			num = num * 10 + *arg - '0';
+		printf("%d",num);
 		char* address_start = strtok(NULL, " ");
 		char* record = address_start;
 		int where = 0;
