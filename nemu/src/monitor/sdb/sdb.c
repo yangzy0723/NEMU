@@ -160,6 +160,7 @@ static int cmd_x(char *args)
 		return 0;
 	}
 	char* arg = strtok(args, " ");
+	printf("%s",arg);
 	if(arg == NULL)
 	{
 		printf("Unknown command\n");//无参数，直接视为无效指令。
