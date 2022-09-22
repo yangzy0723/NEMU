@@ -23,6 +23,7 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+word_t vaddr_read(word_t addr, int len);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -59,6 +60,8 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_x(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -68,7 +71,8 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "si [N]:Let the progam execute N instructions and then suspend the execution. When N is not given, it defaults to 1", cmd_si },
-	{ "info", "info r: print register status; info w: print watch point information", cmd_info }
+	{ "info", "info r: print register status; info w: print watch point information", cmd_info },
+	{ "x", "x N EXPR: Figure out the value of EXPR, take the result as the starting memory address, and output N consecutive 4 bytes in hexadecimal form", cmd_x }
   /* TODO: Add more commands */
 
 };
@@ -144,6 +148,45 @@ static int cmd_info(char *args)
 	}
 	else
 		printf("Unknown command '%s'\n", args);
+	return 0;
+}
+
+/* cmd_x */
+static int cmd_x(char *args)
+{
+	if(args == NULL)
+	{
+		printf("Unknown command\n");//此处未传入参数，直接视为无效指令。
+		return 0;
+	}
+	char* arg = strtok(args, " ");
+	if(arg == NULL)
+	{
+		printf("Unknown command\n");//无参数，直接视为无效指令。
+		return 0;
+	}
+	else
+	{
+		int num = 0;
+		for(; *arg != 0; arg++)
+			num = num * 10 + *arg - '0';
+		char* address_start = strtok(NULL, " ");
+		char* record = address_start;
+		int where = 0;
+		while(address_start != NULL && address_start + 2 != 0)
+		{
+			char* position = address_start + 2;
+			if(*position >= '0' && *position <= '9')
+				where = where*16 + *position - '0';
+			else if(*position >= 'a' && *position <= 'f')
+				where = where*16 + *position - 'a' + 10;
+			else if(*position >= 'A' && *position <= 'F')
+				where = where*16 + *position - 'A' + 10;
+			address_start++;
+		}
+		for(int i = 0; i < num; i++)
+			printf("%s\t%#X\n",record, vaddr_read(where, 4));
+	}
 	return 0;
 }
 
