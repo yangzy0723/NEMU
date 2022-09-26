@@ -42,25 +42,25 @@ static struct rule {
 	{"-", '-'},						// subtraction
 	{"\\*", '*'},					// mul
 	{"/",'/'},						// divide
-	{"[0,9]*",TK_NUM},
+	{"[0,9]*",TK_NUM},    // number
 };
 
 #define NR_REGEX ARRLEN(rules)
 
-static regex_t re[NR_REGEX] = {};
+static regex_t re[NR_REGEX] = {};//用于存储编译好的正则表达式。
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
  */
 void init_regex() {
   int i;
-  char error_msg[128];
+  char error_msg[128];//存放错误信息的字符串
   int ret;
 
   for (i = 0; i < NR_REGEX; i ++) {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
-      regerror(ret, &re[i], error_msg, 128);
+      regerror(ret, &re[i], error_msg, 128);//ret是错误编号，err_msg用于储存regerror（）返回的错误信息。
       panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
     }
   }
@@ -69,16 +69,15 @@ void init_regex() {
 typedef struct token {
   int type;
   char str[32];
-} Token;
+} Token;//Token是数据类型
 
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
-static bool make_token(char *e) {
+static bool make_token(char *e) {//e是待解析的目标字符串。
   int position = 0;
   int i;
   regmatch_t pmatch;
-
   nr_token = 0;
 
   while (e[position] != '\0') {
@@ -97,8 +96,20 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
-        switch (rules[i].token_type) {
+        switch (rules[i].token_type)
+				{
+					case TK_NOTYPE:;break;
+					case '+':{tokens[nr_token].type = '+'; nr_token++;}; break;
+					case TK_EQ:{tokens[nr_token].type = TK_EQ; nr_token++;}; break;
+					case '-':{tokens[nr_token].type = '-'; nr_token++;}; break;
+					case '*':{tokens[nr_token].type = '*'; nr_token++;}; break;
+					case '/':{tokens[nr_token].type = '/'; nr_token++;}; break;
+					case TK_NUM:
+									{
+										tokens[nr_token].type = TK_NUM;
+										for(int i = substr_len-1; i >= 0; i--)
+												tokens[nr_token].str[substr_len - 1 - i] = substr_start[i]; //将123存入str数组的模式为3 2 1。
+									}; break;		
           default: TODO();
         }
 
