@@ -216,7 +216,7 @@ int cmd_p(char* args)
 	{
 		bool success;
 		uint32_t ans = expr(args, &success);
-		printf("%d\n", ans);
+		printf("%u\n", ans);
 		return 0;
 	}
 }
