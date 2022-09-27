@@ -179,6 +179,7 @@ bool check_parentheses(int p, int q)
 
 word_t eval(bool* success, int p, int q)
 {
+	printf("yzy\n");
 	if(p > q)
 	{
 		*success = false;
