@@ -225,7 +225,7 @@ word_t eval(bool* success, int p, int q)
 		{
 			*success = false;
 			return 0;
-		}
+		}//括号不匹配，返回非法值。
 		int val1 = eval(success, p, op - 1);
 		int val2 = eval(success, op + 1, q);
 		switch(tokens[op].type)
