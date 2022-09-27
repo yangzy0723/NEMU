@@ -185,9 +185,9 @@ word_t eval(bool* success, int p, int q)
 	{
 		if(tokens[p].type == TK_NUM)
 		{
-			printf("123\n");
 			int i = 0;
 			word_t result = 0;
+			printf("%c\n",tokens[p].str[0]);
 			while(tokens[p].str[i] != 0)
 			{
 				result = result*10 + tokens[p].str[i] - '0';
