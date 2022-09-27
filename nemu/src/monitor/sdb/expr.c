@@ -234,7 +234,7 @@ word_t eval(bool* success, int p, int q)
 			case '-': return val1-val2;
 			case '*': return val1*val2;
 			case '/': return val1/val2;
-			default: panic("Unfinished!");
+			default: {*success = false; return 0;};
 		}
 	}
 }
