@@ -185,6 +185,7 @@ word_t eval(bool* success, int p, int q)
 	{
 		if(tokens[p].type == TK_NUM)
 		{
+			printf("123\n");
 			int i = 0;
 			word_t result = 0;
 			while(tokens[p].str[i] != 0)
@@ -223,7 +224,6 @@ word_t eval(bool* success, int p, int q)
 			else if(tokens[i].type == ')')
 				top--;
 		}
-		printf("%d",op);
 		int val1 = eval(success, p, op - 1);
 		int val2 = eval(success, op + 1, q);
 		switch(tokens[op].type)
