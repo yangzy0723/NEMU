@@ -82,6 +82,7 @@ static struct {
 
 #define NR_CMD ARRLEN(cmd_table)
 
+/* cmd_help */
 static int cmd_help(char *args) {
   /* extract the first argument */
   char *arg = strtok(NULL, " ");
@@ -199,7 +200,7 @@ static int cmd_x(char *args)
 			}//数字命令不合法，打印报错信息。
 		}
 		for(int i = 0; i < num; i++)
-			printf("%#X\t%#010X\n",where+4*i, vaddr_read(where+i*4, 4));
+			printf("%#x\t%#010x\n",where+4*i, vaddr_read(where+i*4, 4));
 	}
 	return 0;
 }
