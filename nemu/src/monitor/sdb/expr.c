@@ -148,9 +148,8 @@ word_t expr(char *e, bool *success)
     *success = false;
     return 0;
   }
-	printf("%d",tokens_size);
   /* TODO: Insert codes to evaluate the expression. */
-	return eval(success, 0, tokens_size - 1);
+	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
 
 bool check_parentheses(int p, int q)
@@ -224,6 +223,7 @@ word_t eval(bool* success, int p, int q)
 			else if(tokens[i].type == ')')
 				top--;
 		}
+		printf("%d",op);
 		int val1 = eval(success, p, op - 1);
 		int val2 = eval(success, op + 1, q);
 		switch(tokens[op].type)
