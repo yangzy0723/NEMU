@@ -62,6 +62,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_p(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -72,7 +74,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "si [N]:Let the progam execute N instructions and then suspend the execution. When N is not given, it defaults to 1", cmd_si },
 	{ "info", "info r: print register status; info w: print watch point information", cmd_info },
-	{ "x", "x N EXPR: Figure out the value of EXPR, take the result as the starting memory address, and output N consecutive 4 bytes in hexadecimal form", cmd_x }
+	{ "x", "x N EXPR: Figure out the value of EXPR, take the result as the starting memory address, and output N consecutive 4 bytes in hexadecimal form", cmd_x },
+	{ "p", "p EXPR: expression evaluation", cmd_p}
   /* TODO: Add more commands */
 
 };
@@ -199,6 +202,23 @@ static int cmd_x(char *args)
 			printf("%#X\t%#010X\n",where+4*i, vaddr_read(where+i*4, 4));
 	}
 	return 0;
+}
+
+/* cmd_p */
+int cmd_p(char* args)
+{
+	if(args == NULL)
+	{
+		printf("Unknown command\n");
+		return 0;
+	}
+	else
+	{
+		bool success;
+		uint32_t ans = expr(args, &success);
+		printf("%d\n", ans);
+		return 0;
+	}
 }
 
 void sdb_set_batch_mode() {
