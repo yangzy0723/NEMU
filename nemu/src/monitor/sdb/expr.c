@@ -151,18 +151,14 @@ word_t expr(char *e, bool *success)
   }
   /* TODO: Insert codes to evaluate the expression. */
 
-	printf("%d\n",tokens_size);
+	//printf("%d\n",tokens_size);
 	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
 
 bool check_parentheses(int p, int q)
 {
-	if(!(tokens[p].type == '(' && tokens[q].type == ')'))
-		return false;
-	else
-	{
-		int top = 0;
-		for(int i = p; i <= q; i++)
+	int top = 0;
+	for(int i = p+1; i <= q-1; i++)
 			if(tokens[i].type == '(')
 				top++;
 			else if(tokens[i].type == ')')
@@ -171,10 +167,11 @@ bool check_parentheses(int p, int q)
 				if(top < 0)
 					return false;
 			}
-		if(top != 0)
-			return false;
+	if(top != 0)
+		return false;
+	if(tokens[p].type == '(' && tokens[q].type == ')')
 		return true;
-	}
+	return false;
 }
 
 word_t eval(bool* success, int p, int q)
