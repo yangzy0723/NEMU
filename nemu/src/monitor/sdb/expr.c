@@ -187,7 +187,6 @@ word_t eval(bool* success, int p, int q)
 		{
 			int i = 0;
 			word_t result = 0;
-			printf("%s\n", tokens[p].str);
 			while(tokens[p].str[i] != 0)
 			{
 				result = result * 10 + tokens[p].str[i] - '0';
