@@ -41,9 +41,15 @@ static struct rule {
   {"==", TK_EQ},        // equal
 	{"-", '-'},						// subtraction
 	{"\\*", '*'},					// mul
-	{"/",'/'},						// divide
+	{"/", '/'},						// divide
+	{"\\)", ')'},					// right parentheses
+	{"\\(", '('},         // left parentheses
 	{"[0,9]*",TK_NUM},    // number
 };
+
+word_t eval(bool* success, int p, int q);
+
+bool check_parentheses(int p, int q);
 
 #define NR_REGEX ARRLEN(rules)
 
@@ -71,19 +77,25 @@ typedef struct token {
   char str[32];
 } Token;//Token是数据类型
 
+static int tokens_size = 0;
+
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
-static bool make_token(char *e) {//e是待解析的目标字符串。
+static bool make_token(char *e)//e是待解析的目标字符串。 
+{
   int position = 0;
   int i;
   regmatch_t pmatch;
   nr_token = 0;
 
-  while (e[position] != '\0') {
+  while (e[position] != '\0') 
+	{
     /* Try all rules one by one. */
-    for (i = 0; i < NR_REGEX; i ++) {
-      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+    for (i = 0; i < NR_REGEX; i ++) 
+		{
+      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) 
+			{
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
@@ -104,11 +116,14 @@ static bool make_token(char *e) {//e是待解析的目标字符串。
 					case '-':{tokens[nr_token].type = '-'; nr_token++;}; break;
 					case '*':{tokens[nr_token].type = '*'; nr_token++;}; break;
 					case '/':{tokens[nr_token].type = '/'; nr_token++;}; break;
+					case '(':{tokens[nr_token].type = '('; nr_token++;}; break;
+					case ')':{tokens[nr_token].type = ')'; nr_token++;}; break;
 					case TK_NUM:
 									{
 										tokens[nr_token].type = TK_NUM;
 										for(int i = substr_len-1; i >= 0; i--)
 												tokens[nr_token].str[substr_len - 1 - i] = substr_start[i]; //将123存入str数组的模式为3 2 1。
+										nr_token++;
 									}; break;		
           default: TODO();
         }
@@ -116,24 +131,109 @@ static bool make_token(char *e) {//e是待解析的目标字符串。
       }
     }
 
-    if (i == NR_REGEX) {
+    if (i == NR_REGEX) 
+		{
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
   }
-
+  tokens_size = nr_token;
   return true;
 }
 
 
-word_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
+word_t expr(char *e, bool *success) 
+{
+  if (!make_token(e)) 
+	{
     *success = false;
     return 0;
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+	return eval(success, 0, tokens_size - 1);
+}
 
-  return 0;
+bool check_parentheses(int p, int q)
+{
+	if(!(tokens[p].type == '(' && tokens[q].type == ')'))
+		return false;
+	else
+	{
+		int top = 0;
+		for(int i = p; i <= q; i++)
+			if(tokens[i].type == '(')
+				top++;
+			else if(tokens[i].type == ')')
+			{
+				top--;
+				if(top < 0)
+					return false;
+			}
+		if(top != 0)
+			return false;
+		return true;
+	}
+}
+
+word_t eval(bool* success, int p, int q)
+{
+	if(p > q)
+	{
+		*success = false;
+		return 0;
+	}
+	else if(p == q)
+	{
+		if(tokens[p].type == TK_NUM)
+		{
+			int i = 0;
+			word_t result = 0;
+			while(tokens[p].str[i] != 0)
+			{
+				result = result*10 + tokens[p].str[i] - '0';
+				i++;
+			}
+			return result;
+		}
+		else
+		{
+			*success = false;
+			return 0;
+		}
+	}
+	else if(check_parentheses(p, q))
+		return eval(success, p + 1, q - 1);
+	else
+	{
+		int top = 0;
+		int op = 0;
+		for(int i = p; i <= q; i++)
+		{
+			if(tokens[i].type == '+' || tokens[i].type == '-')
+			{
+				if(top == 0)
+					op = i;
+			}
+			else if(tokens[i].type == '*' || tokens[i].type == '/')
+			{
+				if(op > 0 && tokens[op].type != '-' && tokens[op].type != '+')
+					op = i;
+			}
+			else if(tokens[i].type == '(')
+				top++;
+			else if(tokens[i].type == ')')
+				top--;
+		}
+		int val1 = eval(success, p, op - 1);
+		int val2 = eval(success, op + 1, q);
+		switch(tokens[op].type)
+		{
+			case '+': return val1+val2;
+			case '-': return val1-val2;
+			case '*': return val1*val2;
+			case '/': return val1/val2;
+			default: panic("Unfinished!");
+		}
+	}
 }
