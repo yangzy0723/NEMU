@@ -125,6 +125,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 												tokens[nr_token].str[substr_len - 1 - j] = substr_start[j]; //将123存入str数组的模式为3 2 1。
 										nr_token++;
 									}; break;		
+									printf("yzy\n");
           default: TODO();
         }
         break;
