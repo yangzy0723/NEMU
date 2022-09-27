@@ -107,6 +107,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
+				printf("%d\n",rules[i].token_type);
         switch (rules[i].token_type)
 				{
 					case TK_NOTYPE:;break;
