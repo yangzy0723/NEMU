@@ -207,19 +207,17 @@ word_t eval(bool* success, int p, int q)
 	else
 	{
 		int top = 0;
-		int op = -1;
+		int op = 0;
+		int if_plus_sub = 0;
 		for(int i = p; i <= q; i++)
 		{
-			if(tokens[i].type == '+' || tokens[i].type == '-')
+			if((tokens[i].type == '+' || tokens[i].type == '-') && top == 0)
 			{
-				if(top == 0)
-					op = i;
+				op = i;
+				if_plus_sub = 1;
 			}
-			else if(tokens[i].type == '*' || tokens[i].type == '/')
-			{
-				if(op >= 0 && tokens[op].type != '-' && tokens[op].type != '+')
-					op = i;
-			}
+			else if((tokens[i].type == '*' || tokens[i].type == '/') && if_plus_sub == 0 && top == 0)
+				op = i;
 			else if(tokens[i].type == '(')
 				top++;
 			else if(tokens[i].type == ')')
