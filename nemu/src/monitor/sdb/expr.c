@@ -121,7 +121,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 									{
 										tokens[nr_token].type = TK_NUM;
 										for(int j = 0; j < substr_len; j++)
-											tokens[nr_token].str[j] = substr_start[j]; //将123存入str数组的模式为3 2 1。
+											tokens[nr_token].str[j] = substr_start[j]; //将123存入str数组的模式为1 2 3 \0。
 										tokens[nr_token].str[substr_len] = 0;//加一个终止符，保证前面的运算结果存储不会影响到后面的。
 										nr_token++;
 									}; break;		
@@ -234,16 +234,16 @@ word_t eval(bool* success, int p, int q)
 			case '-': return val1-val2;
 			case '*': return val1*val2;
 			case '/': 
-			{
-				if(val2 == 0)
 				{
-					printf("Denominator is 0\n");
-					*success = false;
-					return 0;
-				}
-				else
-					return val1/val2;
-			};
+					if(val2 == 0)
+					{
+						printf("Denominator is 0\n");
+						*success = false;
+						return 0;
+					}
+					else
+						return val1/val2;
+				};
 			default: {*success = false; return 0;};
 		}
 	}
