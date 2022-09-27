@@ -205,7 +205,7 @@ word_t eval(bool* success, int p, int q)
 	else
 	{
 		int top = 0;
-		int op = 0;
+		int op = -1;
 		int if_plus_sub = 0;
 		for(int i = p; i <= q; i++)
 		{
@@ -221,11 +221,11 @@ word_t eval(bool* success, int p, int q)
 			else if(tokens[i].type == ')')
 				top--;
 		}
-		if(top != 0)
+		if(top != 0 || op == -1)
 		{
 			*success = false;
 			return 0;
-		}//括号不匹配，返回非法值。
+		}//括号不匹配或找不到操作数，返回非法值。
 		int val1 = eval(success, p, op - 1);
 		int val2 = eval(success, op + 1, q);
 		switch(tokens[op].type)
