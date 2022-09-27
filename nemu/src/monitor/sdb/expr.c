@@ -151,7 +151,7 @@ word_t expr(char *e, bool *success)
   }
   /* TODO: Insert codes to evaluate the expression. */
 
-	printf("%d",tokens_size);
+	printf("%d\n",tokens_size);
 	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
 
