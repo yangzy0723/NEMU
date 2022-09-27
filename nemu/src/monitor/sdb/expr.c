@@ -112,7 +112,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 					case TK_NOTYPE:;break;
 					case '+':{tokens[nr_token].type = '+'; nr_token++;}; break;
 					case TK_EQ:{tokens[nr_token].type = TK_EQ; nr_token++;}; break;
-					case '-':{tokens[nr_token].type = '-'; nr_token++;printf("%d",tokens[nr_token].type);}; break;
+					case '-':{tokens[nr_token].type = '-'; nr_token++;}; break;
 					case '*':{tokens[nr_token].type = '*'; nr_token++;}; break;
 					case '/':{tokens[nr_token].type = '/'; nr_token++;}; break;
 					case '(':{tokens[nr_token].type = '('; nr_token++;}; break;
