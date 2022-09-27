@@ -44,7 +44,7 @@ static struct rule {
 	{"/", '/'},						// divide
 	{"\\)", ')'},					// right parentheses
 	{"\\(", '('},         // left parentheses
-	{"[0,9]*",TK_NUM},    // number
+	{"[0,9]+",TK_NUM},    // number
 };
 
 word_t eval(bool* success, int p, int q);
