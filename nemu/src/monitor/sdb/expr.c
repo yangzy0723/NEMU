@@ -120,9 +120,9 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 					case TK_NUM:
 									{
 										tokens[nr_token].type = TK_NUM;
+										for(int j = 0; j < substr_len; j++)
+											tokens[nr_token].str[j] = substr_start[j]; //将123存入str数组的模式为3 2 1。
 										tokens[nr_token].str[substr_len] = 0;//加一个终止符，保证前面的运算结果存储不会影响到后面的。
-										for(int j = substr_len-1; j >= 0; j--)
-											tokens[nr_token].str[substr_len - 1 - j] = substr_start[j]; //将123存入str数组的模式为3 2 1。
 										nr_token++;
 									}; break;		
           default: TODO();
@@ -190,7 +190,7 @@ word_t eval(bool* success, int p, int q)
 			printf("%s\n", tokens[p].str);
 			while(tokens[p].str[i] != 0)
 			{
-				result = result*10 + tokens[p].str[i] - '0';
+				result = result * 10 + tokens[p].str[i] - '0';
 				i++;
 			}
 			return result;
