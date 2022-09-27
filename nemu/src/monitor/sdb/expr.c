@@ -148,10 +148,10 @@ word_t expr(char *e, bool *success)
     *success = false;
     return 0;
   }
-	printf("123\n");
   /* TODO: Insert codes to evaluate the expression. */
 	/*for(int i = 0; i <= tokens_size-1; i++)
 		printf("%d ",tokens[i].type);*/
+	printf("%d\n",tokens_size);
 	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
 
