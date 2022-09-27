@@ -214,9 +214,12 @@ int cmd_p(char* args)
 	}
 	else
 	{
-		bool success;
+		bool success = true;
 		uint32_t ans = expr(args, &success);
-		printf("%u\n", ans);
+		if(success)
+			printf("%u\n", ans);
+		else
+			printf("illegal expression %s\n", args);
 		return 0;
 	}
 }
