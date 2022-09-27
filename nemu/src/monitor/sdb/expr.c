@@ -148,7 +148,7 @@ word_t expr(char *e, bool *success)
     *success = false;
     return 0;
   }
-	printf("123\n");
+	printf("%d",tokens_size);
   /* TODO: Insert codes to evaluate the expression. */
 	return eval(success, 0, tokens_size - 1);
 }
