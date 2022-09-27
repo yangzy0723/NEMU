@@ -128,7 +128,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
         }
       }
     }
-
+		break;
     if (i == NR_REGEX) 
 		{
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
