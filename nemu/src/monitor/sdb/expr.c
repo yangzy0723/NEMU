@@ -126,6 +126,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 									}; break;		
           default: TODO();
         }
+				printf("123\n");
         break;
       }
     }
