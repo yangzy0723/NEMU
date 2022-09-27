@@ -206,9 +206,8 @@ word_t eval(bool* success, int p, int q)
 		return eval(success, p + 1, q - 1);
 	else
 	{
-		printf("123\n");
 		int top = 0;
-		int op = 0;
+		int op = -1;
 		for(int i = p; i <= q; i++)
 		{
 			if(tokens[i].type == '+' || tokens[i].type == '-')
@@ -218,7 +217,7 @@ word_t eval(bool* success, int p, int q)
 			}
 			else if(tokens[i].type == '*' || tokens[i].type == '/')
 			{
-				if(op > 0 && tokens[op].type != '-' && tokens[op].type != '+')
+				if(op >= 0 && tokens[op].type != '-' && tokens[op].type != '+')
 					op = i;
 			}
 			else if(tokens[i].type == '(')
