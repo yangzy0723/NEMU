@@ -88,7 +88,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
   int i;
   regmatch_t pmatch;
   nr_token = 0;
-
+	printf("123\n");//debuger
   while (e[position] != '\0') 
 	{
     /* Try all rules one by one. */
