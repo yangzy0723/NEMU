@@ -220,11 +220,11 @@ word_t eval(bool* success, int p, int q)
 				top++;
 			else if(tokens[i].type == ')')
 				top--;
-			if(top < 0)
-			{
-				*success = false;
-				return 0;
-			}
+		}
+		if(top != 0)
+		{
+			*success = false;
+			return 0;
 		}
 		int val1 = eval(success, p, op - 1);
 		int val2 = eval(success, op + 1, q);
