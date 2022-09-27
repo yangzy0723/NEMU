@@ -44,7 +44,7 @@ static struct rule {
 	{"/", '/'},						// divide
 	{"\\)", ')'},					// right parentheses
 	{"\\(", '('},         // left parentheses
-	{"[0,9]+",TK_NUM},    // number
+	{"[0-9]+",TK_NUM},    // number
 };
 
 word_t eval(bool* success, int p, int q);
@@ -88,7 +88,6 @@ static bool make_token(char *e)//e是待解析的目标字符串。
   int i;
   regmatch_t pmatch;
   nr_token = 0;
-	printf("%s\n",e);//debuger
   while (e[position] != '\0') 
 	{
     /* Try all rules one by one. */
@@ -121,8 +120,8 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 					case TK_NUM:
 									{
 										tokens[nr_token].type = TK_NUM;
-										for(int i = substr_len-1; i >= 0; i--)
-												tokens[nr_token].str[substr_len - 1 - i] = substr_start[i]; //将123存入str数组的模式为3 2 1。
+										for(int j = substr_len-1; j >= 0; j--)
+												tokens[nr_token].str[substr_len - 1 - j] = substr_start[i]; //将123存入str数组的模式为3 2 1。
 										nr_token++;
 									}; break;		
           default: TODO();
