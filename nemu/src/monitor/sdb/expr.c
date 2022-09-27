@@ -120,6 +120,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 					case TK_NUM:
 									{
 										tokens[nr_token].type = TK_NUM;
+										printf("enter for\n");
 										for(int j = substr_len-1; j >= 0; j--)
 										{
 												printf("%d",j);
