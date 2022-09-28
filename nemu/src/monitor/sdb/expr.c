@@ -21,8 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM, HEX_NUM,REG,
-
+  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_NUM, HEX_NUM, REG,
   /* TODO: Add more token types */
 
 };
@@ -39,12 +38,13 @@ static struct rule {
 	{"\\$0|\\$(ra|sp|gp|t[0-6]|s[0-11]|a[0-7])", REG}, //register
 	{"0x[0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
 	{"-", '-'},						// subtraction
 	{"\\*", '*'},					// mul
 	{"/", '/'},						// divide
 	{"\\)", ')'},					// right parentheses
 	{"\\(", '('},         // left parentheses
+  {"==", TK_EQ},        // equal
+  {"!=", TK_NEQ},        // not equal
 	{"[0-9]+", TK_NUM},   // number
 };
 
@@ -112,12 +112,13 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 				{
 					case TK_NOTYPE:;break;
 					case '+':{tokens[nr_token].type = '+'; nr_token++;}; break;
-					case TK_EQ:{tokens[nr_token].type = TK_EQ; nr_token++;}; break;
 					case '-':{tokens[nr_token].type = '-'; nr_token++;}; break;
 					case '*':{tokens[nr_token].type = '*'; nr_token++;}; break;
 					case '/':{tokens[nr_token].type = '/'; nr_token++;}; break;
 					case '(':{tokens[nr_token].type = '('; nr_token++;}; break;
 					case ')':{tokens[nr_token].type = ')'; nr_token++;}; break;
+					case TK_EQ:{tokens[nr_token].type = TK_EQ; nr_token++;}; break;
+					case TK_NEQ:{tokens[nr_token].type = TK_NEQ; nr_token++;}; break;
 					case TK_NUM:
 									{
 										tokens[nr_token].type = TK_NUM;
@@ -230,9 +231,9 @@ word_t eval(bool* success, int p, int q)
 			return isa_reg_str2val(tokens[p].str, success);
 		else
 		{
-			*success = false;
-			return 0;
-		}
+			*success = false; 
+			return 0; 
+		} 
 	}
 	else if(check_parentheses(p, q))
 		return eval(success, p + 1, q - 1);
@@ -241,14 +242,20 @@ word_t eval(bool* success, int p, int q)
 		int top = 0;
 		int op = -1;
 		int if_plus_sub = 0;
+		int if_NEQ_EQ = 0;
 		for(int i = p; i <= q; i++)
 		{
-			if((tokens[i].type == '+' || tokens[i].type == '-') && top == 0)
+			if((tokens[i].type == TK_NEQ || tokens[i].type == TK_EQ) && top == 0)
+			{
+				op = i;
+				if_NEQ_EQ =1;
+			}
+			if((tokens[i].type == '+' || tokens[i].type == '-') && if_plus_sub == 0 && top == 0)
 			{
 				op = i;
 				if_plus_sub = 1;
 			}
-			else if((tokens[i].type == '*' || tokens[i].type == '/') && if_plus_sub == 0 && top == 0)
+			else if((tokens[i].type == '*' || tokens[i].type == '/') && if_plus_sub == 0  && if_NEQ_EQ == 0 && top == 0)
 				op = i;
 			else if(tokens[i].type == '(')
 				top++;
@@ -264,6 +271,8 @@ word_t eval(bool* success, int p, int q)
 		int val2 = eval(success, op + 1, q);
 		switch(tokens[op].type)
 		{
+			case TK_EQ: return val1 == val2;
+		  case TK_NEQ: return val1 != val2;
 			case '+': return val1+val2;
 			case '-': return val1-val2;
 			case '*': return val1*val2;
