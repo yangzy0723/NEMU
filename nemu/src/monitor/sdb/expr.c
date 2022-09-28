@@ -214,6 +214,7 @@ word_t eval(bool* success, int p, int q)
 				else
 					tmp = tokens[p].str[i] - 'a' + 10;
 				result = result * 16 + tmp;
+				i++;
 			}
 			return result;
 		}
