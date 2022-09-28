@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM,
+  TK_NOTYPE = 256, TK_EQ, TK_NUM, HEX_NUM,
 
   /* TODO: Add more token types */
 
@@ -44,7 +44,8 @@ static struct rule {
 	{"/", '/'},						// divide
 	{"\\)", ')'},					// right parentheses
 	{"\\(", '('},         // left parentheses
-	{"[0-9]+",TK_NUM},    // number
+	{"[0-9]+", TK_NUM},    // number
+	{"0x[0-9]+", HEX_NUM}, // hexadecimal-number
 };
 
 word_t eval(bool* success, int p, int q);
@@ -95,7 +96,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 		{
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) 
 			{
-        char *substr_start = e + position;
+        char *substr_start  = e + position;
         int substr_len = pmatch.rm_eo;
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
@@ -125,6 +126,13 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 										tokens[nr_token].str[substr_len] = 0;//加一个终止符，保证前面的运算结果存储不会影响到后面的。
 										nr_token++;
 									}; break;		
+					case HEX_NUM:
+									{
+										tokens[nr_token].type = HEX_NUM;
+										for(int j = 2; j < substr_len; j++)
+											tokens[nr_token].str[j - 2] = substr_start[j];
+										tokens[nr_token].str[substr_len] = 0;
+									}; break;
           default: TODO();
         }
         break;
@@ -191,6 +199,21 @@ word_t eval(bool* success, int p, int q)
 			{
 				result = result * 10 + tokens[p].str[i] - '0';
 				i++;
+			}
+			return result;
+		}
+		else if(tokens[p].type == HEX_NUM)
+		{
+			int i = 0;
+			word_t result = 0;
+			while(tokens[p].str[i] != 0)
+			{
+				int tmp;
+				if(tokens[p].str[i] >= '0' && tokens[p].str[i] <= '9')
+					tmp = tokens[p].str[i] - '0';
+				else
+					tmp = tokens[p].str[i] - 'a' + 10;
+				result = result * 16 + tmp;
 			}
 			return result;
 		}
