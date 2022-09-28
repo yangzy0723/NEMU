@@ -35,7 +35,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-	{"\\$0|\\$[ra|sp|gp|t[0-6]{1}|s[0-11]{1}|a[0-7]{1}]", REG}, //register
+	{"\\$0|\\$(ra|sp|gp|t[0-6]{1}|s[0-11]{1}|a[0-7]{1})", REG}, //register
 	{"0x[0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
