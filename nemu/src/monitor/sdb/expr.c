@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM, HEX_NUM,
+  TK_NOTYPE = 256, TK_EQ, TK_NUM, HEX_NUM,REG,
 
   /* TODO: Add more token types */
 
@@ -35,6 +35,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
+	{"$0|$[ra|sp|gp|t[0-6]|s[0-11]|a[0-7]]|", REG}, //register
 	{"0x[0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
@@ -44,7 +45,7 @@ static struct rule {
 	{"/", '/'},						// divide
 	{"\\)", ')'},					// right parentheses
 	{"\\(", '('},         // left parentheses
-	{"[0-9]+", TK_NUM},    // number
+	{"[0-9]+", TK_NUM},   // number
 };
 
 word_t eval(bool* success, int p, int q);
@@ -133,6 +134,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 										tokens[nr_token].str[substr_len] = 0;
 										nr_token++;
 									}; break;
+					case REG:{tokens[nr_token].type = REG; nr_token++;}; break;
           default: TODO();
         }
         break;
