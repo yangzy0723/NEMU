@@ -35,9 +35,9 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-	{"\\$0|\\$(ra|sp|gp|t[0-6]{1}|s[0-11]{1}|a[0-7]{1})", REG}, //register
-	{"0x[0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {" +", TK_NOTYPE},    // spaces
+	{"\\$0|\\$(ra|sp|gp|t[0-6]|s[0-11]|a[0-7])", REG}, //register
+	{"0x[0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
 	{"-", '-'},						// subtraction
@@ -134,7 +134,13 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 										tokens[nr_token].str[substr_len] = 0;
 										nr_token++;
 									}; break;
-					case REG:{tokens[nr_token].type = REG; nr_token++;}; break;
+					case REG:{
+										tokens[nr_token].type = REG;
+										for(int j = 1; j < substr_len; j++)
+											tokens[nr_token].str[j - 1] = substr_start[j];//忽略substr_start[0],也就是$,此时要注意$0。
+										tokens[nr_token].str[substr_len] = 0;
+										nr_token++;
+									}; break;
           default: TODO();
         }
         break;
@@ -193,7 +199,7 @@ word_t eval(bool* success, int p, int q)
 	}
 	else if(p == q)
 	{
-		if(tokens[p].type == TK_NUM)
+		if(tokens[p].type == TK_NUM)//处理十进制数字
 		{
 			int i = 0;
 			word_t result = 0;
@@ -204,7 +210,7 @@ word_t eval(bool* success, int p, int q)
 			}
 			return result;
 		}
-		else if(tokens[p].type == HEX_NUM)
+		else if(tokens[p].type == HEX_NUM)//处理十六进制数字
 		{
 			int i = 0;
 			word_t result = 0;
@@ -220,6 +226,8 @@ word_t eval(bool* success, int p, int q)
 			}
 			return result;
 		}
+		else if(tokens[p].type == REG)//处理寄存器
+			return isa_reg_str2val(tokens[p].str, success);
 		else
 		{
 			*success = false;
