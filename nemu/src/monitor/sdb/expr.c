@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_NUM, HEX_NUM, REG,
+  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_AND, TK_NUM, HEX_NUM, REG,
   /* TODO: Add more token types */
 
 };
@@ -44,7 +44,8 @@ static struct rule {
 	{"\\)", ')'},					// right parentheses
 	{"\\(", '('},         // left parentheses
   {"==", TK_EQ},        // equal
-  {"!=", TK_NEQ},        // not equal
+  {"!=", TK_NEQ},       // not equal
+	{"&&", TK_AND},       // logic and
 	{"[0-9]+", TK_NUM},   // number
 };
 
@@ -111,14 +112,15 @@ static bool make_token(char *e)//e是待解析的目标字符串。
         switch (rules[i].token_type)
 				{
 					case TK_NOTYPE:;break;
-					case '+':{tokens[nr_token].type = '+'; nr_token++;}; break;
-					case '-':{tokens[nr_token].type = '-'; nr_token++;}; break;
-					case '*':{tokens[nr_token].type = '*'; nr_token++;}; break;
-					case '/':{tokens[nr_token].type = '/'; nr_token++;}; break;
-					case '(':{tokens[nr_token].type = '('; nr_token++;}; break;
-					case ')':{tokens[nr_token].type = ')'; nr_token++;}; break;
-					case TK_EQ:{tokens[nr_token].type = TK_EQ; nr_token++;}; break;
-					case TK_NEQ:{tokens[nr_token].type = TK_NEQ; nr_token++;}; break;
+					case '+': tokens[nr_token].type = '+'; nr_token++; break;
+					case '-': tokens[nr_token].type = '-'; nr_token++; break;
+					case '*': tokens[nr_token].type = '*'; nr_token++; break;
+					case '/': tokens[nr_token].type = '/'; nr_token++; break;
+					case '(': tokens[nr_token].type = '('; nr_token++; break;
+					case ')': tokens[nr_token].type = ')'; nr_token++; break;
+					case TK_EQ: tokens[nr_token].type = TK_EQ; nr_token++; break;
+					case TK_NEQ: tokens[nr_token].type = TK_NEQ; nr_token++; break;
+				  case TK_AND: tokens[nr_token].type = TK_AND; nr_token++; break;
 					case TK_NUM:
 									{
 										tokens[nr_token].type = TK_NUM;
@@ -241,21 +243,27 @@ word_t eval(bool* success, int p, int q)
 	{
 		int top = 0;
 		int op = -1;
-		int if_plus_sub = 0;
-		int if_NEQ_EQ = 0;
+		bool if_plus_sub = 0;
+		bool if_NEQ_EQ = 0;
+		int if_AND = 0;
 		for(int i = p; i <= q; i++)
 		{
-			if((tokens[i].type == TK_NEQ || tokens[i].type == TK_EQ) && top == 0)
+			if(tokens[i].type == TK_AND && top == 0)
 			{
 				op = i;
-				if_NEQ_EQ =1;
+				if_AND = true;
 			}
-			if((tokens[i].type == '+' || tokens[i].type == '-') && if_plus_sub == 0 && top == 0)
+			if((tokens[i].type == TK_NEQ || tokens[i].type == TK_EQ) && top == 0 && !if_AND)
 			{
 				op = i;
-				if_plus_sub = 1;
+				if_NEQ_EQ = true;
 			}
-			else if((tokens[i].type == '*' || tokens[i].type == '/') && if_plus_sub == 0  && if_NEQ_EQ == 0 && top == 0)
+			if((tokens[i].type == '+' || tokens[i].type == '-') && top == 0 && !if_AND && !if_NEQ_EQ)
+			{
+				op = i;
+				if_plus_sub = true;
+			}
+			else if((tokens[i].type == '*' || tokens[i].type == '/') && top == 0 && !if_AND && !if_NEQ_EQ && !if_plus_sub)
 				op = i;
 			else if(tokens[i].type == '(')
 				top++;
