@@ -35,7 +35,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-
+	{"0x[0-9]+", HEX_NUM}, // hexadecimal-number
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
@@ -45,7 +45,6 @@ static struct rule {
 	{"\\)", ')'},					// right parentheses
 	{"\\(", '('},         // left parentheses
 	{"[0-9]+", TK_NUM},    // number
-	{"0x[0-9]+", HEX_NUM}, // hexadecimal-number
 };
 
 word_t eval(bool* success, int p, int q);
