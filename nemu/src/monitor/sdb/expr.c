@@ -35,7 +35,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-	{"0x[0-9]+", HEX_NUM}, // hexadecimal-number
+	{"0x[0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
