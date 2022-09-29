@@ -171,9 +171,12 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
     return 0;
   }
 
-	for(int i = 0; i < tokens_size; i++)
+	for(int i = 0; i < tokens_size; i++)//处理乘法和解引用
 		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != REG && tokens[i-1].type != HEX_NUM)))
+		{
 			tokens[i].type = DEREF;
+			printf("yzy\n");
+		}
 	/*for(int i = 0; i < tokens_size; i++)
 		printf("%d\n",tokens[i].type);*/
 
