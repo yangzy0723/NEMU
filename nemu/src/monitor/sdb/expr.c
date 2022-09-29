@@ -145,7 +145,7 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 										for(int j = 1; j < substr_len; j++)
 											tokens[nr_token].str[j - 1] = substr_start[j];//忽略substr_start[0],也就是$,此时要注意$0。
 										printf("%s\n",tokens[nr_token].str);
-										tokens[nr_token].str[substr_len] = 0;
+										tokens[nr_token].str[substr_len - 1] = 0;
 										nr_token++;
 									}; break;
           default: TODO();
