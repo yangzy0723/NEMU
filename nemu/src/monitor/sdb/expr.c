@@ -23,7 +23,7 @@
 word_t vaddr_read(word_t addr, int len);
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_AND, TK_NUM, HEX_NUM, REG, DEREF, 
+  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_AND, TK_NUM, HEX_NUM, TK_REG, TK_DEREF, TK_NEG, 
   /* TODO: Add more token types */
 
 };
@@ -38,7 +38,7 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-	{"\\$0|\\$(ra|sp|gp|t[0-6]|s[0-11]|a[0-7])", REG}, //register
+	{"\\$(\\$0|ra|sp|gp|t[0-6]|s[0-11]|a[0-7])", TK_REG}, //register
 	{"0x[0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {"\\+", '+'},         // plus
 	{"-", '-'},						// subtraction
@@ -60,8 +60,7 @@ bool check_parentheses(int p, int q);
 
 static regex_t re[NR_REGEX] = {};//用于存储编译好的正则表达式。
 
-/* Rules are used for many times.
- * Therefore we compile them only once before any usage.
+/* Rules are used for many times. Therefore we compile them only once before any usage.
  */
 void init_regex() {
   int i;
@@ -140,8 +139,8 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 										tokens[nr_token].str[substr_len] = 0;
 										nr_token++;
 									}; break;
-					case REG:{
-										tokens[nr_token].type = REG;
+					case TK_REG:{
+										tokens[nr_token].type = TK_REG;
 										for(int j = 1; j < substr_len; j++)
 											tokens[nr_token].str[j - 1] = substr_start[j];//忽略substr_start[0],也就是$,此时要注意$0。
 										tokens[nr_token].str[substr_len] = 0;
@@ -171,9 +170,9 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
     return 0;
   }
 
-	for(int i = 0; i < tokens_size; i++)//处理乘法和解引用
-		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != REG && tokens[i-1].type != HEX_NUM)))
-			tokens[i].type = DEREF;
+	for(int i = 0; i < tokens_size; i++)//处理乘法和解引用的区别
+		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != TK_REG && tokens[i-1].type != HEX_NUM)))
+			tokens[i].type = TK_DEREF;
 	/*for(int i = 0; i < tokens_size; i++)
 		printf("%d\n",tokens[i].type);*/
 
@@ -235,7 +234,7 @@ word_t eval(bool* success, int p, int q)
 			}
 			return result;
 		}
-		else if(tokens[p].type == REG)//处理寄存器
+		else if(tokens[p].type == TK_REG)//处理寄存器
 			return isa_reg_str2val(tokens[p].str, success);
 		else
 		{
@@ -253,6 +252,7 @@ word_t eval(bool* success, int p, int q)
 		bool if_NEQ_EQ = 0;
 		bool if_PLU_SUB = 0;
 		bool if_MUL_DIV = 0;
+		bool if_DEREF_NEG = 0;
 		for(int i = p; i <= q; i++)
 		{
 			if(tokens[i].type == TK_AND && top == 0)
@@ -275,8 +275,11 @@ word_t eval(bool* success, int p, int q)
 				op = i;
 				if_MUL_DIV = true;
 			}
-			else if(tokens[i].type == DEREF && top == 0 && !if_AND && !if_NEQ_EQ && !if_PLU_SUB && !if_MUL_DIV)
+			else if(tokens[i].type == TK_DEREF && top == 0 && !if_AND && !if_NEQ_EQ && !if_PLU_SUB && !if_MUL_DIV && !if_DEREF_NEG)
+			{	
 				op = i;
+				if_DEREF_NEG = true;
+			}
 			else if(tokens[i].type == '(')
 				top++;
 			else if(tokens[i].type == ')')
@@ -288,7 +291,7 @@ word_t eval(bool* success, int p, int q)
 			return 0;
 		}//括号不匹配或找不到操作数，返回非法值。
 
-		if(tokens[op].type == DEREF)//处理指针解引用
+		if(tokens[op].type == TK_DEREF)//处理指针解引用
 		{
 			word_t value = eval(success, op+1, q);
 			return vaddr_read(value, 4);
@@ -315,7 +318,7 @@ word_t eval(bool* success, int p, int q)
 					else
 						return val1/val2;
 				};
-			default: {*success = false; return 0;};
+			default: *success = false; return 0;
 		}
 	}
 }
