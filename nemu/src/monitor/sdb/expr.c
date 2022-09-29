@@ -83,7 +83,7 @@ typedef struct token {
 
 static int tokens_size = 0;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[108] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e)//e是待解析的目标字符串。 

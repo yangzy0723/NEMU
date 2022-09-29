@@ -181,9 +181,10 @@ static int cmd_x(char *args)
 				printf("Unknown command '%s'\n", arg);
 				return 0;
 			}//第一个数字命令出现错误，打印。
-
-		char* address_start = strtok(NULL, " ");
-		int where = 0;
+		word_t where = cmd_p(args + strlen(args) + 1);
+		for(int i = 0; i < num; i++)
+			printf("%#x\t%#010x\n", where+4*i, vaddr_read(where+i*4, 4));
+		/*int where = 0;
 		for(int i = 0; address_start != NULL && *(address_start + i + 2) != 0; i++)
 		{
 			char* position = address_start + 2 + i;
@@ -200,13 +201,13 @@ static int cmd_x(char *args)
 			}//数字命令不合法，打印报错信息。
 		}
 		for(int i = 0; i < num; i++)
-			printf("%#x\t%#010x\n",where+4*i, vaddr_read(where+i*4, 4));
+			printf("%#x\t%#010x\n",where+4*i, vaddr_read(where+i*4, 4));*/
 	}
 	return 0;
 }
 
 /* cmd_p */
-int cmd_p(char* args)
+static int cmd_p(char* args)
 {
 	if(args == NULL)
 	{
