@@ -173,11 +173,10 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
 	for(int i = 0; i < tokens_size; i++)//处理乘法和解引用的区别,减法与负号的区别。
 		if(i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != TK_REG && tokens[i-1].type != HEX_NUM))
 		{
-			printf("yzy\n");
 			if(tokens[i].type == '*')
 				tokens[i].type = TK_DEREF;
 			else if(tokens[i].type == '-')
-				tokens[i].type = TK_NEG;
+			{printf("yzy\n");tokens[i].type = TK_NEG;}
 		}
 
 	/*for(int i = 0; i < tokens_size; i++)
