@@ -181,27 +181,11 @@ static int cmd_x(char *args)
 				printf("Unknown command '%s'\n", arg);
 				return 0;
 			}//第一个数字命令出现错误，打印。
+			 
 		word_t where = cmd_p(args + strlen(args) + 1);
+
 		for(int i = 0; i < num; i++)
 			printf("%#x\t%#010x\n", where+4*i, vaddr_read(where+i*4, 4));
-		/*int where = 0;
-		for(int i = 0; address_start != NULL && *(address_start + i + 2) != 0; i++)
-		{
-			char* position = address_start + 2 + i;
-			if(*position >= '0' && *position <= '9')
-				where = where*16 + *position - '0';
-			else if(*position >= 'a' && *position <= 'f')
-				where = where*16 + *position - 'a' + 10;
-			else if(*position >= 'A' && *position <= 'F')
-				where = where*16 + *position - 'A' + 10;
-			else
-			{
-				printf("Unknown command '%s'\n", address_start);
-				return 0;
-			}//数字命令不合法，打印报错信息。
-		}
-		for(int i = 0; i < num; i++)
-			printf("%#x\t%#010x\n",where+4*i, vaddr_read(where+i*4, 4));*/
 	}
 	return 0;
 }
