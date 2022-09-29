@@ -174,8 +174,8 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
 	for(int i = 0; i < tokens_size; i++)
 		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != REG && tokens[i-1].type != HEX_NUM)))
 			tokens[i].type = DEREF;
-	for(int i = 0; i < tokens_size; i++)
-		printf("%d\n",tokens[i].type);
+	/*for(int i = 0; i < tokens_size; i++)
+		printf("%d\n",tokens[i].type);*/
 
 	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
@@ -289,8 +289,9 @@ word_t eval(bool* success, int p, int q)
 			return 0;
 		}//括号不匹配或找不到操作数，返回非法值。
 
-		if(tokens[op].type == DEREF)
+		if(tokens[op].type == DEREF)//处理指针解引用
 		{
+			printf("%d\n", op);
 			if(op + 1 > tokens_size - 1)
 			{
 				*success = false;
