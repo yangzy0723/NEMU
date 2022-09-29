@@ -207,7 +207,7 @@ static int cmd_p(char* args)
 		bool success = true;
 		word_t ans = expr(args, &success);
 		if(success)
-			printf("%#010x\n", ans);
+			printf("%u\n", ans);
 		else
 			printf("illegal expression %s\n", args);
 		return 0;
