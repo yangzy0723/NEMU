@@ -181,11 +181,15 @@ static int cmd_x(char *args)
 				printf("Unknown command '%s'\n", arg);
 				return 0;
 			}//第一个数字命令出现错误，打印。
-			 
-		word_t where = cmd_p(args + strlen(args) + 1);
 
-		for(int i = 0; i < num; i++)
-			printf("%#x\t%#010x\n", where+4*i, vaddr_read(where+i*4, 4));
+		bool success = true; 
+		word_t where = expr(args + strlen(args) + 1, &success);
+
+		if(success)
+			for(int i = 0; i < num; i++)
+				printf("%#x\t%#010x\n", where+4*i, vaddr_read(where+i*4, 4));
+		else
+			printf("illegal expression %s\n", args+strlen(args)+1);
 	}
 	return 0;
 }
