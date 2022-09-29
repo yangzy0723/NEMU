@@ -38,7 +38,7 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-	{"\\$(\\$0|ra|sp|gp|t[0-6]|s[0-11]|a[0-7])", TK_REG}, //register
+	{"\\$(\\$0|ra|sp|gp|pc|t[0-6]|s[0-11]|a[0-7])", TK_REG}, //register, add pc register.
 	{"0[x|X][0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {"\\+", '+'},         // plus
 	{"-", '-'},						// subtraction
