@@ -282,7 +282,7 @@ word_t eval(bool* success, int p, int q)
 			else if(tokens[i].type == ')')
 				top--;
 		}
-
+		printf("%d\n",op);
 		if(top != 0 || op == -1)
 		{
 			*success = false;
