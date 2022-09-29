@@ -241,7 +241,7 @@ word_t eval(bool* success, int p, int q)
 			return result;
 		}
 		else if(tokens[p].type == TK_REG)//处理寄存器
-			return isa_reg_str2val(tokens[p].str, success);
+			return isa_reg_str2val(tokens[p].str + 1, success);//不看第一位的$。
 		else
 		{
 			*success = false; 

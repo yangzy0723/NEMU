@@ -29,15 +29,11 @@ void isa_reg_display() {
 	//reg_name(int x, int width)是reg.h的函数，调用它返回寄存器名称，因为第二个参数不知道有什么用，暂时传入-1;gpr(int x)是reg.h里的宏定义。
 }
 
-word_t isa_reg_str2val(const char *s, bool *success) {
-	if(s[0] == '0' && s[1] == '\0')
-		return gpr(0);
-	else
-	{
-		for(int i = 1; i < 32; i++)
-			if(strcmp(regs[i], s) == 0)
-				return gpr(i);
-	}
+word_t isa_reg_str2val(const char *s, bool *success) 
+{
+	for(int i = 0; i < 32; i++)
+		if(strcmp(regs[i], s) == 0)
+			return gpr(i);
 	*success = false;
 	return 0;
 }
