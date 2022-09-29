@@ -260,12 +260,12 @@ word_t eval(bool* success, int p, int q)
 				op = i;
 				if_AND = true;
 			}
-			if((tokens[i].type == TK_NEQ || tokens[i].type == TK_EQ) && top == 0 && !if_AND)
+			else if((tokens[i].type == TK_NEQ || tokens[i].type == TK_EQ) && top == 0 && !if_AND)
 			{
 				op = i;
 				if_NEQ_EQ = true;
 			}
-			if((tokens[i].type == '+' || tokens[i].type == '-') && top == 0 && !if_AND && !if_NEQ_EQ)
+			else if((tokens[i].type == '+' || tokens[i].type == '-') && top == 0 && !if_AND && !if_NEQ_EQ)
 			{
 				op = i;
 				if_PLU_SUB = true;
@@ -282,7 +282,6 @@ word_t eval(bool* success, int p, int q)
 			else if(tokens[i].type == ')')
 				top--;
 		}
-		printf("%d\n",op);
 		if(top != 0 || op == -1)
 		{
 			*success = false;
@@ -291,7 +290,6 @@ word_t eval(bool* success, int p, int q)
 
 		if(tokens[op].type == DEREF)//处理指针解引用
 		{
-			printf("%d\n", op);
 			if(op + 1 > tokens_size - 1)
 			{
 				*success = false;
