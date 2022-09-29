@@ -172,10 +172,10 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
   }
 
 	for(int i = 0; i < tokens_size; i++)
-	{
 		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != REG && tokens[i-1].type != HEX_NUM)))
 			tokens[i].type = DEREF;
-	}
+	for(int i = 0; i < tokens_size; i++)
+		printf("%d\n",tokens[i].type);
 
 	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
