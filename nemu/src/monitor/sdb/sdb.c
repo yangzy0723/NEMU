@@ -116,19 +116,19 @@ static int cmd_si(char *args)
 	{
 		char* record = args;
 		int length = strlen(args);
-		int num = 0;
-		int if_leagl_cmd = 1;
+		word_t num = 0;
+		bool if_leagl_cmd = true;
 		for(int i = 0; i < length; i++, args++)
 		{
 			if('0' <= *args && *args <= '9')
 				num = num * 10 + (*args - '0');
 			else
 			{	
-				if_leagl_cmd = 0;
+				if_leagl_cmd = false;
 				break;
 			}//若传入无效参数，空格，字母啥的，直接返回Unknown command。
 		}
-		if(if_leagl_cmd == 1)
+		if(if_leagl_cmd)
 			cpu_exec(num);
 		else
 			printf("Unknown command '%s'\n", record);
@@ -216,9 +216,9 @@ int cmd_p(char* args)
 	else
 	{
 		bool success = true;
-		uint32_t ans = expr(args, &success);
+		word_t ans = expr(args, &success);
 		if(success)
-			printf("%u\n", ans);
+			printf("%#010x\n", ans);
 		else
 			printf("illegal expression %s\n", args);
 		return 0;
