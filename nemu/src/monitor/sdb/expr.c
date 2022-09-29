@@ -173,10 +173,7 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
 
 	for(int i = 0; i < tokens_size; i++)//处理乘法和解引用
 		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != REG && tokens[i-1].type != HEX_NUM)))
-		{
 			tokens[i].type = DEREF;
-			printf("yzy\n");
-		}
 	/*for(int i = 0; i < tokens_size; i++)
 		printf("%d\n",tokens[i].type);*/
 
@@ -278,7 +275,7 @@ word_t eval(bool* success, int p, int q)
 				op = i;
 				if_MUL_DIV = true;
 			}
-			else if(tokens[i].type == DEREF && top == 0 && !if_AND && if_NEQ_EQ && !if_PLU_SUB && !if_MUL_DIV)
+			else if(tokens[i].type == DEREF && top == 0 && !if_AND && !if_NEQ_EQ && !if_PLU_SUB && !if_MUL_DIV)
 				op = i;
 			else if(tokens[i].type == '(')
 				top++;
