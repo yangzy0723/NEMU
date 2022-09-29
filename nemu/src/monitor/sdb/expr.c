@@ -171,8 +171,14 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
   }
 
 	for(int i = 0; i < tokens_size; i++)//处理乘法和解引用的区别
-		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != TK_REG && tokens[i-1].type != HEX_NUM)))
-			tokens[i].type = TK_DEREF;
+		if(i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != TK_REG && tokens[i-1].type != HEX_NUM))
+		{
+			if(tokens[i].type == '*')
+				tokens[i].type = TK_DEREF;
+			else if(tokens[i].type == '-')
+				tokens[i].type = TK_NEG;
+		}
+
 	/*for(int i = 0; i < tokens_size; i++)
 		printf("%d\n",tokens[i].type);*/
 
@@ -296,6 +302,8 @@ word_t eval(bool* success, int p, int q)
 			word_t value = eval(success, op+1, q);
 			return vaddr_read(value, 4);
 		}
+		else if(tokens[op].type == TK_NEG)
+			return (-1)*eval(success, op+1, q);
 
 		int val1 = eval(success, p, op - 1);
 		int val2 = eval(success, op + 1, q);
