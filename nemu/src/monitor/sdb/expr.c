@@ -176,7 +176,7 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
 			if(tokens[i].type == '*')
 				tokens[i].type = TK_DEREF;
 			else if(tokens[i].type == '-')
-			{printf("yzy\n");tokens[i].type = TK_NEG;}
+				tokens[i].type = TK_NEG;
 		}
 
 	/*for(int i = 0; i < tokens_size; i++)
@@ -281,7 +281,7 @@ word_t eval(bool* success, int p, int q)
 				op = i;
 				if_MUL_DIV = true;
 			}
-			else if(tokens[i].type == TK_DEREF && top == 0 && !if_AND && !if_NEQ_EQ && !if_PLU_SUB && !if_MUL_DIV && !if_DEREF_NEG)
+			else if((tokens[i].type == TK_DEREF || tokens[i].type == TK_NEG) && top == 0 && !if_AND && !if_NEQ_EQ && !if_PLU_SUB && !if_MUL_DIV && !if_DEREF_NEG)
 			{	
 				op = i;
 				if_DEREF_NEG = true;
