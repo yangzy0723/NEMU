@@ -23,7 +23,7 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
-word_t vaddr_read(word_t addr, int len);
+word_t vaddr_read(word_t addr, int len);//声明一下，不然会报错。
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {

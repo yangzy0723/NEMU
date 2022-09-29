@@ -20,8 +20,10 @@
  */
 #include <regex.h>
 
+word_t vaddr_read(word_t addr, int len);
+
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_AND, TK_NUM, HEX_NUM, REG,
+  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_AND, TK_NUM, HEX_NUM, REG, DEREF, 
   /* TODO: Add more token types */
 
 };
@@ -34,6 +36,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
+
   {" +", TK_NOTYPE},    // spaces
 	{"\\$0|\\$(ra|sp|gp|t[0-6]|s[0-11]|a[0-7])", REG}, //register
 	{"0x[0-9a-f]+", HEX_NUM}, // hexadecimal-number
@@ -160,17 +163,20 @@ static bool make_token(char *e)//e是待解析的目标字符串。
   return true;
 }
 
-
-word_t expr(char *e, bool *success) 
+word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expression. */
 {
   if (!make_token(e)) 
 	{
     *success = false;
     return 0;
   }
-  /* TODO: Insert codes to evaluate the expression. */
 
-	//printf("%d\n",tokens_size);
+	for(int i = 0; i < tokens_size; i++)
+	{
+		if(tokens[i].type == '*' && (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != TK_NUM && tokens[i-1].type != REG && tokens[i-1].type != HEX_NUM)))
+			tokens[i].type = DEREF;
+	}
+
 	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
 
@@ -243,9 +249,10 @@ word_t eval(bool* success, int p, int q)
 	{
 		int top = 0;
 		int op = -1;
-		bool if_plus_sub = 0;
+		bool if_AND = 0;
 		bool if_NEQ_EQ = 0;
-		int if_AND = 0;
+		bool if_PLU_SUB = 0;
+		bool if_MUL_DIV = 0;
 		for(int i = p; i <= q; i++)
 		{
 			if(tokens[i].type == TK_AND && top == 0)
@@ -261,20 +268,41 @@ word_t eval(bool* success, int p, int q)
 			if((tokens[i].type == '+' || tokens[i].type == '-') && top == 0 && !if_AND && !if_NEQ_EQ)
 			{
 				op = i;
-				if_plus_sub = true;
+				if_PLU_SUB = true;
 			}
-			else if((tokens[i].type == '*' || tokens[i].type == '/') && top == 0 && !if_AND && !if_NEQ_EQ && !if_plus_sub)
+			else if((tokens[i].type == '*' || tokens[i].type == '/') && top == 0 && !if_AND && !if_NEQ_EQ && !if_PLU_SUB)
+			{
+				op = i;
+				if_MUL_DIV = true;
+			}
+			else if(tokens[i].type == DEREF && top == 0 && !if_AND && if_NEQ_EQ && !if_PLU_SUB && !if_MUL_DIV)
 				op = i;
 			else if(tokens[i].type == '(')
 				top++;
 			else if(tokens[i].type == ')')
 				top--;
 		}
+
 		if(top != 0 || op == -1)
 		{
 			*success = false;
 			return 0;
 		}//括号不匹配或找不到操作数，返回非法值。
+
+		if(tokens[op].type == DEREF)
+		{
+			if(op + 1 > tokens_size - 1)
+			{
+				*success = false;
+				return 0;
+			}
+			else
+			{
+				word_t value = eval(success, op+1, op+1);
+				return vaddr_read(value, 4);
+			}
+		}
+
 		int val1 = eval(success, p, op - 1);
 		int val2 = eval(success, op + 1, q);
 		switch(tokens[op].type)
