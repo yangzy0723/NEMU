@@ -179,8 +179,8 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
 				tokens[i].type = TK_NEG;
 		}
 
-	/*for(int i = 0; i < tokens_size; i++)
-		printf("%d\n",tokens[i].type);*/
+	for(int i = 0; i < tokens_size; i++)
+		printf("%d\n",tokens[i].type);
 
 	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
@@ -241,7 +241,10 @@ word_t eval(bool* success, int p, int q)
 			return result;
 		}
 		else if(tokens[p].type == TK_REG)//处理寄存器
+		{
+			printf("%s\n", tokens[p].str);
 			return isa_reg_str2val(tokens[p].str, success);//前面已经忽略第一位$。
+		}
 		else
 		{
 			*success = false; 
