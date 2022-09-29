@@ -38,7 +38,7 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-	{"\\$(\\$0|ra|sp|gp|tp|pc|t[0-6]|s[0-9]|s10|s11|a[0-7])", TK_REG}, //register, add pc register.
+	{"\\$(\\$0|ra|sp|gp|tp|pc|t[0-6]|s[0-9]|s1[0-1]|a[0-7])", TK_REG}, //register, add pc register.
 	{"0[x|X][0-9a-f]+", HEX_NUM}, // hexadecimal-number
   {"\\+", '+'},         // plus
 	{"-", '-'},						// subtraction
@@ -46,7 +46,7 @@ static struct rule {
 	{"/", '/'},						// divide
 	{"\\)", ')'},					// right parentheses
 	{"\\(", '('},         // left parentheses
-  {"==", TK_EQ},        // equal
+  {"==", TK_EQ},        // equal"
   {"!=", TK_NEQ},       // not equal
 	{"&&", TK_AND},       // logic and
 	{"[0-9]+", TK_NUM},   // number
@@ -139,10 +139,12 @@ static bool make_token(char *e)//e是待解析的目标字符串。
 										tokens[nr_token].str[substr_len] = 0;
 										nr_token++;
 									}; break;
-					case TK_REG:{
+					case TK_REG:
+									{
 										tokens[nr_token].type = TK_REG;
 										for(int j = 1; j < substr_len; j++)
 											tokens[nr_token].str[j - 1] = substr_start[j];//忽略substr_start[0],也就是$,此时要注意$0。
+										printf("%s\n",tokens[nr_token].str);
 										tokens[nr_token].str[substr_len] = 0;
 										nr_token++;
 									}; break;
