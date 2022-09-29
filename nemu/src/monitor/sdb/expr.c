@@ -290,16 +290,8 @@ word_t eval(bool* success, int p, int q)
 
 		if(tokens[op].type == DEREF)//处理指针解引用
 		{
-			if(op + 1 > tokens_size - 1)
-			{
-				*success = false;
-				return 0;
-			}
-			else
-			{
-				word_t value = eval(success, op+1, op+1);
-				return vaddr_read(value, 4);
-			}
+			word_t value = eval(success, op+1, q);
+			return vaddr_read(value, 4);
 		}
 
 		int val1 = eval(success, p, op - 1);
