@@ -179,8 +179,8 @@ word_t expr(char *e, bool *success)   /* TODO: Insert codes to evaluate the expr
 				tokens[i].type = TK_NEG;
 		}
 
-	for(int i = 0; i < tokens_size; i++)
-		printf("%d\n",tokens[i].type);
+	/*for(int i = 0; i < tokens_size; i++)
+		printf("%d\n",tokens[i].type);*/
 
 	return eval(success, 0, tokens_size - 1);//tokens_size记录tokens数组哪些位数有效，从而确定p，q。
 }
