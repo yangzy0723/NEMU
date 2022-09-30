@@ -53,16 +53,9 @@ static char* rl_gets() {
   return line_read;
 }
 
-static int cmd_c(char *args) {
-  cpu_exec(-1);
-  return 0;
-}
+static int cmd_c(char *args);
 
-
-static int cmd_q(char *args) {
-  nemu_state.state = NEMU_QUIT;//更改nemu_state状态，安全退出，见utlis/state.c
-  return -1;
-}
+static int cmd_q(char *args);
 
 static int cmd_help(char *args);
 
@@ -94,6 +87,18 @@ static struct {
 };
 
 #define NR_CMD ARRLEN(cmd_table)
+
+/* cmd_c */
+static int cmd_c(char *args) {
+  cpu_exec(-1);
+  return 0;
+}
+
+/* cmd_q */
+static int cmd_q(char *args) {
+  nemu_state.state = NEMU_QUIT;//更改nemu_state状态，安全退出，见utlis/state.c
+  return -1;
+}
 
 /* cmd_help */
 static int cmd_help(char *args) {

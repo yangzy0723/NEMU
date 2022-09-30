@@ -51,7 +51,7 @@ void init_mem() {
   int i;
   for (i = 0; i < (int) (CONFIG_MSIZE / sizeof(p[0])); i ++) {
     p[i] = rand();
-  }//每32位存一个随机数
+  }//每32位存一个随机数，即四个字节
 #endif
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
