@@ -89,6 +89,7 @@ static void execute(uint64_t n) {
 		WP* head = get_head();
 		while(head != NULL)
 		{
+			printf("%s\n", head -> expr);
 			word_t original = head -> original_value;
 			bool success = true;
 			word_t now = expr(head -> expr, &success);
@@ -98,6 +99,7 @@ static void execute(uint64_t n) {
 				printf("The value of %s changed\n", head->expr);
 				return;
 			}
+			head = head -> next;
 		}
 
 
