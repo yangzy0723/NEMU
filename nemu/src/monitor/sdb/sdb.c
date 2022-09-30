@@ -32,6 +32,7 @@ void init_regex();
 void init_wp_pool();
 
 WP* new_wp();
+WP* get_head();
 void free_wp(int num);
 word_t vaddr_read(word_t addr, int len);//声明一下，不然会报错。
 
@@ -168,7 +169,13 @@ static int cmd_info(char *args)
 	if(strlen(args) == 1)
 	{
 		if(*args == 'r') isa_reg_display();
-		else if(*args == 'w')	printf("unfinished\n");
+		else if(*args == 'w')
+		{
+			printf("NUM\tEXPR\tORIGINAL_VALUE\n");
+			WP* head = get_head();
+			while(head != NULL)
+				printf("%d\t%s\t%u\n",head->NO, head->expr, head->original_value);
+		}
 		else	printf("Unknown command '%s'\n", args);
 	}
 	else

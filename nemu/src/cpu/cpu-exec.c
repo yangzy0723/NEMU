@@ -33,7 +33,7 @@ typedef struct watchpoint {
 #define MAX_INST_TO_PRINT 10
 
 word_t expr(char* e, bool* success);
-WP* get_head();
+WP* get_head();//声明一下，不然直接调用会出问题。
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
