@@ -32,7 +32,7 @@ void init_regex();
 void init_wp_pool();
 
 WP* new_wp();
-void free_up(WP* wp);
+void free_wp(int num);
 word_t vaddr_read(word_t addr, int len);//声明一下，不然会报错。
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -69,6 +69,8 @@ static int cmd_p(char *args);
 
 static int cmd_w(char *args);
 
+static int cmd_d(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -81,7 +83,8 @@ static struct {
 	{ "info", "info r: print register status; info w: print watch point information", cmd_info },
 	{ "x", "x N EXPR: Figure out the value of EXPR, take the result as the starting memory address, and output N consecutive 4 bytes in hexadecimal form", cmd_x },
 	{ "p", "p EXPR: expression evaluation", cmd_p},
-	{ "w", "w EXPR: Pause the program when the value of expression EXPR changes", cmd_w}
+	{ "w", "w EXPR: Pause the program when the value of expression EXPR changes", cmd_w},
+	{ "d", "d N: Delete the watchpoint N", cmd_d}
   /* TODO: Add more commands */
 
 };
@@ -253,6 +256,33 @@ static int cmd_w(char* args)
 	}
 	else
 		printf("illegal expression %s\n", args);
+	return 0;
+}
+
+/* cmd_d */
+static int cmd_d(char* args)
+{
+	if(args == NULL)
+		printf("Unknown command\n");
+	else
+	{
+		int num = 0;
+		char* tmp = args;
+		while(tmp != 0)
+		{
+			if( *tmp <= '9' && *tmp >= '0')
+			{
+				num = num*10 + *args - '0';
+				args++;
+			}
+			else
+				printf("Unknown command %s\n", args);
+		}
+		if(num >= 0 && num < 31)
+			free_wp(num);	
+		else
+			printf("Watchpoint %d does not exist!\n", num);
+	}
 	return 0;
 }
 
