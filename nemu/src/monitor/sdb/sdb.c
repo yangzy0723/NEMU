@@ -273,7 +273,7 @@ static int cmd_d(char* args)
 			if( *tmp <= '9' && *tmp >= '0')
 			{
 				num = num*10 + *args - '0';
-				args++;
+				tmp++;
 			}
 			else
 				printf("Unknown command %s\n", args);
