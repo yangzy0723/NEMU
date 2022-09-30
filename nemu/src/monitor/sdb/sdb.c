@@ -240,10 +240,11 @@ static int cmd_w(char* args)
 	if(success)
 	{
 		WP* new_point = new_wp();
+		printf("123\n");
 		if(new_point != NULL)
 		{
+			printf("456\n");
 			strcpy(new_point -> expr, args);
-			printf("%s\n",new_point -> expr);
 			new_point -> original_value = record; 
 		}
 	}
