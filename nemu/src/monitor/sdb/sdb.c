@@ -268,9 +268,9 @@ static int cmd_d(char* args)
 	{
 		int num = 0;
 		char* tmp = args;
-		while(tmp != 0)
+		while(*tmp != 0)
 		{
-			if( *tmp <= '9' && *tmp >= '0')
+			if(*tmp <= '9' && *tmp >= '0')
 			{
 				num = num*10 + *args - '0';
 				tmp++;
