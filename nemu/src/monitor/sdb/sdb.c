@@ -230,6 +230,11 @@ static int cmd_p(char* args)
 /* cmd_w */
 static int cmd_w(char* args)
 {
+	if(args == NULL)
+	{
+		printf("Unknown command\n");
+		return 0;
+	}
 	bool success = true;
 	word_t record = expr(args, &success);
 	if(success)
