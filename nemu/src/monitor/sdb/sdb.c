@@ -174,7 +174,10 @@ static int cmd_info(char *args)
 			printf("NUM\tEXPR\tORIGINAL_VALUE\n");
 			WP* head = get_head();
 			while(head != NULL)
+			{
 				printf("%d\t%s\t%u\n",head->NO, head->expr, head->original_value);
+				head = head -> next;
+			}
 		}
 		else	printf("Unknown command '%s'\n", args);
 	}
