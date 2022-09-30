@@ -175,7 +175,7 @@ static int cmd_info(char *args)
 			WP* head = get_head();
 			while(head != NULL)
 			{
-				printf("%d\t%s\t%u\n",head->NO, head->expr, head->original_value);
+				printf("%d\t%s\t%#010x\n",head->NO, head->expr, head->original_value);
 				head = head -> next;
 			}
 		}
