@@ -48,8 +48,8 @@ WP* new_wp()
 		printf("no more free watchpoint!\n");
 	free_ = free_ -> next;
 	tmp -> next = head;
-	tmp = head;
-	return tmp;
+	head = tmp;
+	return head;
 }
 
 void free_wp(WP* wp)
