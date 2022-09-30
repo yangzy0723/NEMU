@@ -243,6 +243,7 @@ static int cmd_w(char* args)
 		if(new_point != NULL)
 		{
 			strcpy(new_point -> expr, args);
+			printf("%s\n",new_point -> expr);
 			new_point -> original_value = record; 
 		}
 	}
