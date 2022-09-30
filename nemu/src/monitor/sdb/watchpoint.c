@@ -61,16 +61,20 @@ void free_wp(int num)
 		free_ = &wp_pool[num];
 		return;
 	}
-	while(head != NULL)
+	else
 	{
-		if(head -> next == &wp_pool[num])
+		WP* tmp = head;
+		while(tmp != NULL)
 		{
-			head -> next = head -> next -> next;
-			(&wp_pool[num]) -> next = free_;
-			free_ = &wp_pool[num];
-			break;
+			if(tmp -> next == &wp_pool[num])
+			{
+				tmp -> next = tmp -> next -> next;
+				(&wp_pool[num]) -> next = free_;
+				free_ = &wp_pool[num];
+				break;
+			}
+			tmp = tmp -> next;
 		}
-		head = head -> next;
 	}
 }
 
