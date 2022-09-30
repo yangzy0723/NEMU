@@ -21,7 +21,7 @@ typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
 	word_t original_value;
-	char expr[108]; 
+	char expr[108];//假设这是人能写出来的表达式。 
 
   /* TODO: Add more members if necessary */
 
