@@ -20,6 +20,8 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
+	word_t original_value;
+	char expr[108]; 
 
   /* TODO: Add more members if necessary */
 
@@ -37,6 +39,44 @@ void init_wp_pool() {
 
   head = NULL;
   free_ = wp_pool;
+}
+
+WP* new_wp()
+{
+	WP* tmp = free_;
+	if(free_ == NULL)
+		printf("no more free watchpoint!\n");
+	free_ = free_ -> next;
+	tmp -> next = head;
+	tmp = head;
+	return tmp;
+}
+
+void free_wp(WP* wp)
+{
+	if(head == wp)
+	{
+		head = head->next;
+		wp -> next = free_;
+		free_ = wp;
+		return;
+	}
+	while(head != NULL)
+	{
+		if(head -> next == wp)
+		{
+			head -> next = head -> next -> next;
+			wp -> next = free_;
+			free_ = wp;
+			break;
+		}
+		head = head -> next;
+	}
+}
+
+WP* get_head()
+{
+	return head;
 }
 
 /* TODO: Implement the functionality of watchpoint */

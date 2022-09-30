@@ -21,8 +21,18 @@
 
 static int is_batch_mode = false;
 
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+	word_t original_value;
+	char expr[108]; 
+} WP;
+
 void init_regex();
 void init_wp_pool();
+
+WP* new_wp();
+void free_up(WP* wp);
 word_t vaddr_read(word_t addr, int len);//声明一下，不然会报错。
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -64,6 +74,8 @@ static int cmd_x(char *args);
 
 static int cmd_p(char *args);
 
+static int cmd_w(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -75,7 +87,8 @@ static struct {
 	{ "si", "si [N]:Let the progam execute N instructions and then suspend the execution. When N is not given, it defaults to 1", cmd_si },
 	{ "info", "info r: print register status; info w: print watch point information", cmd_info },
 	{ "x", "x N EXPR: Figure out the value of EXPR, take the result as the starting memory address, and output N consecutive 4 bytes in hexadecimal form", cmd_x },
-	{ "p", "p EXPR: expression evaluation", cmd_p}
+	{ "p", "p EXPR: expression evaluation", cmd_p},
+	{ "w", "w EXPR: Pause the program when the value of expression EXPR changes", cmd_w}
   /* TODO: Add more commands */
 
 };
@@ -212,6 +225,25 @@ static int cmd_p(char* args)
 			printf("illegal expression %s\n", args);
 		return 0;
 	}
+}
+
+/* cmd_w */
+static int cmd_w(char* args)
+{
+	bool success = true;
+	word_t record = expr(args, &success);
+	if(success)
+	{
+		WP* new_point = new_wp();
+		if(new_point != NULL)
+		{
+			strcpy(new_point -> expr, args);
+			new_point -> original_value = record; 
+		}
+	}
+	else
+		printf("illegal expression %s\n", args);
+	return 0;
 }
 
 void sdb_set_batch_mode() {
