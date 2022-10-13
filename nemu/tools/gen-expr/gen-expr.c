@@ -31,8 +31,64 @@ static char *code_format =
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
-  buf[0] = '\0';
+static uint32_t choose(uint32_t n)
+{
+	return rand()%n;
+}
+
+uint32_t now_position = 0;
+
+void gen_num()
+{
+	uint32_t tmp = rand()%1000;
+	if(tmp == 0)
+	{
+		buf[now_position] = '0';
+		now_position++;
+	}
+	else
+	{
+		uint32_t old_position = now_position;
+		if(tmp >= 100)
+			now_position += 3;//三位数处理。
+		else if(tmp >= 10)
+			now_position += 2;//两位数处理。
+		else
+			now_position += 1;//一位数处理。
+		for(int j = 1; j <= now_position - old_position; j++)
+		{
+			buf[now_position - j] = tmp % 10 + '0';
+			tmp = tmp / 10;
+		}
+	}
+}
+
+void gen(char op)
+{
+	buf[now_position] = op;
+	now_position++;
+}
+
+void gen_rand_op()
+{
+	int op = rand()%4;
+	if(op == 0)
+		gen('+');
+	else if(op == 1)
+		gen('-');
+	else if(op == 2)
+		gen('*');
+	else if(op == 3)
+		gen('/');
+}
+static void gen_rand_expr() 
+{
+	switch(choose(3))
+	{
+		case 0: gen_num(); break;
+		case 1: gen('('); gen_rand_expr(); gen(')'); break;
+		default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -42,28 +98,32 @@ int main(int argc, char *argv[]) {
   if (argc > 1) {
     sscanf(argv[1], "%d", &loop);
   }
-  int i;
-  for (i = 0; i < loop; i ++) {
+  for (int i = 0; i < loop; i ++) 
+	{
     gen_rand_expr();
+		
+		buf[now_position] = 0;//保护作用。
 
-    sprintf(code_buf, code_format, buf);
+    sprintf(code_buf, code_format, buf);//将code_format中的格式化符号替换为buf，全部读入code_buf中。
 
     FILE *fp = fopen("/tmp/.code.c", "w");
     assert(fp != NULL);
-    fputs(code_buf, fp);
+    fputs(code_buf, fp);//将code_buf中的代码放进fp文件中，也就是.code.c文件里。
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");//对.code.c文件进行编译。
     if (ret != 0) continue;
 
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
     int result;
-    fscanf(fp, "%d", &result);
+    if(fscanf(fp, "%d", &result)){};//将结果从fp（也就是.expr文件）中取出，读入result中，然后打印。
     pclose(fp);
 
     printf("%u %s\n", result, buf);
   }
   return 0;
 }
+
+

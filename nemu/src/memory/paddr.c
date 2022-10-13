@@ -39,7 +39,7 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
 static void out_of_bound(paddr_t addr) {
   panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
       addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
-}
+}//越界，激活panic，使得程序会宕机。
 
 void init_mem() {
 #if   defined(CONFIG_PMEM_MALLOC)
@@ -51,7 +51,7 @@ void init_mem() {
   int i;
   for (i = 0; i < (int) (CONFIG_MSIZE / sizeof(p[0])); i ++) {
     p[i] = rand();
-  }
+  }//每32位存一个随机数，即四个字节
 #endif
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }

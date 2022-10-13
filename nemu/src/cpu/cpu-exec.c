@@ -18,12 +18,22 @@
 #include <cpu/difftest.h>
 #include <locale.h>
 
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+	word_t original_value;
+	char expr[108]; 
+} WP;
+
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
+
+word_t expr(char* e, bool* success);
+WP* get_head();//声明一下，不然直接调用会出问题。
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -73,6 +83,26 @@ static void execute(uint64_t n) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
+
+
+/*insert something*/
+		WP* head = get_head();
+		while(head != NULL)
+		{
+			word_t original = head -> original_value;
+			bool success = true;
+			word_t now = expr(head -> expr, &success);
+			if(now != original)
+			{
+				head -> original_value = now;
+				nemu_state.state = NEMU_STOP;
+				printf("The value of %s changed\n", head->expr);
+				break;
+			}
+			head = head -> next;
+		}
+
+
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
@@ -120,5 +150,9 @@ void cpu_exec(uint64_t n) {
           nemu_state.halt_pc);
       // fall through
     case NEMU_QUIT: statistic();
+
+
+		/* my insertinsert */
+		case NEMU_STOP: statistic();
   }
 }
