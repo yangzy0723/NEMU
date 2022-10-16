@@ -152,7 +152,7 @@ void cpu_exec(uint64_t n) {
     case NEMU_QUIT: statistic();
 
 
-		/* my insertinsert */
+		/* my insert */
 		case NEMU_STOP: statistic();
   }
 }
