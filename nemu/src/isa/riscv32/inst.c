@@ -56,7 +56,7 @@ static int decode_exec(Decode *s) {
   int dest = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
-
+	int64_t tmp;
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   decode_operand(s, &dest, &src1, &src2, &imm, concat(TYPE_, type)); \
@@ -104,7 +104,7 @@ static int decode_exec(Decode *s) {
 	INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div    , R, R(dest) = src1 / src2);
 	INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem    , R, R(dest) = src1 % src2);
 	INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = (sword_t)src1 < (sword_t)src2);
-	INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh   , R, R(dest) = ((int64_t)src1*(int64_t)src2)>>32);
+	INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh   , R, tmp = (int64_t)src1*(int64_t)src2, R(dest) = tmp >> 32);
 	INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra    , R, R(dest) = (sword_t)src1 >> (src2&0x0000001f));
 	INSTPAT("0000000 ????? ????? 101 ????? 01100 11", srl    , R, R(dest) = src1 >> (src2&0x0000001f));
 	/*N*/
