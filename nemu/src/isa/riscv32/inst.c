@@ -31,7 +31,7 @@ enum {
 #define src2R() do { *src2 = R(rs2); } while (0)
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
-#define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
+#define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5)|BITS(i, 11, 7); } while(0)
 #define immB() do { *imm = ((((SEXT(BITS(i, 31, 31), 1)<<12)|BITS(i, 7, 7)<<11)|BITS(i, 30, 25)<<5)|BITS(i, 11, 8)<<1)|0; } while(0)
 #define immJ() do { *imm = ((((SEXT(BITS(i, 31, 31), 1)<<20)|BITS(i, 19, 12)<<12)|BITS(i, 20, 20)<<11)|BITS(i, 30, 21)<<1)|0; } while(0)
 
@@ -70,11 +70,11 @@ static int decode_exec(Decode *s) {
 
 	/*J*/
 	INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, s->dnpc = imm + s->pc, R(dest) = s->snpc);
-	INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , J, s->dnpc = (imm + src1)&0, R(dest) = s->snpc);
 	/*B*/
 	/*I*/
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = Mr(src1 + imm, 4));
 	INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = imm + src1);
+	INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, s->dnpc = (imm + src1)&0, R(dest) = s->snpc);
 	/*S*/
   INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));
 	/*R*/
