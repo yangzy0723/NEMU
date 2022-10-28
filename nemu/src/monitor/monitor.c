@@ -82,7 +82,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
-      case 1: img_file = optarg; return 0;
+      case 1: img_file = optarg; return 0;/***************/
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
         printf("\t-b,--batch              run with batch mode\n");
@@ -100,7 +100,7 @@ void init_monitor(int argc, char *argv[]) {
   /* Perform some global initialization. */
 
   /* Parse arguments. */
-  parse_args(argc, argv);
+  parse_args(argc, argv);//对传入的参数进行分析，如-l代表记录log文件，-b代表打开批处理模式等等
 
   /* Set random seed. */
   init_rand();

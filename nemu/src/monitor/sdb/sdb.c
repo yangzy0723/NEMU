@@ -19,7 +19,7 @@
 #include <readline/history.h>
 #include "sdb.h"
 
-static int is_batch_mode = true;
+static int is_batch_mode = false;
 
 typedef struct watchpoint {
   int NO;
