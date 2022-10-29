@@ -184,6 +184,7 @@ int sprintf(char *out, const char *fmt, ...) {
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {//返回的值应该是strlen(fmt)的长度，但'\0'要算入n里面，即这个out要留一个位置给终止符，只能存n-1个字符。
   int char_num = 0;
 	int int_record;
+	int stringLen;
 	char char_record;
 	char *string_record;
 	const char *record_origin = fmt;
@@ -196,8 +197,9 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {//返回的值�
 			char_num++;
 			if(char_num == n - 1)
 			{
+				stringLen = strlen(record_origin);
 				*out = 0;//输出out的串，确定范围，范围边界也一定为'\0'。
-				return strlen(record_origin);
+				return stringLen;
 			}
 		}
 		else
@@ -211,8 +213,9 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {//返回的值�
 					char_num++;
 					if(char_num == n - 1)
 					{
+						stringLen = strlen(record_origin);
 						*out = 0;
-						return strlen(record_origin);
+						return stringLen;
 					}
 					break;
 				case 'c':
@@ -223,8 +226,9 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {//返回的值�
 					char_num++;
 					if(char_num == n - 1)
 					{
+						stringLen = strlen(record_origin);
 						*out = 0;
-						return strlen(record_origin);
+						return stringLen;
 					}
 					break;
 				case 's':	
@@ -236,8 +240,9 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {//返回的值�
 						char_num++;
 						if(char_num == n - 1)
 						{
+							stringLen = strlen(record_origin);
 							*out = 0;
-							return strlen(record_origin);
+							return stringLen;
 						}
 						string_record++;
 					}
@@ -247,8 +252,9 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {//返回的值�
 					write_int_buffer_limit(int_record, n, &char_num, &out);
 					if(char_num == n - 1)
 					{
+						stringLen = strlen(record_origin);
 						*out = 0;
-						return strlen(record_origin);
+						return stringLen;
 					}
 					break;
 				default:
