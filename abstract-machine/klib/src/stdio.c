@@ -5,6 +5,8 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+size_t strlen(const char* s);
+
 int write_int(int x)
 {
 	int num = 0;
@@ -41,20 +43,20 @@ int write_int_buffer(int x, char **buffer)
 
 void write_int_buffer_limit(int x, int size, int *num, char **buffer)
 {
-	if(*num == size)
+	if((*num) == size - 1)
 			return;
 	if(x < 0)
 	{
 		*(*buffer) = '-';
 		(*buffer)++;
-		num++;
+		(*num)++;
 		x = -x;
 	}
-	if(*num == size)
+	if(*num == size - 1)
 		return;
 	if(x >= 10)
 		write_int_buffer_limit(x/10, size, num, buffer);
-	if(*num == size)
+	if(*num == size - 1)
 		return;
 	*(*buffer) = x % 10 + '0';
 	(*buffer)++;
@@ -62,7 +64,7 @@ void write_int_buffer_limit(int x, int size, int *num, char **buffer)
 	return;
 }
 
-int printf(const char *fmt, ...) {
+int printf(const char *fmt, ...) {//有多少字符，return多少字符，不考虑最后的终止符'\0'
 	va_list ap;
 	int char_num = 0;
 	int int_record;
@@ -115,7 +117,7 @@ int printf(const char *fmt, ...) {
 	return char_num;
 }
 
-int vsprintf(char *out, const char *fmt, va_list ap) {
+int vsprintf(char *out, const char *fmt, va_list ap) {//out结尾必须添加终止符'\0','\0'不算长度。
 	int char_num = 0;
 	int int_record;
 	char char_record;
@@ -179,11 +181,12 @@ int sprintf(char *out, const char *fmt, ...) {
 	return char_num;
 }
 
-int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
+int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {//返回的值应该是strlen(fmt)的长度，但'\0'要算入n里面，即这个out要留一个位置给终止符，只能存n-1个字符。
   int char_num = 0;
 	int int_record;
 	char char_record;
 	char *string_record;
+	const char *record_origin = fmt;
 	while(*fmt)
 	{
 		if(*fmt != '%')
@@ -191,8 +194,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 			*out = *fmt;
 			out++;
 			char_num++;
-			if(char_num == n)
-				return char_num;
+			if(char_num == n - 1)
+			{
+				*out = 0;//输出out的串，确定范围，范围边界也一定为'\0'。
+				return strlen(record_origin);
+			}
 		}
 		else
 		{
@@ -203,8 +209,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 					*out = '%';
 					out++;
 					char_num++;
-					if(char_num == n)
-							return char_num;
+					if(char_num == n - 1)
+					{
+						*out = 0;
+						return strlen(record_origin);
+					}
 					break;
 				case 'c':
 					char_record = (char)va_arg(ap, int);
@@ -212,8 +221,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 					*out = char_record;
 					out++;
 					char_num++;
-					if(char_num == n)
-						return char_num;
+					if(char_num == n - 1)
+					{
+						*out = 0;
+						return strlen(record_origin);
+					}
 					break;
 				case 's':	
 					string_record = va_arg(ap, char*);
@@ -222,16 +234,22 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 						*out = *string_record;
 						out++;
 						char_num++;
-						if(char_num == n)
-							return char_num;
+						if(char_num == n - 1)
+						{
+							*out = 0;
+							return strlen(record_origin);
+						}
 						string_record++;
 					}
 					break; 
 				case 'd':	
 					int_record = va_arg(ap, int);
 					write_int_buffer_limit(int_record, n, &char_num, &out);
-					if(char_num == n)
-						return char_num;
+					if(char_num == n - 1)
+					{
+						*out = 0;
+						return strlen(record_origin);
+					}
 					break;
 				default:
 					return -1;
@@ -241,15 +259,15 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 		fmt++;
 	}
 	*out = 0;
-	return char_num;
+	return strlen(record_origin);
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
   va_list ap;
-	int char_num;
+	int return_value;
 	va_start(ap, fmt);
-	char_num = vsnprintf(out, n, fmt, ap);
+	return_value = vsnprintf(out, n, fmt, ap);
 	va_end(ap);
-	return char_num;
+	return return_value;
 }
 #endif
