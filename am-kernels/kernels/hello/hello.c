@@ -14,7 +14,7 @@ int main(const char *args) {
   printf("%d",printf("%s%d\n",s,d));
   printf("%d",sprintf(buffer, "%s%d%s\n", s, d, s));
   printf("%s\n",buffer);
-  printf("%d",snprintf(buffer, 5, "%s%d%s\n", s, d, s));
+  printf("%d",snprintf(buffer, 5, "$$$$$$$$$$$$$$$$$$"));
   printf("%s",buffer);
   return 0;
 }
