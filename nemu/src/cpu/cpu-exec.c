@@ -85,6 +85,7 @@ static void execute(uint64_t n) {
     trace_and_difftest(&s, cpu.pc);
 
 
+
 /*insert something*/
 		WP* head = get_head();
 		while(head != NULL)
