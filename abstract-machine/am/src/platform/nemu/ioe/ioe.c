@@ -42,13 +42,13 @@ static void *lut[128] = {
   [AM_DISK_STATUS ] = __am_disk_status,
   [AM_DISK_BLKIO  ] = __am_disk_blkio,
   [AM_NET_CONFIG  ] = __am_net_config,
-};
+};//函数指针，每一个寄存器都对应一个函数。
 
 static void fail(void *buf) { panic("access nonexist register"); }
 
 bool ioe_init() {
   for (int i = 0; i < LENGTH(lut); i++)
-    if (!lut[i]) lut[i] = fail;
+    if (!lut[i]) lut[i] = fail;//函数指针
   __am_gpu_init();
   __am_timer_init();
   __am_audio_init();
