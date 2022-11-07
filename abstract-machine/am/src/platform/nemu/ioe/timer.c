@@ -1,11 +1,14 @@
 #include <am.h>
 #include <nemu.h>
 
+//word_t mmio_read(paddr_t addr, int len);
+	
 void __am_timer_init() {
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  uptime->us = mmio(RTC_ADDR + 4, 4);
+  //uptime->us = mmio(RTC_ADDR + 4, 4);
+	uptime->us = inl(RTC_ADDR + 4);
 }
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
