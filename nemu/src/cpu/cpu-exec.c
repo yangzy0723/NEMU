@@ -17,13 +17,36 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include <string.h>
 
+#define BUF_SIZE 16
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
 	word_t original_value;
 	char expr[108]; 
 } WP;
+
+
+char Buff[BUF_SIZE][128] = {0};
+int Read = 0;
+int Write = 0;
+void Buff_Write(char* log)
+{
+	strcpy(Buff[Write], log);
+	Write = (Write + 1) % BUF_SIZE;
+	Read = Write;
+}
+void Buff_Read()
+{
+	for(int i = 1; i <= 16; i++)
+	{
+		if(Buff[Read][0] != 0)
+			printf("%s\n",Buff[Read]);
+		Read = (Read + 1)%BUF_SIZE;
+	}
+}
+
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -74,6 +97,13 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+	
+
+
+	Buff_Write(s->logbuf);
+
+
+
 #endif
 }
 
@@ -121,6 +151,7 @@ static void statistic() {
 void assert_fail_msg() {
   isa_reg_display();
   statistic();
+	Buff_Read();
 }
 
 /* Simulate how the CPU works. */
