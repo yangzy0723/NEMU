@@ -73,19 +73,30 @@ static inline void update_screen() {
 void vga_update_screen() {
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
+	if(vgactl_port_base[1] == 1)
+	{
+		update_screen();
+		vgactl_port_base[1] = 0;
+	}
+}
+/*我自己写的回调函数*/
+static void vga_io_handler(uint32_t offset, int len, bool is_write) 
+{
+	if(is_write)
+		vga_update_screen();	
 }
 
 void init_vga() {
   vgactl_port_base = (uint32_t *)new_space(8);
-  vgactl_port_base[0] = (screen_width() << 16) | screen_height();
+  vgactl_port_base[0] = (screen_width() << 16) | screen_height();//vgactl_port_base[0]存宽和高，vgactl_port_base[1]存是否需要同步图像到设备。
 #ifdef CONFIG_HAS_PORT_IO
   add_pio_map ("vgactl", CONFIG_VGA_CTL_PORT, vgactl_port_base, 8, NULL);
 #else
-  add_mmio_map("vgactl", CONFIG_VGA_CTL_MMIO, vgactl_port_base, 8, NULL);
+  add_mmio_map("vgactl", CONFIG_VGA_CTL_MMIO, vgactl_port_base, 8, vga_io_handler);
 #endif
 
   vmem = new_space(screen_size());
-  add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
+  add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), vga_io_handler);
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
   IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
 }
