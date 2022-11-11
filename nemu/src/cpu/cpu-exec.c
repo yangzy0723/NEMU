@@ -44,9 +44,9 @@ void Buff_Read()
 		if(Buff[Read][0] != 0)
 		{
 			if(i == 16)//最近执行的一条指令
-				printf("   -->%s\n", Buff[Read]);
+				printf(" -->%s\n", Buff[Read]);
 			else
-				printf("      %s\n", Buff[Read]);
+				printf("    %s\n", Buff[Read]);
 		}
 		Read = (Read + 1)%BUF_SIZE;
 	}
