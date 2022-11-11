@@ -17,13 +17,11 @@
 
 extern uint64_t g_nr_guest_inst;
 FILE *log_fp = NULL;
-FILE *memlog_file;
+FILE *memlog_file = NULL;
 void init_log(const char *log_file) {
 	
 	/*my insert*/
 	memlog_file = fopen("../../build/mem-log.txt", "w");//用于存储mem_trace
-	if(memlog_file == NULL)
-		printf("55555\n");
 
 	log_fp = stdout;
   if (log_file != NULL) {
