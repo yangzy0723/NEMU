@@ -23,7 +23,7 @@ void init_log(const char *log_file) {
 	/*my insert*/
 	memlog_file = fopen("../../build/mem-log.txt", "w");//用于存储mem_trace
 	if(memlog_file == NULL)
-		printf("123\n");
+		printf("55555\n");
 
 	log_fp = stdout;
   if (log_file != NULL) {
