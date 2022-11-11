@@ -27,7 +27,7 @@ typedef struct watchpoint {
 	char expr[108]; 
 } WP;
 
-
+#ifdef CONFIG_IRINGBUF
 char Buff[BUF_SIZE][128] = {0};
 int Read = 0;
 int Write = 0;
@@ -46,6 +46,7 @@ void Buff_Read()
 		Read = (Read + 1)%BUF_SIZE;
 	}
 }
+#endif
 
 
 /* The assembly code of instructions executed is only output to the screen
@@ -97,13 +98,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-	
+#endif
 
-
+#ifdef CONFIG_IRINGBUF
 	Buff_Write(s->logbuf);
-
-
-
 #endif
 }
 
@@ -151,7 +149,9 @@ static void statistic() {
 void assert_fail_msg() {
   isa_reg_display();
   statistic();
+#ifdef CONFIG_IRINGBUF
 	Buff_Read();
+#endif
 }
 
 /* Simulate how the CPU works. */
