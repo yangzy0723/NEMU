@@ -42,7 +42,12 @@ void Buff_Read()
 	for(int i = 1; i <= 16; i++)
 	{
 		if(Buff[Read][0] != 0)
-			printf("%s\n",Buff[Read]);
+		{
+			if(i == 16)//最近执行的一条指令
+				printf("--->%s\n", Buff[Read]);
+			else
+				printf("\t%s\n", Buff[Read]);
+		}
 		Read = (Read + 1)%BUF_SIZE;
 	}
 }
