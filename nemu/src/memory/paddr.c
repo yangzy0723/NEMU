@@ -56,7 +56,10 @@ void init_mem() {
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
+extern FILE* memlog_file;
+
 word_t paddr_read(paddr_t addr, int len) {
+	fprintf(memlog_file, "read data from ADDRESS %u, the length of data is %d\n",addr, len);
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
@@ -64,6 +67,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
+	fprintf(memlog_file, "write data to ADDRESS %u, the length of data is %d, the data is %u\n",addr, len, data);
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
