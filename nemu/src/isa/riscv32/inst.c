@@ -22,6 +22,10 @@
 #define Mr vaddr_read
 #define Mw vaddr_write
 
+#ifdef CONFIG_IRINGBUF
+	void Buff_Write(char * log);
+#endif
+
 enum {
   TYPE_I, TYPE_U, TYPE_S, TYPE_R, TYPE_B, TYPE_J,
   TYPE_N, // none
@@ -128,5 +132,29 @@ static int decode_exec(Decode *s) {
 
 int isa_exec_once(Decode *s) {
   s->isa.inst.val = inst_fetch(&s->snpc, 4);
+
+/*自己加的*/
+#ifdef CONFIG_IRINGBUF
+  char *p = s->logbuf;
+  p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
+  int ilen = s->snpc - s->pc;
+  int i;
+  uint8_t *inst = (uint8_t *)&s->isa.inst.val;
+  for (i = ilen - 1; i >= 0; i --) {
+    p += snprintf(p, 4, " %02x", inst[i]);
+  }
+  int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
+  int space_len = ilen_max - ilen;
+  if (space_len < 0) space_len = 0;
+  space_len = space_len * 3 + 1;
+  memset(p, ' ', space_len);
+  p += space_len;
+
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+	Buff_Write(s->logbuf);
+#endif
+
   return decode_exec(s);
 }

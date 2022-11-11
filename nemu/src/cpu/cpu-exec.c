@@ -99,10 +99,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #endif
-
-#ifdef CONFIG_IRINGBUF
-	Buff_Write(s->logbuf);
-#endif
 }
 
 static void execute(uint64_t n) {
