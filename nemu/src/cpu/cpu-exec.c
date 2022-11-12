@@ -123,7 +123,7 @@ static void execute(uint64_t n) {
 			if(now != original)
 			{
 				head -> original_value = now;
-				nemu_state.state = NEMU_STOP;
+				nemu_state.state = NEMU_STOP;//就相当于暂停程序
 				printf("The value of %s changed\n", head->expr);
 				break;
 			}
