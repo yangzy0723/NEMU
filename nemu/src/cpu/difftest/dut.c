@@ -125,7 +125,7 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
-  checkregs(&ref_r, npc);
+  checkregs(&ref_r, npc);//此处把pc改为了npc,pc寄存器中应该是下一条指令的pc值
 }
 #else
 void init_difftest(char *ref_so_file, long img_size, int port) { }
