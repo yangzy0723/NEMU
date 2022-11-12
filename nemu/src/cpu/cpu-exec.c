@@ -76,7 +76,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }//将输出写进nemu-log文件
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
-  IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+  IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));//_this->pc，是当前已执行完指令的pc；dnpc是即将执行的下一条指令的pc
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
