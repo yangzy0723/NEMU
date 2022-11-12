@@ -286,7 +286,10 @@ static int cmd_d(char* args)
 				tmp++;
 			}
 			else
+			{
 				printf("Unknown command %s\n", args);
+				return 0;
+			}
 		}
 		if(num >= 0 && num < 31)
 			free_wp(num);	
