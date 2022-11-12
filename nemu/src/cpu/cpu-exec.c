@@ -171,7 +171,7 @@ void cpu_exec(uint64_t n) {
   g_timer += timer_end - timer_start;
 
   switch (nemu_state.state) {
-    case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
+    case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;//可能是用于暂停执行的
 
     case NEMU_END: case NEMU_ABORT:
       Log("nemu: %s at pc = " FMT_WORD,
@@ -180,10 +180,6 @@ void cpu_exec(uint64_t n) {
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           nemu_state.halt_pc);
       // fall through
-    case NEMU_QUIT: statistic();
-
-
-		/* my insert */
-		case NEMU_STOP: statistic();
+    case NEMU_QUIT: statistic();//上面的NEMU_END/NEMU_ABORT都会调用statistic
   }
 }
