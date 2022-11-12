@@ -21,7 +21,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   for(int i = 0; i < 32; i++)
 		if(gpr(i) != ref_r->gpr[i])
 			return false;
-	printf(FMT_WORD""FMT_WORD, ref_r->pc, pc);
+	printf(FMT_WORD" "FMT_WORD, ref_r->pc, pc);
 	if(ref_r->pc != pc)
 		return false;
 	return true;
