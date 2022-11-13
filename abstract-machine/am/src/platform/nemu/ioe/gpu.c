@@ -35,10 +35,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl)
 	for(int i = 0; i < ctl -> h; i++)
 	{
 		for(int j = 0; j < ctl -> w; j++)
-		{	
-			outl(FB_ADDR + (Width * dy_y + dy_x + j)*4, pixels_live[count]);
-			count++;
-		}
+			outl(FB_ADDR + (Width * dy_y + dy_x + j)*4, pixels_live[i * ctl->w + j]);
 		dy_y++;
 	}
 }
