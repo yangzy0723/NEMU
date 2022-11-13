@@ -28,7 +28,6 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl)
 	/*uint32_t Height = get_information & 0x0000ffff; 用不到*/
 	uint32_t dy_x = ctl -> x;
 	uint32_t dy_y = ctl -> y;
-	int count = 0;
 	uint32_t *pixels_live = (uint32_t *)ctl -> pixels;
   if (ctl->sync) 
     outl(SYNC_ADDR, 1);
