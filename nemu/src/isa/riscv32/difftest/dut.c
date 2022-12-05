@@ -23,7 +23,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   for(int i = 0; i < 32; i++)
 		if(gpr(i) != ref_r->gpr[i])
 		{
-			printf("register %d is different, %d ans:%d\n",i, gpr(i), ref_r->gpr[i]);
+			printf("register %d is different, yours:"FMT_WORD" standard:"FMT_WORD"\n",i, gpr(i), ref_r->gpr[i]);
 			return false;
 		}
 	if(ref_r->pc != cpu.pc)
