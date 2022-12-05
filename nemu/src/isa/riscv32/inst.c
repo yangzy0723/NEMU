@@ -79,6 +79,30 @@ void csrrs_function(word_t csr, word_t src1, word_t dest)
 	R(dest) = t;
 	return;
 }
+void csrrw_function(word_t csr, word_t src1, word_t dest)
+{
+	word_t t = 0;
+	switch(csr)
+	{
+		case 0x341:
+			t = cpu.mepc;
+			cpu.mepc = src1;
+			break;
+		case 0x300:
+			t = cpu.mstatus;
+			cpu.mstatus = src1;
+			break;
+		case 0x342:
+			t = cpu.mcause;
+			cpu.mcause = src1;
+			break;
+		case 0x305:
+			t = cpu.mtvec;
+			cpu.mtvec = src1;
+			break;
+	}
+	R(dest) = t;
+}
 
 static int decode_exec(Decode *s) {
   int dest = 0;
@@ -149,6 +173,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
 	/*privileged instruction*/
 	INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, csrrs_function(imm, src1, dest));
+	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, csrrw_function(imm, src1, dest));
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
