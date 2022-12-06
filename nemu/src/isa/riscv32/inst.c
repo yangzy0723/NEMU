@@ -87,21 +87,21 @@ void csrrw_function(word_t csr, word_t src1, word_t dest)
 	switch(csr)
 	{
 		case 0x341:
-			t = cpu.mepc;
-			cpu.mepc = src1;
-			break;
+				t = cpu.mepc;
+				cpu.mepc = src1;
+				break;
 		case 0x300:
-			t = cpu.mstatus;
-			cpu.mstatus = src1;
-			break;
+				t = cpu.mstatus;
+				cpu.mstatus = src1;
+				break;
 		case 0x342:
-			t = cpu.mcause;
-			cpu.mcause = src1;
-			break;
+				t = cpu.mcause;
+				cpu.mcause = src1;
+				break;
 		case 0x305:
-			t = cpu.mtvec;
-			cpu.mtvec = src1;
-			break;
+				t = cpu.mtvec;
+				cpu.mtvec = src1;
+				break;
 	}
 	R(dest) = t;
 	return;
