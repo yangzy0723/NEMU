@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <stdio.h>
+#include <utils.h>
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 
 #ifdef CONFIG_ETRACE
