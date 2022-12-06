@@ -69,7 +69,7 @@ word_t paddr_read(paddr_t addr, int len) {
 
 void paddr_write(paddr_t addr, int len, word_t data) {
 #ifdef CONFIG_MTRACE
-	log_write("\twrite data to ADDRESS " FMT_WORD ", the length of data is %d, the data is " FMT_WORD "\n",addr, len, data);
+	log_write("\twrite data to ADDRESS " FMT_WORD ", the length of data is %d, the data is " FMT_WORD "\n", addr, len, data);
 #endif  
 
 	if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
