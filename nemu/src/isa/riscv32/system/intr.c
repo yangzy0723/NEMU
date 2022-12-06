@@ -15,11 +15,10 @@
 
 #include <isa.h>
 #include <stdio.h>
-#include <utils.h>
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 
 #ifdef CONFIG_ETRACE
-	log_write("123\n");
+	printf("\nAt PC_ADDRESS " FMT_WORD ", an error is triggered. The error_num(cpu.mcause) is " FMT_WORD "\n\n",epc, NO);
 #endif
 
 	cpu.mepc = epc;
