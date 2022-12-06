@@ -17,8 +17,7 @@
 #include <stdio.h>
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 #ifdef CONFIG_ETRACE
-	printf("yzy\n");
-	log_write("\n\nAt PC_ADDRESS " FMT_WORD ", an error is triggered.\nThe error_num(cpu.mcause) is" FMT_WORD "\n\n\n",epc, NO);
+	log_write("At PC_ADDRESS " FMT_WORD ", an error is triggered.\nThe error_num(cpu.mcause) is" FMT_WORD "\n\n\n",epc, NO);
 #endif  
 	cpu.mepc = epc;
 	cpu.mcause = NO;
