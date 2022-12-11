@@ -102,7 +102,7 @@ int printf(const char *fmt, ...) {//有多少字符，return多少字符，不�
 						string_record++;
 					}
 					break; 
-				case 'd':	
+				case 'd': case 'p': 	
 					int_record = va_arg(ap, int);
 					char_num += write_int(int_record);
 					break;
