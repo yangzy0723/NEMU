@@ -18,7 +18,7 @@ void do_syscall(Context *c) {
 					if(c->GPR2 == 1 || c->GPR2 == 2)
 						for(int i = 0; i < c->GPR4; i++)
 							putch(*((char*)c->GPR3 + i));
-					c->GPRx = c->GPR4;
+					c->GPRx = 1;
 				};break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
