@@ -31,10 +31,10 @@ int write_16(uint32_t x)//以16进制的方式去写一个数
 	switch(x % 16)
 	{
 		case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
-			putch(x % 10 + '0');
+			putch(x % 16 + '0');
 			break;
 		default:
-			putch(x % 10 - 10 + 'a');
+			putch(x % 16 - 10 + 'a');
 			break;
 		num++;
 	}
