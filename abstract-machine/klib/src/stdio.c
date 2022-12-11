@@ -7,7 +7,7 @@
 
 size_t strlen(const char* s);
 
-int write_int(int x)
+int write_10(int x)
 {
 	int num = 0;
 	if(x < 0)
@@ -17,11 +17,30 @@ int write_int(int x)
 		x = -x;
 	}
 	if(x >= 10)
-		num += write_int(x / 10);
+		num += write_10(x / 10);
 	putch(x % 10 + '0');
 	num++;
 	return num;
 }
+
+int write_16(uint32_t x)//以16进制的方式去写一个数
+{
+	int num = 0;
+	if(x >= 16)
+		num += write_16(x / 16);
+	switch(x % 16)
+	{
+		case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+			putch(x % 10 + '0');
+			break;
+		default:
+			putch(x % 10 - 10 + 'a');
+			break;
+		num++;
+	}
+	return num;
+}														
+
 
 int write_int_buffer(int x, char **buffer)
 {
@@ -68,6 +87,7 @@ int printf(const char *fmt, ...) {//有多少字符，return多少字符，不�
 	va_list ap;
 	int char_num = 0;
 	int int_record;
+	uint32_t uint_record;
 	char char_record;
 	char *string_record;
 	va_start(ap, fmt);
@@ -102,9 +122,16 @@ int printf(const char *fmt, ...) {//有多少字符，return多少字符，不�
 						string_record++;
 					}
 					break; 
-				case 'd': case 'p': 	
+				case 'd':  	
 					int_record = va_arg(ap, int);
-					char_num += write_int(int_record);
+					char_num += write_10(int_record);
+					break;
+				case 'p':
+					putch('0');
+					putch('x');
+					char_num = 2;
+					uint_record = va_arg(ap, uint32_t);
+					char_num += write_16(uint_record);
 					break;
 				default:
 					return -1;
