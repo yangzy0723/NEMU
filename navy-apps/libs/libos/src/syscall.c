@@ -66,7 +66,7 @@ int _write(int fd, void *buf, size_t count) {
 }
 
 extern char end;
-void *progran_break = NULL;
+void *program_break = NULL;
 void *_sbrk(intptr_t increment) {
   if(program_break == NULL)
 		program_break = (void *)&end;
@@ -76,7 +76,7 @@ void *_sbrk(intptr_t increment) {
 		return program_break-increment;
 	}
 	else
-		return -1;
+		return (void*)-1;
 }
 
 int _read(int fd, void *buf, size_t count) {
