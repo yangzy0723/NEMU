@@ -20,23 +20,33 @@ int fs_close(int fd);
 static uintptr_t loader(PCB *pcb, const char *filename) {
 
 	int fd = fs_open(filename, 0, 0);
+	
 	Elf_Ehdr elf;
-	fs_read(fd, &elf, sizeof(elf));
+	
+	fs_read(fd, &elf, sizeof(elf));//由于elf头一定是某一个ELF文件的头部文件，直接读取对应大小即可,不需要fs_lseek
+	
 	assert(*(uint32_t*)elf.e_ident == 0x464c457f);//小端方式
 	for(int i = 0; i < elf.e_phnum; i++)
 	{
 		Elf_Phdr segment;
+		
 		fs_lseek(fd, i * elf.e_phentsize + elf.e_phoff, SEEK_SET);
 		fs_read(fd, &segment, sizeof(segment));
+		
 		if(segment.p_type == PT_LOAD)
 		{
 			void *VAddr = (void *)segment.p_vaddr;
+			
 			fs_lseek(fd, segment.p_offset, SEEK_SET);
 			fs_read(fd, VAddr, segment.p_filesz);
+			
 			memset(VAddr + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
 		}
 	}
-  return elf.e_entry;
+
+	fs_close(fd);
+  
+	return elf.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
@@ -66,5 +76,5 @@ ELF Header:
   Size of section headers:           40 (bytes)
   Number of section headers:         14
   Section header string table index: 13
-  */
+*/
 
