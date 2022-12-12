@@ -107,6 +107,32 @@ void csrrw_function(word_t csr, word_t src1, word_t dest)
 	return;
 }
 
+void csrrc_function(word_t csr, word_t src1, word_t dest)
+{
+	word_t t = 0;
+	switch(csr)
+	{
+		case 0x341:
+				t = cpu.mepc;
+				cpu.mepc = t & (~src1);
+				break;
+		case 0x300:
+				t = cpu.mstatus;
+				cpu.mstatus = t & (~src1);
+				break;
+		case 0x342:
+				t = cpu.mcause;
+				cpu.mcause = t & (~src1);
+				break;
+		case 0x305:
+				t = cpu.mtvec;
+				cpu.mtvec = t & (~src1);
+				break;
+	}
+	R(dest) = t;
+	return;
+}
+
 static int decode_exec(Decode *s) {
   int dest = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -177,6 +203,7 @@ static int decode_exec(Decode *s) {
 	/*privileged instruction*/
 	INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, csrrs_function(imm, src1, dest));
 	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, csrrw_function(imm, src1, dest));	
+	INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , I, csrrc_function(imm, src1, dest));
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(isa_reg_str2val("a7", &success), s->pc));
 	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc + 4);
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
