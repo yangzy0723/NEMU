@@ -73,7 +73,7 @@ void *_sbrk(intptr_t increment) {
 	if(_syscall_(SYS_brk, increment, 0, 0) == 0)
 	{
 		program_break += increment;
-		return program_break-increment;
+		return program_break-increment;//就是return old_program_break
 	}
 	else
 		return (void*)-1;

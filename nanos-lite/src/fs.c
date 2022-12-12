@@ -7,8 +7,8 @@ typedef struct {
   char *name;
   size_t size;
   size_t disk_offset;
-  ReadFn read;
-  WriteFn write;
+  ReadFn read;		//这应该是一个函数,对应的是fs_read
+  WriteFn write;	//这应该也是一个函数,对应的是fs_write
 } Finfo;
 
 enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
@@ -33,4 +33,13 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+}
+
+int fs_open(const char *pathname, int flags, int mode)
+{
+	int Num_Of_File_Table = sizeof(file_table)/sizeof(Finfo);
+	for(int i = 0; i < Num_Of_File_Table; i++)
+		if(strcmp(file_table[i].name, pathname) == 0)
+			return i;
+	assert(0);	
 }
