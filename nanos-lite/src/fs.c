@@ -43,7 +43,7 @@ int fs_open(const char *pathname, int flags, int mode)
 	for(int i = 0; i < Num_Of_File_Table; i++)
 		if(strcmp(file_table[i].name, pathname) == 0)
 			return i;	
-	panic("files-matching fails!");
+	return -1;
 }
 
 size_t fs_read(int fd, void *buf, size_t len)

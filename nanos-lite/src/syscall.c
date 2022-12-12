@@ -1,6 +1,8 @@
 #include <common.h>
 #include "syscall.h"
 
+int fs_open(const char *pathname, int flags, int mode);
+
 #define STRACE 1
 void do_syscall(Context *c) {
 
@@ -23,10 +25,13 @@ void do_syscall(Context *c) {
 							putch(*((char*)a[2] + i));
 					c->GPRx = a[3];
 				};break;
-		case SYS_brk:
-				{
-					c->GPRx = 0;
-				}; break;
+		case SYS_brk: c->GPRx = 0; break;
+		case SYS_open: 
+			{
+				c->GPRx = fs_open((const char *)a[1], (int)a[2], (int)a[3]);
+				if(c -> GPRx == -1)
+						panic("files-matching fails!");
+			}; break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 }
