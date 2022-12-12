@@ -9,10 +9,10 @@ void do_syscall(Context *c) {
 #endif
 	
   uintptr_t a[4];
-  a[0] = c->GPR1;//存的是type
-	a[1] = c->GPR2;//_syscall_第二个参数
-	a[2] = c->GPR3;//_syscall_第三个参数
-	a[3] = c->GPR4;//_syscall_第四个参数
+  a[0] = c->GPR1;//存的是type,a17
+	a[1] = c->GPR2;//_syscall_第二个参数,a0
+	a[2] = c->GPR3;//_syscall_第三个参数,a1
+	a[3] = c->GPR4;//_syscall_第四个参数,a2
   switch (a[0]) {
 		case SYS_exit: halt(0);
 		case SYS_yield: yield(); c->GPRx = 0; break; 

@@ -4,6 +4,7 @@
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_read(int fd, void *buf, size_t len);
+size_t fs_lseek(int fd, size_t offset, int whence);
 int fs_close(int fd);
 size_t invalid_read(void *buf, size_t offset, size_t len);
 size_t invalid_write(const void *buf, size_t offset, size_t len);
@@ -45,10 +46,22 @@ int fs_open(const char *pathname, int flags, int mode)
 
 size_t fs_read(int fd, void *buf, size_t len)
 {
-	printf("%d %d\n", len, file_table[fd].open_offset);
+	if(len > file_table[fd].size - file_table[fd].open_offset)
+		len = file_table[fd].size - file_table[fd].open_offset; 
 	ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
 	file_table[fd].open_offset += len;
 	return len;
+}
+
+size_t fs_lseek(int fd, size_t offset, int whence)
+{
+	switch(whence)
+	{
+		case SEEK_SET: file_table[fd].open_offset = offset; break;
+		case SEEK_CUR: file_table[fd].open_offset += offset; break;
+		case SEEK_END: file_table[fd].open_offset = file_table[fd].size + offset; break;
+	}
+	return file_table[fd].open_offset;
 }
 
 int fs_close(int fd)

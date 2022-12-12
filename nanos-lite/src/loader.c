@@ -1,9 +1,11 @@
 #include <proc.h>
 #include <elf.h>
+#include <fs.h>
 
 //声明一下
 size_t ramdisk_read(void *buf, size_t offset, size_t len);//声明一下
 int fs_open(const char *pathname, int flags, int mode);
+size_t fs_lseek(int fd, size_t offset, int whence);
 size_t fs_read(int fd, void *buf, size_t len);
 int fs_close(int fd);
 
@@ -20,16 +22,17 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	int fd = fs_open(filename, 0, 0);
 	Elf_Ehdr elf;
 	fs_read(fd, &elf, sizeof(elf));
-	fs_close(fd);
 	assert(*(uint32_t*)elf.e_ident == 0x464c457f);//小端方式
 	for(int i = 0; i < elf.e_phnum; i++)
 	{
 		Elf_Phdr segment;
-		ramdisk_read(&segment, i * elf.e_phentsize + elf.e_phoff, sizeof(segment));
+		fs_lseek(fd, i * elf.e_phentsize + elf.e_phoff, SEEK_SET);
+		fs_read(fd, &segment, sizeof(segment));
 		if(segment.p_type == PT_LOAD)
 		{
 			void *VAddr = (void *)segment.p_vaddr;
-			ramdisk_read(VAddr, segment.p_offset, segment.p_filesz);
+			fs_lseek(fd, segment.p_offset, SEEK_SET);
+			fs_read(fd, VAddr, segment.p_filesz);
 			memset(VAddr + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
 		}
 	}
