@@ -44,14 +44,14 @@ void do_syscall(Context *c) {
 				c->GPRx = fs_lseek(a[1], a[2], a[3]); 
 				if(c->GPRx == -1)
 					panic("seeking the offset fails!");
-			}; break;
+			}; break;//在函数实现过程中，未考虑返回-1情况，见fs.c
 
 		case SYS_read:
 			{
 				c->GPRx = fs_read(a[1], (void *)a[2], a[3]);
 				if(c->GPRx == -1)
 					panic("reading from file fails!");
-			}; break;
+			}; break;//在函数实现过程中，未考虑返回-1情况，见fs.c
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 }
