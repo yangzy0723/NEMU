@@ -10,12 +10,15 @@
 #endif
 
 size_t ramdisk_read(void *buf, size_t offset, size_t len);//声明一下
+int fs_open(const char *pathname, int flags, int mode);
+size_t fs_read(int fd, void *buf, size_t len);
+int fs_close(int fd);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
+
+	int fd = fs_open(filename, 0, 0);
 	Elf_Ehdr elf;
-	ramdisk_read(&elf, 0, sizeof(elf));
-	
-	printf("%p", elf.e_ident);
+	fs_read(fd, &elf, sizeof(elf));
 	assert(*(uint32_t*)elf.e_ident == 0x464c457f);//小端方式
 	
 	for(int i = 0; i < elf.e_phnum; i++)
