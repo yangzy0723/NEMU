@@ -1,6 +1,12 @@
 #include <proc.h>
 #include <elf.h>
 
+//声明一下
+size_t ramdisk_read(void *buf, size_t offset, size_t len);//声明一下
+int fs_open(const char *pathname, int flags, int mode);
+size_t fs_read(int fd, void *buf, size_t len);
+int fs_close(int fd);
+
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
 # define Elf_Phdr Elf64_Phdr
@@ -8,11 +14,6 @@
 # define Elf_Ehdr Elf32_Ehdr
 # define Elf_Phdr Elf32_Phdr
 #endif
-
-size_t ramdisk_read(void *buf, size_t offset, size_t len);//声明一下
-int fs_open(const char *pathname, int flags, int mode);
-size_t fs_read(int fd, void *buf, size_t len);
-int fs_close(int fd);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
 

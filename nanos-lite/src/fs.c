@@ -2,6 +2,11 @@
 
 //声明
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
+int fs_open(const char *pathname, int flags, int mode);
+size_t fs_read(int fd, void *buf, size_t len);
+int fs_close(int fd);
+size_t invalid_read(void *buf, size_t offset, size_t len);
+size_t invalid_write(const void *buf, size_t offset, size_t len);
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
@@ -16,16 +21,6 @@ typedef struct {
 } Finfo;
 
 enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
-
-size_t invalid_read(void *buf, size_t offset, size_t len) {
-  panic("should not reach here");
-  return 0;
-}
-
-size_t invalid_write(const void *buf, size_t offset, size_t len) {
-  panic("should not reach here");
-  return 0;
-}
 
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
@@ -42,6 +37,7 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode)
 {
 	int Num_Of_File_Table = sizeof(file_table)/sizeof(Finfo);
+	printf("%d\n", Num_Of_File_Table);
 	for(int i = 0; i < Num_Of_File_Table; i++)
 		if(strcmp(file_table[i].name, pathname) == 0)
 			return i;	
@@ -59,4 +55,14 @@ int fs_close(int fd)
 {
 	file_table[fd].open_offset = 0;
 	return 0;
+}
+
+size_t invalid_read(void *buf, size_t offset, size_t len) {
+  panic("should not reach here");
+  return 0;
+}
+
+size_t invalid_write(const void *buf, size_t offset, size_t len) {
+  panic("should not reach here");
+  return 0;
 }
