@@ -57,6 +57,7 @@ void _exit(int status) {
 }
 
 int _open(const char *path, int flags, mode_t mode) {
+	printf("123\n");
   _exit(SYS_open);
   return 0;
 }
