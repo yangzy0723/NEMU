@@ -33,6 +33,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			memset(VAddr + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
 		}
 	}
+	printf("123\n");
   return elf.e_entry;
 }
 
