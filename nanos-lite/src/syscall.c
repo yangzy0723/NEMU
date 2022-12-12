@@ -3,6 +3,7 @@
 
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_lseek(int fd, size_t offset, int whence);
+size_t fs_read(int fd, void *buf, size_t len);
 
 #define STRACE 1
 void do_syscall(Context *c) {
@@ -34,15 +35,22 @@ void do_syscall(Context *c) {
 		case SYS_open: 
 			{
 				c->GPRx = fs_open((const char *)a[1], (int)a[2], (int)a[3]);
-				if(c -> GPRx == -1)
+				if(c->GPRx == -1)
 					panic("opening files fails!");
 			}; break;
 
 		case SYS_lseek:
 			{
 				c->GPRx = fs_lseek(a[1], a[2], a[3]); 
-				if(c -> GPRx == -1)
+				if(c->GPRx == -1)
 					panic("seeking the offset fails!");
+			}; break;
+
+		case SYS_read:
+			{
+				c->GPRx = fs_read(a[1], (void *)a[2], a[3]);
+				if(c->GPRx == -1)
+					panic("reading from file fails!");
 			}; break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
