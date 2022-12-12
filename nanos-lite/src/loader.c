@@ -21,7 +21,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	Elf_Ehdr elf;
 	fs_read(fd, &elf, sizeof(elf));
 	assert(*(uint32_t*)elf.e_ident == 0x464c457f);//小端方式
-	
+	printf("123\n");	
 	for(int i = 0; i < elf.e_phnum; i++)
 	{
 		Elf_Phdr segment;
