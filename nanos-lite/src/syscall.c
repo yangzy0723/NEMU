@@ -7,7 +7,6 @@ size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
 int fs_close(int fd);
 
-#define STRACE 1
 void do_syscall(Context *c) {
 
 #ifdef STRACE
