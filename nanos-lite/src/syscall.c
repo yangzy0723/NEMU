@@ -1,5 +1,6 @@
 #include <common.h>
 #include "syscall.h"
+#include <time.h>
 
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_lseek(int fd, size_t offset, int whence);
@@ -59,6 +60,15 @@ void do_syscall(Context *c) {
 				if(c->GPRx == -1)
 					panic("closing files fails!");
 			}; break;//在函数实现过程中，未考虑返回-1情况，见fs.c
+		
+		case SYS_time:
+			{
+				struct timeval my_time = *(struct timeval*)(a[1]);
+				my_time.tv_sec = io_read(AM_TIMER_UPTIME).us / 100000;
+				my_time.tv_usec = io_read(AM_TIMER_UPTIME).us;
+				printf("%dus %ds\n",(int)my_time.tv_usec, (int)my_time.tv_sec);
+				c->GPRx = 0;	
+			}
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 }
