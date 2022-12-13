@@ -25,14 +25,14 @@ typedef struct {
   WriteFn write;	//这应该也是一个函数,对应的是fs_write
 } Finfo;
 
-enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB, FD_READ_FROM_KB};
+enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_READ_FROM_KB, FD_FB};
 
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin", 0, 0, 0, invalid_read, invalid_write},
   [FD_STDOUT] = {"stdout", 0, 0, 0, invalid_read, serial_write},
   [FD_STDERR] = {"stderr", 0, 0, 0, invalid_read, serial_write},
-  //[FD_READ_FROM_KB] = {"/dev/events", 0, 0, 0, events_read, invalid_write},
+  [FD_READ_FROM_KB] = {"/dev/events", 0, 0, 0, events_read, invalid_write},
 #include "files.h"
 };
 
