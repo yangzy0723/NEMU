@@ -8,7 +8,7 @@ int main()
 		int i = 1;
 		gettimeofday(&now_time, NULL);
 		printf("sec:%d, usec:%d\n",(int)now_time.tv_sec, (int)now_time.tv_usec);
-		if(now_time.tv_usec % 100000 == 0)
+		if(now_time.tv_sec == i)
 			{
 				printf("%ds passed", i);
 				i++;

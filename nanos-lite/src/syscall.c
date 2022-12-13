@@ -1,6 +1,6 @@
 #include <common.h>
 #include "syscall.h"
-#include <time.h>
+#include <sys/time.h>
 
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_lseek(int fd, size_t offset, int whence);
@@ -65,8 +65,8 @@ void do_syscall(Context *c) {
 			{
 				struct timeval *my_time = (struct timeval*)(a[1]);
 				my_time->tv_sec = io_read(AM_TIMER_UPTIME).us / 1000000;
-				my_time->tv_usec = io_read(AM_TIMER_UPTIME).us;
-				c->GPRx = 0;	
+				my_time->tv_usec = io_read(AM_TIMER_UPTIME).us % 1000000;//在自己的机器上跑，发现usec总不会超过1,000,000，故应该模一下
+				c->GPRx = 0;//想不出来出错的情况，总是返回0	
 			};break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
