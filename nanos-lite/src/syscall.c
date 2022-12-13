@@ -24,13 +24,6 @@ void do_syscall(Context *c) {
 
 		case SYS_yield: yield(); c->GPRx = 0; break; 
 
-		case SYS_write:
-				{
-					c->GPRx = fs_write(a[1], (const void *)a[2], a[3]);
-					if(c->GPRx == -1)
-						panic("writing files fails!");//在我的实现里，只有写道STDIN才会触发，见fs.c
-				};break;
-
 		case SYS_brk: c->GPRx = 0; break;
 
 		case SYS_open: 
@@ -52,7 +45,14 @@ void do_syscall(Context *c) {
 				c->GPRx = fs_read(a[1], (void *)a[2], a[3]);
 				if(c->GPRx == -1)
 					panic("reading from file fails!");
-			}; break;//在函数实现过程中，未考虑返回-1情况，除非读到STDIN，见fs.c
+			}; break;//在函数实现过程中,从STDOUT，STDERR和STDIN中读才会触发，见fs.c
+
+		case SYS_write:	
+				{
+					c->GPRx = fs_write(a[1], (const void *)a[2], a[3]);
+					if(c->GPRx == -1)
+						panic("writing files fails!");//在我的实现里，只有写到STDIN才会触发，见fs.c
+				};break;
 
 		case SYS_close:
 			{

@@ -20,7 +20,6 @@ int main() {
 
   for (i = 500; i < 1000; i ++) {
     fscanf(fp, "%d", &n);
-      printf("%d %d\n", n, i);
     assert(n == i + 1);
   }
 
@@ -31,7 +30,7 @@ int main() {
   }
 
   fclose(fp);
-
+	assert(0);
   printf("PASS!!!\n");
 
   return 0;
