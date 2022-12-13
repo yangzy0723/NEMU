@@ -6,7 +6,7 @@ int main()
 	NDL_Init(0);
 	while(1)
 	{
-		printf("%d", (int)NDL_GetTicks());
+		printf("%d\n", (int)NDL_GetTicks());
 	}
 	 
 }
