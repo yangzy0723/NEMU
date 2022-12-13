@@ -63,7 +63,7 @@ size_t fs_write(int fd, const void *buf, size_t len)
 		for(int i = 0; i < len; i++)
 			putch(*((char*)buf + i));
 	else if(fd == FD_STDIN)
-		panic("FD_STDIN is not implemented!");
+		return -1;
 	else
 	{
 		if(len > file_table[fd].size - file_table[fd].open_offset)
