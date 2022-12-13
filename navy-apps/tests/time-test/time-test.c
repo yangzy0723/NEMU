@@ -4,6 +4,7 @@
 int main()
 {
 	NDL_Init(0);
+	printf("123\n");
 	int ms_500 = 500;
 	while(1)
 	{
