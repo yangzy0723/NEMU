@@ -4,6 +4,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 static int evtdev = -1;
 static int fbdev = -1;
@@ -16,7 +19,8 @@ uint32_t NDL_GetTicks() {
 }
 
 int NDL_PollEvent(char *buf, int len) {
-  return 0;
+  int fd = open("/dev/events", O_RDONLY);//以只读方式打开
+	return read(fd, (void *)buf, len);
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
@@ -69,4 +73,7 @@ int NDL_Init(uint32_t flags) {
 }
 
 void NDL_Quit() {
+	//timer quit
+	now_time.tv_usec = 0;
+	now_time.tv_sec = 0;
 }
