@@ -4,6 +4,7 @@
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_lseek(int fd, size_t offset, int whence);
 size_t fs_read(int fd, void *buf, size_t len);
+int fs_close(int fd);
 
 #define STRACE 1
 void do_syscall(Context *c) {
@@ -52,6 +53,13 @@ void do_syscall(Context *c) {
 				if(c->GPRx == -1)
 					panic("reading from file fails!");
 			}; break;//在函数实现过程中，未考虑返回-1情况，除非读到STDIN，见fs.c
+
+		case SYS_close:
+			{
+				c->GPRx = fs_close(a[1]);
+				if(c->GPRx == -1)
+					panic("closing files fails!");
+			}; break;//在函数实现过程中，未考虑返回-1情况，见fs.c
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 }
