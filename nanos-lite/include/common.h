@@ -8,7 +8,7 @@
 //#define TIME_SHARING
 
 //TRACE define!
-#define STRACE
+//#define STRACE
 
 #include <am.h>
 #include <klib.h>

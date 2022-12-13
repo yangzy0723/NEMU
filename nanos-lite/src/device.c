@@ -21,7 +21,6 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
-	printf("%p\n", buf);
 	AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
 	if(ev.keycode == AM_KEY_NONE)
 		return 0;
@@ -33,7 +32,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	strcat(keyboard_code, keyname[ev.keycode]);
 
 	//assert(len >= strlen(keyboard_code) + 1);
-	
+	printf("buf = %p, keyboard_code = %s, %d\n", strlen(keyboard_code));	
 	memcpy(buf, (const void *)keyboard_code, strlen(keyboard_code));	
 	*(char *)(buf + strlen(keyboard_code) + 1) = '\n';
 	return strlen(keyboard_code) + 1;
