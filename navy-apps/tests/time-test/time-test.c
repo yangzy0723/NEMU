@@ -1,13 +1,11 @@
-#include <sys/time.h>
 #include <stdio.h>
 #include <NDL.h>
 int main()
-{		int i = 1;
+{
+	NDL_init();
 	while(1)
 	{
-				printf("%d", (int)NDL_GetTicks());
-				i++;
- 
+		printf("%d", (int)NDL_GetTicks());
 	}
 	 
 }
