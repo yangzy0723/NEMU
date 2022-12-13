@@ -6,6 +6,8 @@
 //#define HAS_VME
 //#define MULTIPROGRAM
 //#define TIME_SHARING
+
+//TRACE define!
 #define STRACE
 
 #include <am.h>
