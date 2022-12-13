@@ -1,11 +1,12 @@
+//#include <navy-apps/libs/libndl/NDL.c>
 #include <stdio.h>
-#include <NDL.h>
+
 int main()
 {
-	NDL_init();
-	while(1)
-	{
-		printf("%d", (int)NDL_GetTicks());
-	}
+	//NDL_init();
+	//while(1)
+	//{
+		//printf("%d", (int)NDL_GetTicks());
+	//}
 	 
 }
