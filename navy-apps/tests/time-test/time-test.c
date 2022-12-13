@@ -8,7 +8,7 @@ int main()
 		gettimeofday(&now_time, NULL);
 		if(now_time.tv_sec == i)
 			{
-				printf("%ds passed\n", i);
+				printf("爱上悦宝的第%ds\n", i);
 				i++;
 			}
  
