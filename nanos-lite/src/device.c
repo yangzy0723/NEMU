@@ -31,7 +31,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 		keyboard_code = "ku ";
 	strcat(keyboard_code, keyname[ev.keycode]);
 
-	assert(len >= strlen(keyboard_code) + 1);
+	//assert(len >= strlen(keyboard_code) + 1);
 	
 	memcpy(buf, (const void *)keyboard_code, strlen(keyboard_code));	
 	*(char *)(buf + strlen(keyboard_code) + 1) = '\n';
