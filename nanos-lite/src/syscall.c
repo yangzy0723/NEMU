@@ -63,9 +63,9 @@ void do_syscall(Context *c) {
 		
 		case SYS_time:
 			{
-				struct timeval my_time __attribute__((unused))= *(struct timeval*)(a[1]);
-				my_time.tv_sec = io_read(AM_TIMER_UPTIME).us / 100000;
-				my_time.tv_usec = io_read(AM_TIMER_UPTIME).us;
+				struct timeval *my_time = (struct timeval*)(a[1]);
+				my_time->tv_sec = io_read(AM_TIMER_UPTIME).us / 100000;
+				my_time->tv_usec = io_read(AM_TIMER_UPTIME).us;
 				c->GPRx = 0;	
 			};break;
     default: panic("Unhandled syscall ID = %d", a[0]);
