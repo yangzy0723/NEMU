@@ -4,6 +4,7 @@
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_lseek(int fd, size_t offset, int whence);
 size_t fs_read(int fd, void *buf, size_t len);
+size_t fs_write(int fd, const void *buf, size_t len);
 int fs_close(int fd);
 
 //#define STRACE 1
@@ -25,10 +26,9 @@ void do_syscall(Context *c) {
 
 		case SYS_write:
 				{
-					if(a[1] == 1 || a[1] == 2)
-						for(int i = 0; i < a[3]; i++)
-							putch(*((char*)a[2] + i));
-					c->GPRx = a[3];
+					c->GPRx = fs_write(a[1], (const void *)a[2], a[3]);
+					if(c->GPRx == -1)
+						panic("writing files fails!");//在我的实现里，只有写道STDIN才会触发，见fs.c
 				};break;
 
 		case SYS_brk: c->GPRx = 0; break;
