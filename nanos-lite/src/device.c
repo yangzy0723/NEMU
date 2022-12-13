@@ -35,7 +35,6 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	
 	memcpy(buf, (const void *)keyboard_code, strlen(keyboard_code));	
 	*(char *)(buf + strlen(keyboard_code) + 1) = '\n';
-	printf("%s\n", keyboard_code);
 	return strlen(keyboard_code) + 1;
 }
 
