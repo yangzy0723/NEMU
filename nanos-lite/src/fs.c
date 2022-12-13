@@ -18,18 +18,18 @@ typedef struct {
   char *name;
   size_t size;
   size_t disk_offset;
-	size_t open_offset;
   ReadFn read;		//这应该是一个函数,对应的是fs_read
   WriteFn write;	//这应该也是一个函数,对应的是fs_write
+	size_t open_offset;
 } Finfo;
 
 enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
 
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
-  [FD_STDIN]  = {"stdin", 0, 0, 0, invalid_read, invalid_write},
-  [FD_STDOUT] = {"stdout", 0, 0, 0, invalid_read, invalid_write},
-  [FD_STDERR] = {"stderr", 0, 0, 0, invalid_read, invalid_write},
+  [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
+  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, invalid_write},
+  [FD_STDERR] = {"stderr", 0, 0, invalid_read, invalid_write},
 #include "files.h"
 };
 
