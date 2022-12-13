@@ -42,7 +42,12 @@ int fs_open(const char *pathname, int flags, int mode)
 	int Num_Of_File_Table = sizeof(file_table)/sizeof(Finfo);
 	for(int i = 0; i < Num_Of_File_Table; i++)
 		if(strcmp(file_table[i].name, pathname) == 0)
-			return i;	
+		{
+#ifdef STRACE
+			printf("open the file: %s\n", file_table[i].name);
+#endif
+			return i;
+		}
 	return -1;
 }
 
@@ -87,6 +92,9 @@ size_t fs_lseek(int fd, size_t offset, int whence)
 
 int fs_close(int fd)
 {
+#ifdef STRACE
+	printf("close the file: %s\n", file_table[fd].name);
+#endif
 	file_table[fd].open_offset = 0;
 	return 0;
 }
