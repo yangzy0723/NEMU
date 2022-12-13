@@ -9,7 +9,7 @@ int main()
 		gettimeofday(&now_time, NULL);
 		if(now_time.tv_sec == i)
 			{
-				printf("%ds passed", i);
+				printf("%ds passed\n", i);
 				i++;
 			}
  
