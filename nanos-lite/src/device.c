@@ -25,7 +25,6 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	if(ev.keycode == AM_KEY_NONE)
 		return 0;
 	char* keyboard_code;
-	printf("%d\n", ev.keydown);
 	if(ev.keydown)
 		keyboard_code = "kd ";
 	else
@@ -34,7 +33,6 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	strcat(keyboard_code, keyname[ev.keycode]);
 
 	//assert(len >= strlen(keyboard_code) + 1);
-	printf("buf = %p, keyboard_code = %s, %d\n", buf, keyboard_code, strlen(keyboard_code));	
 	memcpy(buf, (const void *)keyboard_code, strlen(keyboard_code));	
 	*(char *)(buf + strlen(keyboard_code) + 1) = '\n';
 	return strlen(keyboard_code) + 1;
