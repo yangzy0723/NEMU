@@ -31,7 +31,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 		strcat((char*)buf, "ku ");
 	strcat((char*)buf, keyname[ev.keycode]);
 	*(char *)(buf + strlen((char *)buf) + 1) = '\n';
-	*(char *)(buf + strlen((char *)buf) + 1) = 0;
+	*(char *)(buf + strlen((char *)buf) + 2) = 0;
 	printf("%s\n", buf);
 	printf("%d\n", strlen(buf));
 	return strlen((char *)buf);
