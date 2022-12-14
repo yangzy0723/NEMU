@@ -24,22 +24,15 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
 	if(ev.keycode == AM_KEY_NONE)
 		return 0;
-	char* keyboard_code = (char *)buf;
-	printf("keyboard_code: %p\n", keyboard_code);
-	memset(keyboard_code, 0, strlen(keyboard_code));
-	printf("%p\n", keyboard_code);
+	memset((char *)buf, 0, strlen((char *)buf));//每用完一次，将整个以buf指针为首的字符串清0
 	if(ev.keydown)
-		strcat(keyboard_code, "kd ");
+		strcat((char*)buf, "kd ");
 	else
-		strcat(keyboard_code, "ku ");
-	printf("keyboard_code:%p, %s\n", keyboard_code,keyboard_code);
-	strcat(keyboard_code, keyname[ev.keycode]);
-
-	//assert(len >= strlen(keyboard_code) + 1);
-	memcpy(buf, (const void *)keyboard_code, strlen(keyboard_code));	
-	*(char *)(buf + strlen(keyboard_code) + 1) = '\n';
-	*(char *)(buf + strlen(keyboard_code) + 2) = 0;
-	return strlen(keyboard_code) + 1;
+		strcat((char*)buf, "ku ");
+	strcat((char*)buf, keyname[ev.keycode]);
+	*(char *)(buf + strlen((char *)buf) + 1) = '\n';
+	*(char *)(buf + strlen((char *)buf) + 2) = 0;
+	return strlen((char *)buf);
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
