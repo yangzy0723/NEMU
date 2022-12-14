@@ -25,6 +25,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	if(ev.keycode == AM_KEY_NONE)
 		return 0;
 	char* keyboard_code = (char *)buf;
+	printf("keyboard_code: %p\n", keyboard_code);
 	memset(keyboard_code, 0, strlen(keyboard_code));
 	printf("%s\n", keyboard_code);
 	if(ev.keydown)
