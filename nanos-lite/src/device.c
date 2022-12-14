@@ -26,11 +26,11 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 		return 0;
 	char* keyboard_code = (char *)buf;
 	memset(keyboard_code, 0, strlen(keyboard_code));
+	printf("%s\n", keyboard_code);
 	if(ev.keydown)
 		keyboard_code = "kd ";
 	else
 		keyboard_code = "ku ";
-	printf("%s\n", keyboard_code);
 	strcat(keyboard_code, keyname[ev.keycode]);
 
 	//assert(len >= strlen(keyboard_code) + 1);
