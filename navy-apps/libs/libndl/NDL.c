@@ -72,11 +72,11 @@ int NDL_Init(uint32_t flags) {
   //display monitor initialized
 	int fd = open("/proc/dispinfo", 0);
 	char buf[4096];
-	read(fd, (void*)buf, sizeof(buf));
+	read(fd, buf, sizeof(buf));
 	close(fd);
 	int my_weight = 0;
 	int weight_constant = 8;
-	printf("%s", buf);
+	printf("%s\n", buf);
 	while('0' <= *(buf+weight_constant) <= '9')
 	{
 		my_weight = my_weight * 10 + *(buf + weight_constant) - '0';
