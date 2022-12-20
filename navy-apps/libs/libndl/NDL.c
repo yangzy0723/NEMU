@@ -74,7 +74,6 @@ int NDL_Init(uint32_t flags) {
 	char buf[4096];
 	read(fd, buf, sizeof(buf));
 	close(fd);
-	printf("%s", buf);
 	int my_weight = 0;
 	int weight_constant = 8;
 	printf("%c", *(buf + 8));
