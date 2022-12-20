@@ -78,11 +78,10 @@ int NDL_Init(uint32_t flags) {
 	int weight_constant = 8;
 	while('0' <= *(buf+weight_constant) <= '9')
 	{
+		printf("%c\n", *(buf+weight_constant));
 		my_weight = my_weight * 10 + *(buf + weight_constant) - '0';
 		weight_constant++;
-		printf("123\n");
 	}
-	printf("123\n");
 	int my_height = 0;
 	int height_constant = 19;
 	while('0' <= *(buf+weight_constant) <= '9')
