@@ -30,15 +30,22 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	else
 		strcat((char*)buf, "ku ");
 	strcat((char*)buf, keyname[ev.keycode]);
-	*(char *)(buf + strlen((char *)buf)) = '\n';
+	*(char *)(buf + strlen((char *)buf)) = '\n';//一个事件以换行符\n结束
 	*(char *)(buf + strlen((char *)buf)+ 1) = 0;
-	printf("%s\n", buf);
-	printf("%d\n", strlen(buf));
 	return strlen((char *)buf);
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-  return 0;
+  //我们认为这个文件不支持lseek，可忽略offset
+	AM_GPU_CONFIG_T ui_dev = io_read(AM_GPU_CONFIG);
+	int w = ui_dev.width;
+	int h = ui_dev.height;
+	printf("%d%d\n", w, h);
+	snprintf(buf, len, "WIDTH : %d\nHEIGHT:%d", w, h);//8和19位取到数字
+	if(strlen((char*)buf) >= len)
+		panic("The exp is too long!");
+	return strlen((char*)buf);
+	
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {

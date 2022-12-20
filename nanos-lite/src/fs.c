@@ -11,6 +11,9 @@ int fs_close(int fd);
 size_t invalid_read(void *buf, size_t offset, size_t len);
 size_t invalid_write(const void *buf, size_t offset, size_t len);
 size_t serial_write(const void *buf, size_t offset, size_t len);
+size_t dispinfo_read(void *buf, size_t offset, size_t len);
+size_t fb_write(const void *buf, size_t offset, size_t len);
+
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
@@ -25,7 +28,7 @@ typedef struct {
   WriteFn write;	//这应该也是一个函数,对应的是fs_write
 } Finfo;
 
-enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_READ_FROM_KB, FD_FB};
+enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_READ_FROM_KB, FD_READ_FROM_DISPINFO, FD_FB};
 
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
@@ -33,6 +36,7 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_STDOUT] = {"stdout", 0, 0, 0, invalid_read, serial_write},
   [FD_STDERR] = {"stderr", 0, 0, 0, invalid_read, serial_write},
   [FD_READ_FROM_KB] = {"/dev/events", 0, 0, 0, events_read, invalid_write},
+	[FD_READ_FROM_DISPINFO] = {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},	
 #include "files.h"
 };
 
@@ -57,7 +61,7 @@ int fs_open(const char *pathname, int flags, int mode)
 size_t fs_read(int fd, void *buf, size_t len)
 {
 	if(file_table[fd].read != NULL)
-		return file_table[fd].read(buf, 0, len);//从键盘读入不考虑偏移量啦
+		return file_table[fd].read(buf, 0, len);//从dispinfo文件读入，从键盘读入不考虑偏移量啦
 	else if(fd == FD_STDIN || fd == FD_STDOUT || fd == FD_STDERR)
 		return -1;
 	if(len > file_table[fd].size - file_table[fd].open_offset)
