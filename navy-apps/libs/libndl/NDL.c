@@ -73,6 +73,7 @@ int NDL_Init(uint32_t flags) {
 	int fd = open("/proc/dispinfo", 0);
 	char buf[4096];
 	read(fd, (void *)buf, sizeof(buf));
+	printf("%s\n", buf);
 	close(fd);
 	int my_weight = 0;
 	int weight_constant = 8;
