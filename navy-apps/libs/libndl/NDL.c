@@ -76,14 +76,14 @@ int NDL_Init(uint32_t flags) {
 	close(fd);
 	int my_weight = 0;
 	int weight_constant = 8;
-	while('0' <= *(buf+weight_constant) <= '9')
+	while('0' <= buf[weight_constant] <= '9')
 	{
 		my_weight = my_weight * 10 + *(buf + weight_constant) - '0';
 		weight_constant++;
 	}
 	int my_height = 0;
 	int height_constant = 19;
-	while('0' <= *(buf+height_constant) <= '9')
+	while('0' <= buf[height_constant] <= '9')
 	{
 		my_height = my_height * 10 + *(buf + height_constant) - '0';
 		height_constant++;
