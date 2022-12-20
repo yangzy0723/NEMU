@@ -40,7 +40,6 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 	AM_GPU_CONFIG_T ui_dev = io_read(AM_GPU_CONFIG);
 	int w = ui_dev.width;
 	int h = ui_dev.height;
-	printf("%d%d\n", w, h);
 	snprintf(buf, len, "WIDTH : %d\nHEIGHT:%d", w, h);//8和19位取到数字
 	if(strlen((char*)buf) >= len)
 		panic("The exp is too long!");
