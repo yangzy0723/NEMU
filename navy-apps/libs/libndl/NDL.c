@@ -80,6 +80,7 @@ int NDL_Init(uint32_t flags) {
 	{
 		my_weight = my_weight * 10 + *(buf + weight_constant) - '0';
 		weight_constant++;
+		printf("123\n");
 	}
 	printf("123\n");
 	int my_height = 0;
