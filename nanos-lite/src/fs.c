@@ -37,11 +37,15 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_STDERR] = {"stderr", 0, 0, 0, invalid_read, serial_write},
   [FD_READ_FROM_KB] = {"/dev/events", 0, 0, 0, events_read, invalid_write},
 	[FD_READ_FROM_DISPINFO] = {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},	
+	[FD_FB] = {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
 #include "files.h"
 };
 
 void init_fs() {
-  // TODO: initialize the size of /dev/fb
+	AM_GPU_CONFIG_T ui_dev = io_read(AM_GPU_CONFIG);
+	int my_weight = ui_dev.width;
+	int my_height = ui_dev.height;
+	file_table[FD_FB].size = my_weight * my_height * 4;//每个像素格四个字节
 }
 
 int fs_open(const char *pathname, int flags, int mode)
@@ -74,7 +78,7 @@ size_t fs_read(int fd, void *buf, size_t len)
 size_t fs_write(int fd, const void *buf, size_t len)
 {
 	if(file_table[fd].write != NULL)
-		return file_table[fd].write(buf, 0, len);//写到串口不考虑偏移量啦
+		return file_table[fd].write(buf, file_table[fd].open_offset, len);//写到串口不考虑偏移量啦,写到显示屏上依旧需要考虑偏移量open_offset
 	else if(fd == FD_STDIN)
 		return -1;
 	else

@@ -35,20 +35,21 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	return strlen((char *)buf);
 }
 
+static int w;
+static int h;
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   //我们认为这个文件不支持lseek，可忽略offset
 	AM_GPU_CONFIG_T ui_dev = io_read(AM_GPU_CONFIG);
-	int w = ui_dev.width;
-	int h = ui_dev.height;
+	w = ui_dev.width;
+	h = ui_dev.height;
 	snprintf(buf, len, "WIDTH : %d\nHEIGHT:%d", w, h);//8和19位取到数字
-	if(strlen((char*)buf) >= len)
-		panic("The exp is too long!");
 	return strlen((char*)buf);
-	
 }
 
-size_t fb_write(const void *buf, size_t offset, size_t len) {
-  return 0;
+size_t fb_write(const void *buf, size_t offset, size_t len) {//写入len个字节，实际上是 len/4 个颜色块
+  for(int i = 0; i < len/4; i++)
+		io_write(AM_GPU_FBDRAW, (offset/4 + i)/w, (offset/4 + i)%w, (uint32_t *)(buf + 4*i), 1, 1, true);
+	return len;
 }
 
 void init_device() {

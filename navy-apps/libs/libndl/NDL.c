@@ -24,6 +24,11 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
+	if(*w  == 0 && *h == 0)
+	{
+		*w = screen_w;
+		*h = screen_h;
+	}
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
@@ -44,6 +49,14 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+	int fd = open("/dev/fb", O_RDWR);
+	for(int i = 0; i < h; i++)
+		for(int  j = 0; j < w; j++)
+		{
+			lseek(fd, (y + i) * screen_w * 4 + (x + j) * 4, SEEK_SET);
+			write(fd, pixels + w * i + j, 4);
+		}
+	close(fd);
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
