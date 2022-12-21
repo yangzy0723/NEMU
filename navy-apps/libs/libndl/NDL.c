@@ -104,7 +104,6 @@ int NDL_Init(uint32_t flags) {
 	}
 	screen_w = my_weight;
 	screen_h = my_height;
-	printf("%d %d\n", screen_w, screen_h);
 	return 0;
 }
 
