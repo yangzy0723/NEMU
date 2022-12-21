@@ -48,8 +48,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {//写入len个字节，实际上是 len/4 个颜色块
   for(int i = 0; i < len/4; i++)
-		io_write(AM_GPU_FBDRAW, (offset/4 + i)%w, (offset/4 + i)/w, (uint32_t *)(buf + 4*i), 1, 1, false);
-	io_write(AM_GPU_FBDRAW, 0, 0, NULL, 0, 0, true);
+		io_write(AM_GPU_FBDRAW, (offset/4 + i)%w, (offset/4 + i)/w, (uint32_t *)(buf + 4*i), 1, 1, true);
 	return len;
 }
 
