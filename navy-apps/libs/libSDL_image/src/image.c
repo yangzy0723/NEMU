@@ -20,7 +20,7 @@ SDL_Surface* IMG_Load(const char *filename) {
 	fread(buf, size, 1, f);//将整个文件读取到buf中
 	SDL_Surface *ret = STBIMG_LoadFromMemory(buf, size);//将buf和size作为参数，调用函数，返回SDL_Surface指针
 	fclose(f);//关闭文件
-	//free(buf);//释放内存
+	free(buf);//释放内存
 	return ret;
 }
 
