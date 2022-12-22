@@ -15,10 +15,12 @@ SDL_Surface* IMG_Load(const char *filename) {
   FILE* f = fopen(filename, "r+");
 	fseek(f, 0, SEEK_END);
 	uint32_t png_size = ftell(f);//获取文件大小size
-	printf("%d\n", png_size);
 	char buf[png_size];
+	printf("1\n");
 	memset(buf, 0, sizeof(buf));
+	printf("2\n");
 	fread(buf, png_size, 1, f);
+	printf("3\n");
 	fclose(f);
 	SDL_Surface *ret = STBIMG_LoadFromMemory(buf, png_size);
 	return ret;
