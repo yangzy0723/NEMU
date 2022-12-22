@@ -15,9 +15,9 @@ int SDL_PushEvent(SDL_Event *ev) {
 
 int SDL_PollEvent(SDL_Event *ev) {
 	char buf[64];
+	memset(buf, 0, sizeof(buf));
 	if(!NDL_PollEvent(buf, sizeof(buf)))
 		return 0;
-	printf("%s\n", buf);
 	if(buf[1] == 'd')
 		ev->type = SDL_KEYDOWN;
 	else if(buf[1] == 'u')
@@ -32,7 +32,6 @@ int SDL_PollEvent(SDL_Event *ev) {
 		strcat(revise_char, "\n");
 		if(strcmp(&buf[3], revise_char) == 0)
 		{
-			printf("%d\n", i);
 			ev->key.keysym.sym = i;
 			break;
 		}
@@ -42,6 +41,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 
 int SDL_WaitEvent(SDL_Event *event) {
   char buf[64];
+	memset(buf, 0, sizeof(buf));
 	while(!NDL_PollEvent(buf, sizeof(buf))){}
 	if(buf[1] == 'd')
 		event->type = SDL_KEYDOWN;
