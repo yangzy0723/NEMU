@@ -17,6 +17,11 @@ int SDL_PollEvent(SDL_Event *ev) {
 	char buf[64];
 	int if_event;
 	if_event = NDL_PollEvent(buf, sizeof(buf));
+	if(if_event == 0)
+	{
+		printf("Nothing happened!\n");
+		return 0;
+	}
 	if(buf[1] == 'd')
 		ev->type = SDL_KEYDOWN;
 	else if(buf[1] == 'u')
@@ -33,7 +38,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 			break;
 		}
 	}
-		return 1;
+	return 1;
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
