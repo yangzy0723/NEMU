@@ -153,11 +153,11 @@ static inline fixedpt fixedpt_abs(fixedpt A) {
 }
 
 static inline fixedpt fixedpt_floor(fixedpt A) {//the function return the largest integral value that is not greater than x
-	return A & (～FIXEDPT_FMASK);
+	return A & (~FIXEDPT_FMASK);
 }
 
 static inline fixedpt fixedpt_ceil(fixedpt A) {
-	if(A & FIXEDPT_FMAST == 0)
+	if(A & FIXEDPT_FMASK == 0)
 			return A;
 	return fixedpt_floor(A) + FIXEDPT_ONE;
 }
