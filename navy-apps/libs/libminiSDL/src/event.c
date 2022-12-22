@@ -17,13 +17,10 @@ int SDL_PollEvent(SDL_Event *ev) {
 	char buf[64];
 	int if_event;
 	if_event = NDL_PollEvent(buf, sizeof(buf));
-	printf("%s\n", buf);
 	if(buf[1] == 'd')
 		ev->type = SDL_KEYDOWN;
 	else if(buf[1] == 'u')
 		ev->type = SDL_KEYUP;
-	else
-		printf("Not implemented yet\n");
 	for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
 	{
 		char revise_char[64];
