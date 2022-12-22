@@ -13,6 +13,7 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
 
 SDL_Surface* IMG_Load(const char *filename) {
   FILE* f = fopen(filename, "r+");
+	printf("%s\n", filename);
 	fseek(f, 0, SEEK_END);
 	uint32_t size = ftell(f);//获取文件大小size
 	void* buf = malloc(size);	
