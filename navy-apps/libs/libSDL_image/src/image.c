@@ -14,15 +14,14 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
 SDL_Surface* IMG_Load(const char *filename) {
   FILE* f = fopen(filename, "r+");
 	fseek(f, 0, SEEK_END);
-	uint32_t png_size = ftell(f);//获取文件大小size
-	char buf[png_size];
-	printf("1\n");
-	memset(buf, 0, png_size);
-	printf("2\n");
-	fread(buf, png_size, 1, f);
-	printf("3\n");
+	uint32_t size = ftell(f);//获取文件大小size
+	printf("%d\n", size);
+	char buf[size];
+	memset(buf, 0, sizeof(buf))
+	fread(buf, size, 1, f);
 	fclose(f);
-	SDL_Surface *ret = STBIMG_LoadFromMemory(buf, png_size);
+	SDL_Surface *ret = STBIMG_LoadFromMemory(buf, size);
+	//free(buf);
 	return ret;
 }
 
