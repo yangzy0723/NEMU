@@ -31,6 +31,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 		strcat(revise_char, "\n");
 		if(strcmp(&buf[3], revise_char) == 0)
 		{
+			printf("%d\n", i);
 			ev->key.keysym.sym = i;
 			break;
 		}
