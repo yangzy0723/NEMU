@@ -14,16 +14,20 @@ int SDL_PushEvent(SDL_Event *ev) {
 }
 
 int SDL_PollEvent(SDL_Event *ev) {
+
 	char buf[64];
 	memset(buf, 0, sizeof(buf));
+	
 	if(!NDL_PollEvent(buf, sizeof(buf)))
 		return 0;
+	
 	if(buf[1] == 'd')
 		ev->type = SDL_KEYDOWN;
 	else if(buf[1] == 'u')
 		ev->type = SDL_KEYUP;
 	else
 		printf("%s\n", buf);
+	
 	for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
 	{
 		char revise_char[64];
@@ -40,15 +44,19 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  char buf[64];
+  
+	char buf[64];
 	memset(buf, 0, sizeof(buf));
+	
 	while(!NDL_PollEvent(buf, sizeof(buf))){}
+	
 	if(buf[1] == 'd')
 		event->type = SDL_KEYDOWN;
 	else if(buf[1] == 'u')
 		event->type = SDL_KEYUP;
 	else
 		printf("Not implemented yet\n");
+	
 	for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
 	{
 		char revise_char[64];
