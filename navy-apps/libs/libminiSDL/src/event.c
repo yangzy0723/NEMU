@@ -15,17 +15,14 @@ int SDL_PushEvent(SDL_Event *ev) {
 
 int SDL_PollEvent(SDL_Event *ev) {
 	char buf[64];
-	int if_event;
-	if_event = NDL_PollEvent(buf, sizeof(buf));
-	if(if_event == 0)
-	{
-		printf("Nothing happened!\n");
+	if(!NDL_PollEvent(buf, sizeof(buf)))
 		return 0;
-	}
 	if(buf[1] == 'd')
 		ev->type = SDL_KEYDOWN;
 	else if(buf[1] == 'u')
 		ev->type = SDL_KEYUP;
+	else
+		printf("%s\n", buf);
 	for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
 	{
 		char revise_char[64];
