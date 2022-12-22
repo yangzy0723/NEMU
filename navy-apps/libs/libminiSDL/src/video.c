@@ -96,7 +96,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-	if(s->format->BitsPerPixel == 32)
+	/*if(s->format->BitsPerPixel == 32)
 	{
 		if(w == 0 && h == 0 && x == 0 && y == 0)
 			NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
@@ -126,7 +126,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 				color[i * w + j] = (the_color.a << 24) | (the_color.r << 16) | (the_color.g << 8) | the_color.b;
 			}
 		NDL_DrawRect(color, x, y, w, h);
-	}
+	}*/
 }
 
 // APIs below are already implemented.
