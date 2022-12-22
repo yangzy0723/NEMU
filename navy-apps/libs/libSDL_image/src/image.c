@@ -17,7 +17,7 @@ SDL_Surface* IMG_Load(const char *filename) {
 	uint32_t size = ftell(f);//获取文件大小size
 	printf("%d\n", size);
 	char buf[size];
-	memset(buf, 0, sizeof(buf))
+	memset(buf, 0, sizeof(buf));
 	fread(buf, size, 1, f);
 	fclose(f);
 	SDL_Surface *ret = STBIMG_LoadFromMemory(buf, size);
