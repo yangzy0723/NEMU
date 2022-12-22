@@ -14,7 +14,8 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
 SDL_Surface* IMG_Load(const char *filename) {
   FILE* f = fopen(filename, "r+");
 	fseek(f, 0, SEEK_END);
-	uint32_t size = ftell(f);
+	uint32_t size = ftell(f);//获取文件大小size
+	printf("%d\n", size);
 	char buf[size];
 	fread(buf, size, 1, f);
 	fclose(f);
