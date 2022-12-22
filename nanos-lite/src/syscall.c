@@ -22,7 +22,7 @@ void do_syscall(Context *c) {
 	a[2] = c->GPR3;//_syscall_第三个参数,a1
 	a[3] = c->GPR4;//_syscall_第四个参数,a2
   switch (a[0]) {
-		case SYS_exit: printf("123\n");naive_uload(NULL, "/bin/menu"); c->GPRx = 0; break;
+		case SYS_exit: naive_uload(NULL, "/bin/nterm"); c->GPRx = 0; break;
 
 		case SYS_yield: yield(); c->GPRx = 0; break; 
 
