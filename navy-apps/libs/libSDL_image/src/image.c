@@ -16,11 +16,11 @@ SDL_Surface* IMG_Load(const char *filename) {
 	printf("%s\n", filename);
 	fseek(f, 0, SEEK_END);
 	uint32_t size = ftell(f);//获取文件大小size
-	void* buf = malloc(size);	
-	fread(buf, size, 1, f);
-	fclose(f);
-	SDL_Surface *ret = STBIMG_LoadFromMemory(buf, size);
-	//free(buf);
+	void* buf = malloc(size);//申请一段大小为size的内存空间	
+	fread(buf, size, 1, f);//将整个文件读取到buf中
+	SDL_Surface *ret = STBIMG_LoadFromMemory(buf, size);//将buf和size作为参数，调用函数，返回SDL_Surface指针
+	fclose(f);//关闭文件
+	free(buf);//释放内存
 	return ret;
 }
 
