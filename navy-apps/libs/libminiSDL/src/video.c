@@ -109,20 +109,20 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			NDL_DrawRect(color, x, y, w, h);
 		}
 	}
-	else if(s->format->BitsPerPixel == 8)
+	/*else if(s->format->BitsPerPixel == 8)
 	{
 		if(w == 0 && h == 0 && x == 0 && y == 0)
 		{
 			w = s->w;
 			h = s->h;
 		}
-		color[w*h + 5];
+		uint32_t color[w*h + 5];
 		for(int i = 0; i < h; i++)
 			for(int j = 0; j < w; j++)
 			{
-				SDL_color the_color = s->format->palette 
+				SDL_Color the_color = s->format->palette 
 			}
-	}
+	}*/
 }
 
 // APIs below are already implemented.
