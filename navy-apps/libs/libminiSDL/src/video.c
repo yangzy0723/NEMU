@@ -345,18 +345,3 @@ int SDL_LockSurface(SDL_Surface *s) {
 
 void SDL_UnlockSurface(SDL_Surface *s) {
 }
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-NJU-ICS2021-PA/video.c at master · Googol2002/NJU-ICS2021-PA
