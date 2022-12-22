@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
+/*void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
 	
@@ -82,6 +82,61 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 					((uint8_t *)(dst->pixels))[(dst_y + i) * dst->w + dst_x + j] = ((uint8_t *)(src->pixels))[(dstrect->y + i) * src->w + dstrect->x + j];
 		}
 	}
+}*/
+void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
+    //这里两个块的大小应该是一样的
+    //assert(0);
+    assert(dst && src);
+    assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+    //assert(0);
+
+    int src_w = 0,src_h = 0,src_x=0,src_y=0;
+    if(srcrect==NULL) {
+        src_w = src->w;
+        src_h = src->h;
+    }
+    else
+    {
+        src_w = srcrect->w;
+        src_h = srcrect->h;
+        src_x = srcrect->x;
+        src_y = srcrect->y;
+    }
+    int dst_w = 0,dst_h = 0,dst_x=0,dst_y=0;
+    if(dstrect==NULL) {
+        dst_w = dst->w;
+        dst_h = dst->h;
+    }
+    else
+    {
+        dst_w = dstrect->w;
+        dst_h = dstrect->h;
+        dst_x = dstrect->x;
+        dst_y = dstrect->y;
+    }
+    //printf("%d %d %d %d\n",src_w,src_h,src_x,src_y);
+    //printf("%d %d %d %d\n",dst_w,dst_h,dst_x,dst_y);
+    //while (1);
+    if(dst->format->BitsPerPixel==32) {
+        uint32_t *srcpix = (uint32_t * )(src->pixels), *dstpix = (uint32_t * )(dst->pixels);
+        for (int i = 0; i < src_h; ++i) {
+            for (int j = 0; j < src_w; ++j) {
+                dstpix[(dst_y+i)*dst->w+dst_x+j] =srcpix[(src_y+i)*src->w+src_x+j];
+            }
+        }
+    }
+    else
+    {
+        uint8_t *srcpix = (src->pixels), *dstpix = (dst->pixels);
+        for (int i = 0; i < src_h; ++i) {
+            for (int j = 0; j < src_w; ++j) {
+                dstpix[(dst_y+i)*dst->w+dst_x+j] =srcpix[(src_y+i)*src->w+src_x+j];
+            }
+        }
+
+    }
+    //NDL_DrawRect(dst->pixels, dst_x, dst_y, dst_w, dst_h);
+    //while (1);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
