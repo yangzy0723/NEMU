@@ -50,7 +50,7 @@ void NDL_OpenCanvas(int *w, int *h) {
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 	int fd = open("/dev/fb", O_RDWR);
-	for(int i = 0; i < h; i++)
+	for(int i = 0; i < h; i++)//一次写一行的像素颜色信息进去
 	{
 		lseek(fd, ((y + i) * screen_w + x) * 4, SEEK_SET);
 		write(fd, pixels + w * i, w * 4);
