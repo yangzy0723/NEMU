@@ -32,7 +32,6 @@ int SDL_WaitEvent(SDL_Event *event) {
 		memset(revise_char, 0, sizeof(revise_char));
 		strcat(revise_char, keyname[i]);
 		strcat(revise_char, "\n");
-		printf("%s", revise_char);
 		if(strcmp(&buf[3], revise_char) == 0)
 		{
 			event->key.keysym.sym = i;
