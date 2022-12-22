@@ -1,12 +1,14 @@
 #include <common.h>
 #include "syscall.h"
 #include <sys/time.h>
+#include <proc.h>
 
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_lseek(int fd, size_t offset, int whence);
 size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
 int fs_close(int fd);
+void naive_uload(PCB *pcb, const char *filename);
 
 void do_syscall(Context *c) {
 
@@ -67,6 +69,11 @@ void do_syscall(Context *c) {
 				my_time->tv_sec = io_read(AM_TIMER_UPTIME).us / 1000000;
 				my_time->tv_usec = io_read(AM_TIMER_UPTIME).us % 1000000;//在自己的机器上跑，发现usec总不会超过1,000,000，故应该模一下
 				c->GPRx = 0;//想不出来出错的情况，总是返回0	
+			};break;
+		
+		case SYS_execve:
+			{
+				naive_uload(NULL, (char *)a[1]);
 			};break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
