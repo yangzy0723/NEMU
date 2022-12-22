@@ -42,7 +42,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 			}
 			for(int i = 0; i < srcrect->h; i++)
 				for(int j = 0; j < srcrect->w; j++)
-					((uint32_t *)(dst->pixels))[(dst_y + i) * dst->w + dst_x + j] = ((uint32_t *)(src->pixels))[(dstrect->y + i) * src->w + dstrect->x + j];
+					((uint32_t *)(dst->pixels))[(dst_y + i) * dst->w + dst_x + j] = ((uint32_t *)(src->pixels))[(srcrect->y + i) * src->w + srcrect->x + j];
 		}
 	}
 	else if(src->format->BitsPerPixel == 8)
@@ -79,7 +79,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 			}
 			for(int i = 0; i < srcrect->h; i++)
 				for(int j = 0; j < srcrect->w; j++)
-					((uint8_t *)(dst->pixels))[(dst_y + i) * dst->w + dst_x + j] = ((uint8_t *)(src->pixels))[(dstrect->y + i) * src->w + dstrect->x + j];
+					((uint8_t *)(dst->pixels))[(dst_y + i) * dst->w + dst_x + j] = ((uint8_t *)(src->pixels))[(srcrect->y + i) * src->w + srcrect->x + j];
 		}
 	}
 }
