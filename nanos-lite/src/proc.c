@@ -27,7 +27,7 @@ void init_proc() {
   Log("Initializing processes...");
 
   // load program here
-	naive_uload(NULL, "/bin/nslides");
+	naive_uload(NULL, "/bin/nslide");
 }
 
 Context* schedule(Context *prev) {
