@@ -23,8 +23,8 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
-	printf("reach here\n");
 	char command_record[4096];
+	memset(command_record, 0, sizeof(command_record));
 	int i = 0;
 	while(cmd[i] != '\0')
 	{
@@ -32,7 +32,6 @@ static void sh_handle_cmd(const char *cmd) {
 		i++;
 	}
 	command_record[i-1] = '\0'; //处理换行符
-	printf("%s\n", command_record);
 	char *argv[16];
 	
 	i = 0;
