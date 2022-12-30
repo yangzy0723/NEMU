@@ -31,6 +31,7 @@ static void sh_handle_cmd(const char *cmd) {
 		i++;
 	}
 	command_record[i-1] = '\0'; //处理换行符
+	printf("%s\n", command_record);
 	char *argv[16];
 	
 	i = 0;
