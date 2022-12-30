@@ -25,6 +25,7 @@ static void sh_prompt() {
 static void sh_handle_cmd(const char *cmd) {
 	char command_record[4096];
 	memset(command_record, 0, sizeof(command_record));
+
 	int i = 0;
 	while(cmd[i] != '\0')
 	{
@@ -37,9 +38,10 @@ static void sh_handle_cmd(const char *cmd) {
 	int j = 0;
 	while(command_record[i] != '\0')
 	{
-		memory_i = i;
+		memory_i = i;//记录原有的i
 		while(command_record[i] != ' ' || command_record[i] != '\n')
 		{
+			printf("%d\n", command_record[i]);
 			printf("i = %d\n", i);
 			i++;
 		}
