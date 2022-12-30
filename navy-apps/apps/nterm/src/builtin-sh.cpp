@@ -39,13 +39,9 @@ static void sh_handle_cmd(const char *cmd) {
 	while(command_record[i] != '\0')
 	{
 		memory_i = i;//记录原有的i
-		while(command_record[i] != ' ' || command_record[i] != '\n')
+		while(command_record[i] != ' ' && command_record[i] != '\n')
 		{
-			printf("%d\n", command_record[i]);
-			printf("i = %d\n", i);
 			i++;
-			if(i >= 3)
-				assert(0);
 		}
 		command_record[i] = '\0';
 		argv[j] = &command_record[memory_i]; 
