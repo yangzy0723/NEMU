@@ -7,7 +7,7 @@
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
-  assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+  assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);//此处确保源操作框和目标操作框一样大
 	
 	if(src->format->BitsPerPixel == 32)
 	{
