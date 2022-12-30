@@ -37,6 +37,7 @@ static void sh_handle_cmd(const char *cmd) {
 	int j = 0;
 	while(command_record[i] != '\0')
 	{
+		printf("%d\n", i);
 		memory_i = i;
 		while(command_record[i] != ' ' || command_record[i] != '\n')
 		{
@@ -48,7 +49,6 @@ static void sh_handle_cmd(const char *cmd) {
 		j++;
 	}
 	argv[j] = NULL;//要求是argv最后一个必须是NULL
-	printf("%s\n", argv[0]);	
 	execvp(argv[0], argv);
 }
 
