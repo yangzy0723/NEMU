@@ -42,8 +42,9 @@ static void sh_handle_cmd(const char *cmd) {
 		int one_command_count = 0;
 		while(command_record[i] != ' ')
 		{
-	printf("i = %d j = %d\n", i, j);
 			argv[j][one_command_count] = command_record[i];
+
+	printf("i = %d j = %d\n", i, j);
 			i++;
 			one_command_count++;
 		}
