@@ -126,6 +126,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 				color[i * w + j] = (the_color.a << 24) | (the_color.r << 16) | (the_color.g << 8) | the_color.b;
 			}
 		NDL_DrawRect(color, x, y, w, h);
+		free(color);
 	}
 }
 
