@@ -38,6 +38,7 @@ static void sh_handle_cmd(const char *cmd) {
 	int j = 0;
 	while(command_record[i] != '\0')
 	{
+		printf("i = %d j = %d\n", i, j);
 		int one_command_count = 0;
 		while(command_record[i] != ' ')
 		{
