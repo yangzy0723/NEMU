@@ -35,6 +35,7 @@ static void sh_handle_cmd(const char *cmd) {
 	i = 0;
 	int memory_i = 0;
 	int j = 0;
+	printf("%s", command_record);
 	while(command_record[i] != '\0')
 	{
 		printf("%d\n", i);
