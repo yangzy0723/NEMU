@@ -14,7 +14,7 @@ static uint8_t key_state[sizeof(keyname)/sizeof(keyname[0])] = {0};
 
 int SDL_PushEvent(SDL_Event *ev) {
 	assert(0);
-  return 0;
+	return 0;
 }
 
 int SDL_PollEvent(SDL_Event *ev) {
@@ -84,11 +84,11 @@ int SDL_WaitEvent(SDL_Event *event) {
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
 	assert(0);
-  return 0;
+  	return 0;
 }
 
 uint8_t* SDL_GetKeyState(int *numkeys) {
-  if (numkeys != NULL)
-    *numkeys = sizeof(key_state) / sizeof(key_state[0]);
-  return key_state;
+ 	if (numkeys != NULL)
+   		*numkeys = sizeof(key_state) / sizeof(key_state[0]);
+  	return key_state;
 }
