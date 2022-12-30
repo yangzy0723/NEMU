@@ -23,11 +23,43 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
+	char command_record[4096];
+	int i = 0;
+	while(cmd[i] != '\0')
+	{
+		command_record[i] = cmd[i];
+		i++;
+	}
+	command_record[i-1] = '\0'; //处理换行符
+	char *argv[16];
+	
+	i = 0;
+	int j = 0;
+	while(command_record[i] != '\0')
+	{
+		int one_command_count = 0;
+		while(command_record[i] != ' ')
+		{
+			argv[j][one_command_record] = command[i];
+			i++;
+			one_command_record++;
+		}
+		argv[j][one_command_record] = '\0';
+		if(command_record[i] == '\0')//说明最后一个命令已经传进去了
+			break;
+		i++;
+		j++;
+	}
+	argv[j+1] = NULL;//要求是argv最后一个必须是NULL
+	
+	execvp(argv[0], argv);
 }
 
 void builtin_sh_run() {
   sh_banner();
   sh_prompt();
+
+	setenv("PATH", "/bin", 0);
 
   while (1) {
     SDL_Event ev;
