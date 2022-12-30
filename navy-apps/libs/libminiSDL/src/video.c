@@ -119,7 +119,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			draw_w = s->w;
 			draw_h = s->h;
 		}
-		uint32_t color[draw_w * draw_h + 5];
+		uint32_t color[draw_w * draw_h + 5];//颜色信息依然是32位的
 		for(int i = 0; i < draw_h; i++)
 			for(int j = 0; j < draw_w; j++)
 			{
