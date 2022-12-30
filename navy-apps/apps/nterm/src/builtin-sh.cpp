@@ -41,11 +41,11 @@ static void sh_handle_cmd(const char *cmd) {
 		int one_command_count = 0;
 		while(command_record[i] != ' ')
 		{
-			argv[j][one_command_record] = command[i];
+			argv[j][one_command_count] = command_record[i];
 			i++;
-			one_command_record++;
+			one_command_count++;
 		}
-		argv[j][one_command_record] = '\0';
+		argv[j][one_command_count] = '\0';
 		if(command_record[i] == '\0')//说明最后一个命令已经传进去了
 			break;
 		i++;
@@ -59,8 +59,6 @@ static void sh_handle_cmd(const char *cmd) {
 void builtin_sh_run() {
   sh_banner();
   sh_prompt();
-	print("123\n");
-	setenv("PATH", "/bin", 0);
 
   while (1) {
     SDL_Event ev;
