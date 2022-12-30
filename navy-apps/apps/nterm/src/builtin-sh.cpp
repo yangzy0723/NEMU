@@ -33,17 +33,14 @@ static void sh_handle_cmd(const char *cmd) {
 	}
 	command_record[i-1] = '\0'; //处理换行符
 	char *argv[16];
-	printf("%c\n", argv[0][0]);
-	
 	i = 0;
 	int j = 0;
 	while(command_record[i] != '\0')
 	{
-		printf("i = %d j = %d\n", i, j);
 		int one_command_count = 0;
 		while(command_record[i] != ' ')
 		{
-			argv[j][one_command_count] = command_record[i];
+			*(argv[j] + one_command_count) = command_record[i];
 			i++;
 			one_command_count++;
 		}
