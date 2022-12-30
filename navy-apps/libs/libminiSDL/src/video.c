@@ -4,7 +4,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
@@ -84,29 +83,16 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		}
 	}
 }
+
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-  uint32_t *pixels = (uint32_t *)dst->pixels;
-  int dst_w = dst->w;
-  int rect_h, rect_w, rect_x, rect_y;
-
-  if (dstrect == NULL){
-    rect_w = dst->w;
-    rect_h = dst->h;
-    rect_x = 0;
-    rect_y = 0;
-  }else {
-    rect_w = dstrect->w;
-    rect_h = dstrect->h;
-    rect_x = dstrect->x;
-    rect_y = dstrect->y;
-  }
-
-  for (int i = 0; i < rect_h; ++i){
-    for (int j = 0; j < rect_w; ++j){
-      pixels[(rect_y + i) * dst_w + rect_x + j] = color;
-    }
-  }
-
+	if(dstrect == NULL)//NULL to fill the entire surface
+		for(int i = 0; i < dst->h; i++)
+			for(int j = 0; j < dst->w; j++)
+				((uint32_t *)(dst->pixels))[i * dst->w + j] = color;
+	else
+		for(int i = 0; i < dstrect->h; i++)
+			for(int j = 0; j < dstrect->w; j++)
+				((uint32_t *)(dst->pixels))[(dstrect->y + i) * dst->w + dstrect->x + j] = color;
 }
 
 static inline uint32_t translate_color(SDL_Color *color){
