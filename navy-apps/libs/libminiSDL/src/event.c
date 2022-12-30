@@ -91,4 +91,4 @@ uint8_t* SDL_GetKeyState(int *numkeys) {
  	if (numkeys != NULL)
    		*numkeys = sizeof(key_state) / sizeof(key_state[0]);
   	return key_state;
-}
+}//一开始这个事件没有实现，导致一直报错
