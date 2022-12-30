@@ -59,7 +59,7 @@ static void sh_handle_cmd(const char *cmd) {
 void builtin_sh_run() {
   sh_banner();
   sh_prompt();
-
+	print("123\n");
 	setenv("PATH", "/bin", 0);
 
   while (1) {
