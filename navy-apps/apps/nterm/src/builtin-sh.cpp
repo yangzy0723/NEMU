@@ -23,6 +23,7 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
+	printf("reach here\n");
 	char command_record[4096];
 	int i = 0;
 	while(cmd[i] != '\0')
