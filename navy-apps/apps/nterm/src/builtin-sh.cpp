@@ -31,26 +31,23 @@ static void sh_handle_cmd(const char *cmd) {
 		command_record[i] = cmd[i];
 		i++;
 	}
-	command_record[i-1] = '\0'; //处理换行符
 	char *argv[16];
 	i = 0;
+	int memory_i = 0;
 	int j = 0;
 	while(command_record[i] != '\0')
 	{
-		int one_command_count = 0;
-		while(command_record[i] != ' ')
+		memory_i = i;
+		while(command_record[i] != ' ' || command_record[i] != '\n')
 		{
-			*(argv[j] + one_command_count) = command_record[i];
 			i++;
-			one_command_count++;
 		}
-		argv[j][one_command_count] = '\0';
-		if(command_record[i] == '\0')//说明最后一个命令已经传进去了
-			break;
+		command_record[i] = '\0';
+		argv[j] = &command_record[memory_i]; 
 		i++;
 		j++;
 	}
-	argv[j+1] = NULL;//要求是argv最后一个必须是NULL
+	argv[j] = NULL;//要求是argv最后一个必须是NULL
 	
 	execvp(argv[0], argv);
 }
