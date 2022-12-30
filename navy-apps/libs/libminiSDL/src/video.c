@@ -118,7 +118,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			draw_w = s->w;
 			draw_h = s->h;
 		}
-		uint32_t color[w*h + 5];
+		uint32_t * color = malloc(w * h * 4);
 		for(int i = 0; i < draw_h; i++)
 			for(int j = 0; j < draw_w; j++)
 			{
