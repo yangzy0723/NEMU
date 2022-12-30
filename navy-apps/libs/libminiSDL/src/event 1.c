@@ -63,7 +63,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 	else if(buf[1] == 'u')
 		event->type = SDL_KEYUP;
 	else
-		printf("Not implemented yet\n");
+		printf("%s\n", buf);
 	
 	for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
 	{
@@ -90,7 +90,7 @@ int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
 }
 
 uint8_t* SDL_GetKeyState(int *numkeys) {
-  if(numkeys != NULL);
+  	if(numkeys != NULL);
 		*numkeys = sizeof(keyname)/sizeof(keyname[0]);
 	return key_state;
 }
