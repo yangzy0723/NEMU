@@ -108,36 +108,57 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  
-	char buf[64];
-	memset(buf, 0, sizeof(buf));
+    uint8_t type = 0, sym = 0;
+
+  if (read_keyinfo(&type, &sym)){
+    event->type = type;
+    event->key.keysym.sym = sym;
+
+    switch(type){
+    case SDL_KEYDOWN:
+      key_state[sym] = 1;
+      //printf("%d Down\n", (int)sym);
+      break;
+    
+    case SDL_KEYUP:
+      key_state[sym] = 0;
+      //printf("%d Up\n", (int)sym);
+      break;
+    }
+  }else {
+    return 0;
+  }
+
+  return 1;
+	//char buf[64];
+	//memset(buf, 0, sizeof(buf));
 	
-	while(!NDL_PollEvent(buf, sizeof(buf))){}
+	//while(!NDL_PollEvent(buf, sizeof(buf))){}
 	
-	if(buf[1] == 'd')
-		event->type = SDL_KEYDOWN;
-	else if(buf[1] == 'u')
-		event->type = SDL_KEYUP;
-	else
-		printf("%s\n", buf);
+	//if(buf[1] == 'd')
+		//event->type = SDL_KEYDOWN;
+	//else if(buf[1] == 'u')
+		//event->type = SDL_KEYUP;
+	//else
+	//	printf("%s\n", buf);
 	
-	for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
-	{
-		char revise_char[64];
-		memset(revise_char, 0, sizeof(revise_char));
-		strcat(revise_char, keyname[i]);
-		strcat(revise_char, "\n");
-		if(strcmp(&buf[3], revise_char) == 0)
-		{
-			if(event->type == SDL_KEYDOWN)
-				key_state[i] = 1;
-			else
-				key_state[i] = 0;
-			event->key.keysym.sym = i;
-			break;
-		}
-	}
-	return 1;
+	//for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
+	//{
+		//char revise_char[64];
+		//memset(revise_char, 0, sizeof(revise_char));
+		//strcat(revise_char, keyname[i]);
+		//strcat(revise_char, "\n");
+		//if(strcmp(&buf[3], revise_char) == 0)
+		//{
+			//if(event->type == SDL_KEYDOWN)
+			//	key_state[i] = 1;
+			//else
+			//	key_state[i] = 0;
+			//event->key.keysym.sym = i;
+			//break;
+		//}
+//	}
+	//return 1;
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
