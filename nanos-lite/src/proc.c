@@ -35,7 +35,6 @@ void init_proc() {
 }
 
 Context* schedule(Context *prev) {
-	assert(user_handler);
   current->cp = prev;
 	current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);	
 	if(current == &pcb[0])
