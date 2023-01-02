@@ -5,8 +5,7 @@
 static Context* (*user_handler)(Event, Context*) = NULL;
 extern Context* do_event(Event e, Context* c);
 Context* __am_irq_handle(Context *c) {
-	assert(user_handler);
-  if (user_handler) {
+  //if (do_event) {
     Event ev = {0};
     switch (c->mcause) {
 			case -1: ev.event = EVENT_YIELD; break;
@@ -18,7 +17,7 @@ Context* __am_irq_handle(Context *c) {
 
     c = do_event(ev, c);
     assert(c != NULL);
-  }
+  //}
   return c;
 }
 
