@@ -2,10 +2,9 @@
 #include <riscv/riscv.h>
 #include <klib.h>
 
-static Context* (*user_handler)(Event, Context*) = NULL;
+Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
-	printf("%p\n", user_handler);
 	assert(user_handler);
   if (user_handler) {
     Event ev = {0};
@@ -45,7 +44,6 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 }
 
 void yield() {
-	printf("2\n");
   asm volatile("li a7, -1; ecall");
 }
 
