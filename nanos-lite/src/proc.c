@@ -1,7 +1,6 @@
 #include <proc.h>
 
 #define MAX_NR_PROC 4
-extern Context* (*user_handler)(Event, Context*);
 void naive_uload(PCB *pcb, const char *filename);
 void context_kload(PCB *pcb, void (*entry)(void *), void *arg);
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
@@ -14,8 +13,6 @@ void switch_boot_pcb() {
 
 void hello_fun(void *arg) {
   int j = 1;
-printf("in hello:user_hanlder %p\n", user_handler);
-printf("in hello:user_hanlder %p\n", user_handler);
   while (1) {
     Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (uintptr_t)arg, j);
     j ++;
