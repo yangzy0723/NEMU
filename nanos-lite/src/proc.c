@@ -15,12 +15,10 @@ void switch_boot_pcb() {
 
 void hello_fun(void *arg) {
   int j = 1;
-	printf("in hello1: %p\n", user_handler);
   while (1) {
-		printf("in hello2: %p\n", user_handler);
+		if(j % 100 == 0)
     Log("Hello World from Nanos-lite with arg '%p' for the %dth time!", (uintptr_t)arg, j);
     j ++;
-		printf("in hello:%p\n", user_handler);
     yield();
   }
 }
