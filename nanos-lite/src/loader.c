@@ -19,11 +19,11 @@ int fs_close(int fd);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
 	int fd = fs_open(filename, 0, 0);
-	//if(fd == -1)//此处解决批处理模式中，输入无效字符的问题
-	//{
-		//printf("opening file fails!\n");
-		//return loader(NULL, "/bin/nterm");
-	//}
+	if(fd == -1)//此处解决批处理模式中，输入无效字符的问题
+	{
+		printf("opening file fails!\n");
+		return loader(NULL, "/bin/nterm");
+	}
 
 	Elf_Ehdr elf;	
 	fs_read(fd, &elf, sizeof(elf));//由于elf头一定是某一个ELF文件的头部文件，直接读取对应大小即可,不需要fs_lseek

@@ -5,7 +5,7 @@ Context* schedule(Context *prev);
 
 static Context* do_event(Event e, Context* c) {
   switch (e.event) {
-		case EVENT_YIELD: return schedule(c); break;//返回新的上下文 
+		case EVENT_YIELD: c = schedule(c); break;//返回新的上下文 
 		case EVENT_SYSCALL: do_syscall(c); break;
     default: panic("Unhandled event ID = %d", e.event);break;
   }
