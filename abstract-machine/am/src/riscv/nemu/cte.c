@@ -5,11 +5,9 @@
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
-	printf("123\n");
+	assert(user_handler);
   if (user_handler) {
-		printf("456\n");
     Event ev = {0};
-		//printf("%d\n", c->mcause);
     switch (c->mcause) {
 			case -1: ev.event = EVENT_YIELD; break;
 			case 0:case 1:case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: 
@@ -43,7 +41,6 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 	context->mstatus = 0x1800;
 	context->GPR2 = (uintptr_t)arg;//函数参数传递的寄存器为a0(GPR2)
 	return context;
-	//arg先不管了
 }
 
 void yield() {
