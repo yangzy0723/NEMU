@@ -3,7 +3,7 @@
 #include <klib.h>
 
 static Context* (*user_handler)(Event, Context*) = NULL;
-
+extern Context* do_event(Event e, Context* c);
 Context* __am_irq_handle(Context *c) {
 	assert(user_handler);
   if (user_handler) {
@@ -16,7 +16,7 @@ Context* __am_irq_handle(Context *c) {
       default: ev.event = EVENT_ERROR; break;
     }
 
-    c = user_handler(ev, c);
+    c = do_event(ev, c);
     assert(c != NULL);
   }
   return c;
@@ -36,7 +36,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   Context *context = kstack.end - sizeof(Context);//栈中上下文部分的起始位置
 	context->mepc = (uintptr_t)entry;//以entry为返回地址的上下文
-	//context->mstatus = 0x1800;
+	context->mstatus = 0x1800;
 	context->GPR2 = (uintptr_t)arg;//函数参数传递的寄存器为a0(GPR2)
 	return context;
 }
