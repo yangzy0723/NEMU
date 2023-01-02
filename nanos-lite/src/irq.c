@@ -9,7 +9,7 @@ Context* do_event(Event e, Context* c) {
     default: panic("Unhandled event ID = %d", e.event);break;
   }
   return c;
-}
+}//删掉了static，方便在cte.c中供__am_irq_handle使用。
 
 void init_irq(void) {
   Log("Initializing interrupt/exception handler...");
