@@ -31,6 +31,7 @@ void do_syscall(Context *c) {
 		case SYS_open: 
 			{
 				c->GPRx = fs_open((const char *)a[1], (int)a[2], (int)a[3]);
+				printf("GPRx = %d\n", c->GPRx);
 				if(c->GPRx == -1)
 					panic("opening files fails!");
 			}; break;
