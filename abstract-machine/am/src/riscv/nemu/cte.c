@@ -38,6 +38,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   Context *context = kstack.end - sizeof(Context);//栈中上下文部分的起始位置
 	context->mepc = (uintptr_t)entry;//以entry为返回地址的上下文
+	context->mstatus = 0x1800;
 	return context;
 	//arg先不管了
 }
