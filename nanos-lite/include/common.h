@@ -3,12 +3,9 @@
 
 /* Uncomment these macros to enable corresponding functionality. */
 #define HAS_CTE
-//#define HAS_VME
+#define HAS_VME
 //#define MULTIPROGRAM
 //#define TIME_SHARING
-
-//TRACE define!
-//#define STRACE
 
 #include <am.h>
 #include <klib.h>
