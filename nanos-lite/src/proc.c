@@ -22,8 +22,6 @@ void hello_fun(void *arg) {
     j ++;
 		printf("in hello:%p\n", user_handler);
     yield();
-		if(j > 3)
-			break;
   }
 }
 
