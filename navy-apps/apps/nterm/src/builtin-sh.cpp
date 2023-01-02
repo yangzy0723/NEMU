@@ -48,7 +48,7 @@ static void sh_handle_cmd(const char *cmd) {
 		i++;
 		j++;
 	}
-	argv[j] = NULL;//要求是argv最后一个必须是NULL
+	argv[j - 1] = NULL;//要求是argv最后一个必须是NULL
 	execvp(argv[0], argv);
 }
 
