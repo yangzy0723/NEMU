@@ -14,7 +14,7 @@ void switch_boot_pcb() {
 
 void hello_fun(void *arg) {
   int j = 1;
-printf("in hello:user_hanlder %p\n", user_handler);
+//printf("in hello:user_hanlder %p\n", user_handler);
   while (1) {
     Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (uintptr_t)arg, j);
     j ++;
