@@ -1,3 +1,18 @@
+/***************************************************************************************
+* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+*
+* NEMU is licensed under Mulan PSL v2.
+* You can use this software according to the terms and conditions of the Mulan PSL v2.
+* You may obtain a copy of Mulan PSL v2 at:
+*          http://license.coscl.org.cn/MulanPSL2
+*
+* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+*
+* See the Mulan PSL v2 for more details.
+***************************************************************************************/
+
 #include "sim.h"
 #include "../../include/common.h"
 #include <difftest-def.h>
@@ -35,7 +50,6 @@ static state_t *state = NULL;
 void sim_t::diff_init(int port) {
   p = get_core("0");
   state = p->get_state();
-  is_diff_ref = true;
 }
 
 void sim_t::diff_step(uint64_t n) {
@@ -91,12 +105,13 @@ void difftest_init(int port) {
   difftest_htif_args.push_back("");
   s = new sim_t(DEFAULT_ISA, DEFAULT_PRIV, DEFAULT_VARCH, 1, false, false,
       0, 0, NULL, reg_t(-1), difftest_mem, difftest_plugin_devices, difftest_htif_args,
-      std::move(difftest_hartids), difftest_dm_config, nullptr, false, NULL);
+      std::move(difftest_hartids), difftest_dm_config, nullptr, false, NULL, true);
   s->diff_init(port);
 }
 
 void difftest_raise_intr(uint64_t NO) {
-  assert(0);
+  trap_t t(NO);
+  p->take_trap_public(t, state->pc);
 }
 
 }

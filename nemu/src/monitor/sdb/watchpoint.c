@@ -1,6 +1,31 @@
+/***************************************************************************************
+* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+*
+* NEMU is licensed under Mulan PSL v2.
+* You can use this software according to the terms and conditions of the Mulan PSL v2.
+* You may obtain a copy of Mulan PSL v2 at:
+*          http://license.coscl.org.cn/MulanPSL2
+*
+* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+*
+* See the Mulan PSL v2 for more details.
+***************************************************************************************/
+
 #include "sdb.h"
 
 #define NR_WP 32
+
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+	word_t original_value;
+	char expr[108];//假设这是人能写出来的表达式。 
+
+  /* TODO: Add more members if necessary */
+
+} WP;
 
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
@@ -9,85 +34,59 @@ void init_wp_pool() {
   int i;
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
-    wp_pool[i].next = &wp_pool[i + 1];
+    wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
   }
-  wp_pool[NR_WP - 1].next = NULL;
 
   head = NULL;
   free_ = wp_pool;
 }
 
-static int number = 1;
-
-bool check_watchpoint(WP **point){
-  WP *cur = head;
-  bool success = true;
-  while (cur){
-    if (expr(cur->condation, &success)){
-      *point = cur;
-      //IFDEF(CONFIG_DEBUG, Log("Break"));
-      return true;
-    }
-    cur = cur->next;
-  }
-  return false;
+WP* new_wp()
+{
+	if(free_ == NULL)
+		printf("no more free watchpoint!\n");
+	WP* tmp = free_;
+	free_ = free_ -> next;
+	tmp -> next = head;
+	head = tmp;
+	return head;
 }
 
-
-WP* new_wp(const char *condation, bool *success){
-  if (free_->next == NULL){
-    assert(0);
-  }
-  
-  WP* result = free_->next;
-  result->NO = number ++;
-  free_->next = result->next;
-  result->next = NULL;
-  expr(condation, success);
-  strcpy(result->condation, condation);
-  
-  if (head == NULL){
-    head = result;
-  }else{
-    result->next = head->next;
-    head->next = result;
-  }
-
-  return result;
+void free_wp(int num)
+{
+	if(head == &wp_pool[num])
+	{
+		head = head->next;
+		(&wp_pool[num]) -> next = free_;
+		free_ = &wp_pool[num];
+		return;
+	}
+	else
+	{
+		WP* tmp = head;
+		while(tmp != NULL)
+		{
+			if(tmp -> next == &wp_pool[num])
+			{
+				tmp -> next = tmp -> next -> next;
+				(&wp_pool[num]) -> next = free_;
+				free_ = &wp_pool[num];
+				break;
+			}
+			tmp = tmp -> next;
+		}
+	}
 }
 
-static void insert_free(WP *wp){
-  wp->next = free_->next;
-  free_->next = wp;
+WP* get_head()
+{
+	return head;
 }
 
-void free_wp(int NO){
-  if (head->NO == NO){
-    WP* buffer = head->next;
-    insert_free(head);
-    head = buffer;
-    return ;
-  }
-
-  WP* prev = head;
-  while (prev->next){
-    if (prev->next->NO == NO){
-      WP* buffer = prev->next->next;
-      insert_free(prev->next);
-      prev->next = buffer;
-      return ;
-    }
-    prev = prev->next;
-  }
-
-  printf("未找到 \e[1;36mWatchPoint(NO.%d)\e[0m\n", NO);
+WP* get_wlpool()
+{
+	return wp_pool;
 }
 
-void watchpoint_display(){
-  printf("NO.\tCondation\n");
-  WP* cur = head;
-  while (cur){
-    printf("\e[1;36m%d\e[0m\t\e[0;32m%s\e[0m\n", cur->NO, cur->condation);
-    cur = cur->next;
-  }
-}
+/* TODO: Implement the functionality of watchpoint */
+

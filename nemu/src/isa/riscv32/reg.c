@@ -1,3 +1,18 @@
+/***************************************************************************************
+* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+*
+* NEMU is licensed under Mulan PSL v2.
+* You can use this software according to the terms and conditions of the Mulan PSL v2.
+* You may obtain a copy of Mulan PSL v2 at:
+*          http://license.coscl.org.cn/MulanPSL2
+*
+* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+*
+* See the Mulan PSL v2 for more details.
+***************************************************************************************/
+
 #include <isa.h>
 #include "local-include/reg.h"
 
@@ -8,34 +23,19 @@ const char *regs[] = {
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
-#define REGISTERS_PER_LINE 4
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-
 void isa_reg_display() {
-  int length = ARRLEN(regs);
-  int i = 0;
-  printf("=========寄存器信息=========\n");
-  for (i = 0; i < length; i+= REGISTERS_PER_LINE){
-    for (int j = i; j < MIN(length, i + REGISTERS_PER_LINE); ++j){
-      printf("\e[1;36m%3s:\e[0m %#12x | ", regs[j], cpu.gpr[j]._32);
-    }
-    printf("\n");
-  }
+	for(int i = 0; i < 32; i++)
+		printf("%s\t%#x\n", reg_name(i, -1), gpr(i));
+	//reg_name(int x, int width)是reg.h的函数，调用它返回寄存器名称，因为第二个参数不知道有什么用，暂时传入-1;gpr(int x)是reg.h里的宏定义。
 }
 
-word_t isa_reg_str2val(const char *s, bool *success) {
-  *success = true;
-  if (strcmp(s, regs[0]) == 0){
-    return cpu.gpr[0]._32;
-  }
-
-  for (int i = 1; i < ARRLEN(regs); ++i){
-    if (strcmp(regs[i], s+1) == 0){//跳过$
-      *success = true;
-      return cpu.gpr[i]._32;
-    }
-  }
-
-  *success = false;
-  return -1;
+word_t isa_reg_str2val(const char *s, bool *success) 
+{
+	if(strcmp(s, "pc") == 0)
+		return cpu.pc;
+	for(int i = 0; i < 32; i++)
+		if(strcmp(regs[i], s) == 0)
+			return gpr(i);
+	*success = false;
+	return 0;
 }

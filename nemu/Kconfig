@@ -57,8 +57,10 @@ choice
   default TARGET_NATIVE_ELF
 config TARGET_NATIVE_ELF
   bool "Executable on Linux Native"
+config TARGET_SHARE
+  bool "Shared object (used as REF for differential testing)"
 config TARGET_AM
-  bool "Application on Abstract-Machine"
+  bool "Application on Abstract-Machine (DON'T CHOOSE)"
 endchoice
 
 menu "Build Options"
@@ -132,42 +134,38 @@ config TRACE_START
 config TRACE_END
   depends on TRACE
   int "When tracing is disabled (unit: number of instructions)"
-  default 10000
+  default 1000000
 
 config ITRACE
   depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
   bool "Enable instruction tracer"
   default y
 
+config IRINGBUF
+	depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+	bool "Enable iringbuf tracer"
+	default y
+
+config MTRACE
+	depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+	bool "Enable memory tracer"
+	default y
+
+config DTRACE
+	depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+	bool "Enable device tracer"
+	default y
+
+config ETRACE
+	depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+	bool "Enable error tracer"
+	default y
+
 config ITRACE_COND
   depends on ITRACE
   string "Only trace instructions when the condition is true"
   default "true"
 
-config MTRACE
-  depends on TRACE
-  bool "Enable memory tracer"
-  default y
-
-config FTRACE
-  depends on TRACE
-  bool "Enable function tracer"
-  default y
-
-  config FTRACE_COMPLETELY
-  depends on FTRACE
-  bool "Enable function tracer completely"
-  default y
-
-config DTRACE
-  depends on TRACE
-  bool "Enable device tracer"
-  default y
-
-config ETRACE
-  depends on TRACE
-  bool "Enable exception tracer"
-  default y
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
