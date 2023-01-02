@@ -5,7 +5,6 @@
 Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
-	printf("in __am:%p\n", user_handler);
 	assert(user_handler);
   if (user_handler) {
     Event ev = {0};
