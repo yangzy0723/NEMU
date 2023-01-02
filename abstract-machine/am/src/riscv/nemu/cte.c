@@ -40,7 +40,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   Context *context = kstack.end - sizeof(Context);//栈中上下文部分的起始位置
 	context->mepc = (uintptr_t)entry;//以entry为返回地址的上下文
 	context->mstatus = 0x1800;
-	context->gpr[10] = (uintptr_t)arg;//函数参数传递的寄存器为a0(GPR2)
+	context->GPR2 = (uintptr_t)arg;//函数参数传递的寄存器为a0(GPR2)
 	return context;
 }
 
