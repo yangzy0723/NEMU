@@ -5,135 +5,302 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-int vsprintf(char *out, const char *fmt, va_list ap);
-int vsnprintf(char *out, size_t n, const char *fmt, va_list ap);
+size_t strlen(const char* s);
 
-int printf(const char *fmt, ...) {
-  char buffer[2048];
-  va_list arg;
-  va_start (arg, fmt);
-  
-  int done = vsprintf(buffer, fmt, arg);
-
-  putstr(buffer);
-
-  va_end(arg);
-  return done;
+int write_10(int x)
+{
+	int num = 0;
+	if(x < 0)
+	{
+		putch('-');
+		num++;
+		x = -x;
+	}
+	if(x >= 10)
+		num += write_10(x / 10);
+	putch(x % 10 + '0');
+	num++;
+	return num;
 }
 
-static char HEX_CHARACTERS[] = "0123456789ABCDEF";
-#define BIT_WIDE_HEX 8
+int write_16(uint32_t x)//以16进制的方式去写一个数
+{
+	int num = 0;
+	if(x >= 16)
+		num += write_16(x / 16);
+	switch(x % 16)
+	{
+		case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+			putch(x % 16 + '0');
+			break;
+		default:
+			putch(x % 16 - 10 + 'a');
+			break;
+		num++;
+	}
+	return num;
+}														
 
-int vsprintf(char *out, const char *fmt, va_list ap) {
-  return vsnprintf(out, -1, fmt, ap);
+
+int write_int_buffer(int x, char **buffer)
+{
+	int num = 0;
+	if(x < 0)
+	{
+		*(*buffer) = '-';
+		(*buffer)++;
+		num++;
+		x = -x;
+	}
+	if(x >= 10)
+		num += write_int_buffer(x/10, buffer);
+	*(*buffer) = x % 10 + '0';
+	(*buffer)++;
+	num++;
+	return num;
+}
+
+void write_int_buffer_limit(int x, int size, int *num, char **buffer)
+{
+	if((*num) == size - 1)
+			return;
+	if(x < 0)
+	{
+		*(*buffer) = '-';
+		(*buffer)++;
+		(*num)++;
+		x = -x;
+	}
+	if(*num == size - 1)
+		return;
+	if(x >= 10)
+		write_int_buffer_limit(x/10, size, num, buffer);
+	if(*num == size - 1)
+		return;
+	*(*buffer) = x % 10 + '0';
+	(*buffer)++;
+	(*num)++;
+	return;
+}
+
+int printf(const char *fmt, ...) {//有多少字符，return多少字符，不考虑最后的终止符'\0'
+	va_list ap;
+	int char_num = 0;
+	int int_record;
+	uint32_t uint_record;
+	char char_record;
+	char *string_record;
+	va_start(ap, fmt);
+	while(*fmt)
+	{
+		if(*fmt != '%')
+		{
+			putch(*fmt);
+			char_num++;
+		}
+		else
+		{
+			fmt++;
+			switch(*fmt)
+			{
+				case '%':	
+					putch('%');
+					char_num++;
+					break;
+				case 'c':
+					char_record = (char)va_arg(ap, int);
+					//这里va_arg参数为int的原因是，C中调用一个不带原型声明的函数，例如可变长参数函数，传入参数执行“默认实际参数提升”。char将提升为int。
+					putch(char_record);
+					char_num++;
+					break;
+				case 's':	
+					string_record = va_arg(ap, char*);
+					while(*string_record != 0)
+					{
+						putch(*string_record);
+						char_num++;
+						string_record++;
+					}
+					break; 
+				case 'd':  	
+					int_record = va_arg(ap, int);
+					char_num += write_10(int_record);
+					break;
+				case 'p':
+					putch('0');
+					putch('x');
+					char_num = 2;
+					uint_record = va_arg(ap, uint32_t);
+					char_num += write_16(uint_record);
+					break;
+				default:
+					return -1;
+					break;
+			}
+		}
+		fmt++;
+	}
+	va_end(ap);
+	return char_num;
+}
+
+int vsprintf(char *out, const char *fmt, va_list ap) {//out结尾必须添加终止符'\0','\0'不算长度。
+	int char_num = 0;
+	int int_record;
+	char char_record;
+	char *string_record;
+	while(*fmt)
+	{
+		if(*fmt != '%')
+		{
+			*out = *fmt;
+			out++;
+			char_num++;
+		}
+		else
+		{
+			fmt++;
+			switch(*fmt)
+			{
+				case '%':	
+					*out = '%';
+					out++;
+					char_num++;
+					break;
+				case 'c':
+					char_record = (char)va_arg(ap, int);
+					//这里va_arg参数为int的原因是，C中调用一个不带原型声明的函数，例如可变长参数函数，传入参数执行“默认实际参数提升”。char将提升为int。
+					*out = char_record;
+					out++;
+					char_num++;
+					break;
+				case 's':	
+					string_record = va_arg(ap, char*);
+					while(*string_record != 0)
+					{
+						*out = *string_record;
+						out++;
+						char_num++;
+						string_record++;
+					}
+					break; 
+				case 'd':	
+					int_record = va_arg(ap, int);
+					char_num += write_int_buffer(int_record, &out);
+					break;
+				default:
+					return -1;
+					break;
+			}
+		}
+		fmt++;
+	}
+	*out = 0;
+	return char_num;
 }
 
 int sprintf(char *out, const char *fmt, ...) {
-  va_list valist;
-  va_start(valist, fmt);
+	va_list ap;
+	int char_num;
+	va_start(ap, fmt);
+	char_num = vsprintf(out, fmt, ap);
+	va_end(ap);
+	return char_num;
+}
 
-  int res = vsprintf(out ,fmt, valist);
-  va_end(valist);
-  return res;
+int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {//返回的值应该是strlen(fmt)的长度，但'\0'要算入n里面，即这个out要留一个位置给终止符，只能存n-1个字符。
+  int char_num = 0;
+	int int_record;
+	int stringLen;
+	char char_record;
+	char *string_record;
+	const char *record_origin = fmt;
+	while(*fmt)
+	{
+		if(*fmt != '%')
+		{
+			*out = *fmt;
+			out++;
+			char_num++;
+			if(char_num == n - 1)
+			{
+				stringLen = strlen(record_origin);
+				*out = 0;//输出out的串，确定范围，范围边界也一定为'\0'。
+				return stringLen;
+			}
+		}
+		else
+		{
+			fmt++;
+			switch(*fmt)
+			{
+				case '%':	
+					*out = '%';
+					out++;
+					char_num++;
+					if(char_num == n - 1)
+					{
+						stringLen = strlen(record_origin);
+						*out = 0;
+						return stringLen;
+					}
+					break;
+				case 'c':
+					char_record = (char)va_arg(ap, int);
+					//这里va_arg参数为int的原因是，C中调用一个不带原型声明的函数，例如可变长参数函数，传入参数执行“默认实际参数提升”。char将提升为int。
+					*out = char_record;
+					out++;
+					char_num++;
+					if(char_num == n - 1)
+					{
+						stringLen = strlen(record_origin);
+						*out = 0;
+						return stringLen;
+					}
+					break;
+				case 's':	
+					string_record = va_arg(ap, char*);
+					while(*string_record != 0)
+					{
+						*out = *string_record;
+						out++;
+						char_num++;
+						if(char_num == n - 1)
+						{
+							stringLen = strlen(record_origin);
+							*out = 0;
+							return stringLen;
+						}
+						string_record++;
+					}
+					break; 
+				case 'd':	
+					int_record = va_arg(ap, int);
+					write_int_buffer_limit(int_record, n, &char_num, &out);
+					if(char_num == n - 1)
+					{
+						stringLen = strlen(record_origin);
+						*out = 0;
+						return stringLen;
+					}
+					break;
+				default:
+					return -1;
+					break;
+			}
+		}
+		fmt++;
+	}
+	*out = 0;
+	return strlen(record_origin);
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
-  va_list arg;
-  va_start (arg, fmt);
-
-  int done = vsnprintf(out, n, fmt, arg);
-
-  va_end(arg);
-  return done;
+  va_list ap;
+	int return_value;
+	va_start(ap, fmt);
+	return_value = vsnprintf(out, n, fmt, ap);
+	va_end(ap);
+	return return_value;
 }
-
-#define append(x) {out[j++]=x; if (j >= n) {break;}}
-
-int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
-  char buffer[128];
-  char *txt, cha;
-  int num, len;
-  unsigned int unum;
-  uint32_t pointer;
-  
-  
-  int state = 0, i, j;//模仿一个状态机
-  for (i = 0, j = 0; fmt[i] != '\0'; ++i){
-    switch (state)
-    {
-    case 0:
-      if (fmt[i] != '%'){
-        append(fmt[i]);
-      } else
-        state = 1;
-      break;
-    
-    case 1:
-      switch (fmt[i])
-      {
-      case 's':
-        txt = va_arg(ap, char*);
-        for (int k = 0; txt[k] !='\0'; ++k)
-          append(txt[k]);
-        break;
-      
-      case 'd':
-        num = va_arg(ap, int);
-        if(num == 0){
-          append('0');
-          break;
-        }
-        if (num < 0){
-          append('-');
-          num = 0 - num;
-        }
-        for (len = 0; num ; num /= 10, ++len)
-          //buffer[len] = num % 10 + '0';//逆序的
-          buffer[len] = HEX_CHARACTERS[num % 10];//逆序的
-        for (int k = len - 1; k >= 0; --k)
-          append(buffer[k]);
-        break;
-      
-      case 'c':
-        cha = (char)va_arg(ap, int);
-        append(cha);
-        break;
-
-      case 'p':
-        pointer = va_arg(ap, uint32_t);
-        for (len = 0; pointer ; pointer /= 16, ++len)
-          buffer[len] = HEX_CHARACTERS[pointer % 16];//逆序的
-        for (int k = 0; k < BIT_WIDE_HEX - len; ++k)
-          append('0');
-
-        for (int k = len - 1; k >= 0; --k)
-          append(buffer[k]);
-        break;
-
-      case 'x':
-        unum = va_arg(ap, unsigned int);
-        if(unum == 0){
-          append('0');
-          break;
-        }
-        for (len = 0; unum ; unum >>= 4, ++len)
-          buffer[len] = HEX_CHARACTERS[unum & 0xF];//逆序的
-
-        for (int k = len - 1; k >= 0; --k)
-          append(buffer[k]);
-        break;  
-
-      default:
-        assert(0);
-      }
-      state = 0;
-      break;
-      
-    }
-  }
-
-  out[j] = '\0';
-  return j;
-}
-
 #endif
