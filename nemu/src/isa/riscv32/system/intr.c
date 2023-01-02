@@ -1,30 +1,30 @@
-/***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
-*
-* NEMU is licensed under Mulan PSL v2.
-* You can use this software according to the terms and conditions of the Mulan PSL v2.
-* You may obtain a copy of Mulan PSL v2 at:
-*          http://license.coscl.org.cn/MulanPSL2
-*
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-*
-* See the Mulan PSL v2 for more details.
-***************************************************************************************/
-
 #include <isa.h>
-#include <stdio.h>
-word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 
-#ifdef CONFIG_ETRACE
-	printf("\nAt PC_ADDRESS " FMT_WORD ", an error is triggered. The error_num(cpu.mcause) is " FMT_WORD "\n\n", epc, NO);
-#endif
-	cpu.mepc = epc;
-	cpu.mcause = NO;
-	return cpu.mtvec;
+#define IRQ_TIMER 0x80000007
+
+word_t isa_raise_intr(word_t NO, vaddr_t epc) {
+  /* TODO: Trigger an interrupt/exception with ``NO''.
+   * Then return the address of the interrupt/exception vector.
+   */
+  csr.mepc    = epc;
+  csr.mcause  = NO;
+  // 11b-M 01b-S 00b-U
+  // 真的需要吗？
+  // csr.mstatus.m.MPP = 3;
+  //TODO: 缺少一些操作
+  csr.mstatus.m.MPIE = csr.mstatus.m.MIE;
+  csr.mstatus.m.MIE  = 0;
+  IFDEF(CONFIG_ETRACE, Log("etrace: MIE = 0"));
+
+
+  return csr.mtvec;
 }
 
+
 word_t isa_query_intr() {
+  if (csr.mstatus.m.MIE == 1 && cpu.INTR) {
+    cpu.INTR = false;
+    return IRQ_TIMER;
+  }
   return INTR_EMPTY;
 }

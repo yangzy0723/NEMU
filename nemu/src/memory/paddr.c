@@ -1,26 +1,11 @@
-/***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
-*
-* NEMU is licensed under Mulan PSL v2.
-* You can use this software according to the terms and conditions of the Mulan PSL v2.
-* You may obtain a copy of Mulan PSL v2 at:
-*          http://license.coscl.org.cn/MulanPSL2
-*
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-*
-* See the Mulan PSL v2 for more details.
-***************************************************************************************/
-
 #include <memory/host.h>
 #include <memory/paddr.h>
 #include <device/mmio.h>
 #include <isa.h>
 
-#if   defined(CONFIG_PMEM_MALLOC)
+#if   defined(CONFIG_TARGET_AM)
 static uint8_t *pmem = NULL;
-#else // CONFIG_PMEM_GARRAY
+#else
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
@@ -36,13 +21,8 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
   host_write(guest_to_host(addr), len, data);
 }
 
-static void out_of_bound(paddr_t addr) {
-  panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
-      addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
-}//越界，激活panic，使得程序会宕机。
-
 void init_mem() {
-#if   defined(CONFIG_PMEM_MALLOC)
+#if   defined(CONFIG_TARGET_AM)
   pmem = malloc(CONFIG_MSIZE);
   assert(pmem);
 #endif
@@ -51,28 +31,40 @@ void init_mem() {
   int i;
   for (i = 0; i < (int) (CONFIG_MSIZE / sizeof(p[0])); i ++) {
     p[i] = rand();
-  }//每32位存一个随机数，即四个字节
+  }
 #endif
-  Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
+  Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]",
+      (paddr_t)CONFIG_MBASE, (paddr_t)CONFIG_MBASE + CONFIG_MSIZE);
 }
 
+void error_finfo();
+
 word_t paddr_read(paddr_t addr, int len) {
-#ifdef CONFIG_MTRACE
-	log_write("\tread data from ADDRESS " FMT_WORD ", the length of data is %d\n", addr, len);
-#endif
-  
-	if (likely(in_pmem(addr))) return pmem_read(addr, len);
-  IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
-  out_of_bound(addr);
-  return 0;
+  #ifdef CONFIG_MTRACE
+    if (likely(in_pmem(addr))){
+      word_t w = pmem_read(addr, len);
+      if (addr == 0x806BDFF8){
+        Log(" Read  from memory at %#.8x for %d bytes for %x.", addr, len, w);
+        error_finfo();
+      }
+    }
+  #endif
+  if (likely(in_pmem(addr))) return pmem_read(addr, len);
+  MUXDEF(CONFIG_DEVICE, return mmio_read(addr, len),
+    panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR ") at pc = " FMT_WORD,
+      addr, CONFIG_MBASE, CONFIG_MBASE + CONFIG_MSIZE, cpu.pc));
+
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-#ifdef CONFIG_MTRACE
-	log_write("\twrite data to ADDRESS " FMT_WORD ", the length of data is %d, the data is " FMT_WORD "\n", addr, len, data);
-#endif  
-
-	if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
-  IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
-  out_of_bound(addr);
+  #ifdef CONFIG_MTRACE
+    if (addr == 0x806BDFF8){
+      Log("Write %x to memory at %#.8x for %d bytes.", data, addr, len);
+      error_finfo();
+    }
+  #endif
+  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+  MUXDEF(CONFIG_DEVICE, mmio_write(addr, len, data),
+    panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR ") at pc = " FMT_WORD,
+      addr, CONFIG_MBASE, CONFIG_MBASE + CONFIG_MSIZE, cpu.pc));
 }

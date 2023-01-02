@@ -1,18 +1,3 @@
-/***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
-*
-* NEMU is licensed under Mulan PSL v2.
-* You can use this software according to the terms and conditions of the Mulan PSL v2.
-* You may obtain a copy of Mulan PSL v2 at:
-*          http://license.coscl.org.cn/MulanPSL2
-*
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-*
-* See the Mulan PSL v2 for more details.
-***************************************************************************************/
-
 #include <isa.h>
 #include <memory/host.h>
 #include <memory/vaddr.h>
@@ -33,7 +18,9 @@ uint8_t* new_space(int size) {
 }
 
 static void check_bound(IOMap *map, paddr_t addr) {
+  void print_stack_trace();
   if (map == NULL) {
+    print_stack_trace();
     Assert(map != NULL, "address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, addr, cpu.pc);
   } else {
     Assert(addr <= map->high && addr >= map->low,
@@ -53,15 +40,14 @@ void init_map() {
 }
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
+  #ifdef CONFIG_DTRACE
+    Log("%#x\t for len=%d at %s", addr, len, map ? map->name : "No device");
+  #endif
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
-
-#ifdef CONFIG_DTRACE
-	log_write("\t\tread data from %s-register(ADDRESS) " FMT_WORD ", the length of data is %d\n", map->name, addr, len);
-#endif
   return ret;
 }
 
@@ -71,8 +57,4 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
-
-#ifdef CONFIG_DTRACE
-	log_write("\t\twrite data to %s-register(ADDRESS) " FMT_WORD ", the length of data is %d\n, the data is "FMT_WORD" \n", map->name, addr, len, data);
-#endif
 }
