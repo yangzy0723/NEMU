@@ -32,6 +32,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 
   // register event handler
   user_handler = handler;
+	printf("user_handler:%p\n", user_handler);
 
   return true;
 }
