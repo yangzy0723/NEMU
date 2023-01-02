@@ -17,11 +17,13 @@ void hello_fun(void *arg) {
   int j = 1;
 	printf("in hello1: %p\n", user_handler);
   while (1) {
-		//printf("in hello2: %p\n", user_handler);
+		printf("in hello2: %p\n", user_handler);
     Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (uintptr_t)arg, j);
     j ++;
 		printf("in hello:%p\n", user_handler);
     yield();
+		if(j > 3)
+			break;
   }
 }
 
