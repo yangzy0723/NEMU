@@ -20,6 +20,8 @@ int fs_close(int fd);
 static uintptr_t loader(PCB *pcb, const char *filename) {
 
 	int fd = fs_open(filename, 0, 0);
+
+	printf("fd = %d\n", fd);
 	
 	Elf_Ehdr elf;
 	
