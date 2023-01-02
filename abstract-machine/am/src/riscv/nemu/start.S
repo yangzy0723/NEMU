@@ -3,6 +3,7 @@
 .type _start, @function
 
 _start:
+	mv sp, a0
   mv s0, zero
   la sp, _stack_pointer
   jal _trm_init
