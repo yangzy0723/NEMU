@@ -45,7 +45,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 }
 
 void yield() {
-	assert(user_handler);
+	printf("2\n");
   asm volatile("li a7, -1; ecall");
 }
 
