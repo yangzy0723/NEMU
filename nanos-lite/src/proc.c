@@ -36,6 +36,9 @@ void init_proc() {
 Context* schedule(Context *prev) {
   current->cp = prev;
 	current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);	
-	assert(current->cp != prev);
+	if(current == &pcb[0])
+		printf("1\n");
+	else
+		printf("2\n");
 	return current->cp;
 }
