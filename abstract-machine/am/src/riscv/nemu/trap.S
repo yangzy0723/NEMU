@@ -49,6 +49,7 @@ __am_asm_trap:
 
   mv a0, sp
   jal __am_irq_handle
+	# 将当前参数(上下文)更改为另一个程序对应的上下文，__am_irq_handle返回值存在a0中，再把它给栈顶返回 
 	mv sp, a0
 
   LOAD t1, OFFSET_STATUS(sp)
