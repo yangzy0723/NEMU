@@ -18,6 +18,4 @@ typedef union {
 
 extern PCB *current;
 
-Context* schedule(Context *prev);
-
 #endif

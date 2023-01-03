@@ -7,6 +7,7 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
+		//printf("%d\n", c->mcause);
     switch (c->mcause) {
 			case -1: ev.event = EVENT_YIELD; break;
 			case 0:case 1:case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: 
@@ -18,7 +19,7 @@ Context* __am_irq_handle(Context *c) {
     c = user_handler(ev, c);
     assert(c != NULL);
   }
-	printf("123\n");
+
   return c;
 }
 
@@ -30,15 +31,12 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 
   // register event handler
   user_handler = handler;
+
   return true;
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
-  Context *context = kstack.end - sizeof(Context);//栈中上下文部分的起始位置
-	context->mepc = (uintptr_t)entry;//以entry为返回地址的上下文
-	context->mstatus = 0x1800;
-	context->GPR2 = (uintptr_t)arg;//函数参数传递的寄存器为a0(GPR2)
-	return context;
+  return NULL;
 }
 
 void yield() {

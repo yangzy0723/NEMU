@@ -24,7 +24,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 	if(!NDL_PollEvent(buf, sizeof(buf)))
 		return 0;
 	
-	if(buf[1] == 'd')//kd/ku，buf的第二个字符(buf[1])确定是按下还是抬起状态
+	if(buf[1] == 'd')
 		ev->type = SDL_KEYDOWN;
 	else if(buf[1] == 'u')
 		ev->type = SDL_KEYUP;
@@ -33,14 +33,14 @@ int SDL_PollEvent(SDL_Event *ev) {
 	
 	for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
 	{
-		char cmp_char[64];
-		memset(cmp_char, 0, sizeof(cmp_char));
-		strcat(cmp_char, keyname[i]);
-		strcat(cmp_char, "\n");
-		if(strcmp(&buf[3], cmp_char) == 0)//buf[3]开始确定按的是哪一个按键，将其与cmp_char进行比较可以得到当前按下的是哪一个按键
+		char revise_char[64];
+		memset(revise_char, 0, sizeof(revise_char));
+		strcat(revise_char, keyname[i]);
+		strcat(revise_char, "\n");
+		if(strcmp(&buf[3], revise_char) == 0)
 		{
 			ev->key.keysym.sym = i;
-			if(ev->type == SDL_KEYDOWN)//确定按键状态
+			if(ev->type == SDL_KEYDOWN)
 				key_state[i] = 1;
 			else
 				key_state[i] = 0;
@@ -56,7 +56,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 	
 	while(!NDL_PollEvent(buf, sizeof(buf))){}
 	
-	if(buf[1] == 'd')//kd/ku，buf的第二个字符(buf[1])确定是按下还是抬起状态
+	if(buf[1] == 'd')
 		event->type = SDL_KEYDOWN;
 	else if(buf[1] == 'u')
 		event->type = SDL_KEYUP;
@@ -65,13 +65,13 @@ int SDL_WaitEvent(SDL_Event *event) {
 	
 	for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); i++)
 	{
-		char cmp_char[64];
-		memset(cmp_char, 0, sizeof(cmp_char));
-		strcat(cmp_char, keyname[i]);
-		strcat(cmp_char, "\n");
-		if(strcmp(&buf[3], cmp_char) == 0)//buf[3]开始确定按的是哪一个按键，将其与cmp_char进行比较可以得到当前按下的是哪一个按键
+		char revise_char[64];
+		memset(revise_char, 0, sizeof(revise_char));
+		strcat(revise_char, keyname[i]);
+		strcat(revise_char, "\n");
+		if(strcmp(&buf[3], revise_char) == 0)
 		{
-			if(event->type == SDL_KEYDOWN)//确定按键状态
+			if(event->type == SDL_KEYDOWN)
 				key_state[i] = 1;
 			else
 				key_state[i] = 0;
@@ -91,4 +91,4 @@ uint8_t* SDL_GetKeyState(int *numkeys) {
  	if (numkeys != NULL)
    		*numkeys = sizeof(key_state) / sizeof(key_state[0]);
   	return key_state;
-}//这个函数未实现导致一直报错QAQ，警惕！！！]
+}

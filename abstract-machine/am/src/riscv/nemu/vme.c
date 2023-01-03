@@ -70,9 +70,5 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
-  Context *context = kstack.end - sizeof(Context);
-	context->mepc = (uintptr_t)entry;
-	context->mstatus = 0x1800;
-	context->GPRx = (uintptr_t)heap.end;//目前将heap.end作为用户进程的栈顶，然后把这个栈顶赋给用户的栈指针寄存器就可以了
-	return context;
+  return NULL;
 }

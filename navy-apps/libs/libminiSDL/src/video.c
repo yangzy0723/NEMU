@@ -3,11 +3,10 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
-  assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);//此处确保源操作框和目标操作框一样大
+  assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
 	
 	if(src->format->BitsPerPixel == 32)
 	{
@@ -83,7 +82,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 					((uint8_t *)(dst->pixels))[(dst_y + i) * dst->w + dst_x + j] = ((uint8_t *)(src->pixels))[(srcrect->y + i) * src->w + srcrect->x + j];
 		}
 	}
-}//此处感觉写复杂了
+}
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	if(dstrect == NULL)//NULL to fill the entire surface
@@ -103,11 +102,12 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
 		else
 		{
-			uint32_t color[w * h + 5];
+			uint32_t *color = malloc(w * h * 4);
 			for(int i = 0; i < h; i++)
 				for(int j = 0; j < w; j++)
 					color[i * w + j] = ((uint32_t*)(s -> pixels))[(y + i) * s->w + x + j];
 			NDL_DrawRect(color, x, y, w, h);
+			free(color);
 		}
 	}
 	else if(s->format->BitsPerPixel == 8)
@@ -119,14 +119,15 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			draw_w = s->w;
 			draw_h = s->h;
 		}
-		uint32_t color[draw_w * draw_h + 5];//颜色信息依然是32位的
+		uint32_t *color = malloc(draw_w * draw_h * 4);
 		for(int i = 0; i < draw_h; i++)
 			for(int j = 0; j < draw_w; j++)
 			{
-				SDL_Color now_color = s->format->palette->colors[((uint8_t*)(s->pixels))[(y + i) * s->w + x + j]]; 
-				color[i * draw_w + j] = (now_color.a << 24) | (now_color.r << 16) | (now_color.g << 8) | now_color.b;//此处是获得通用的32位颜色信息
+				SDL_Color the_color = s->format->palette->colors[((uint8_t*)(s->pixels))[(y + i) * s->w + x + j]]; 
+				color[i * draw_w + j] = (the_color.a << 24) | (the_color.r << 16) | (the_color.g << 8) | the_color.b;
 			}
 		NDL_DrawRect(color, x, y, draw_w, draw_h);
+		free(color);
 	}
 }
 
