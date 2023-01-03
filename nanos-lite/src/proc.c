@@ -28,7 +28,7 @@ void init_proc() {
 	context_kload(&pcb[0], hello_fun, "yzy");
 	char *argv[] = {"--skip", NULL};
 	//char *envp[] = {"pig", NULL};
-	context_uload(&pcb[1], "/bin/pal", argv, NULL);
+	context_uload(&pcb[1], "/bin/nterm", argv, NULL);
   //Log("Initializing processes...");
 
   // load program here
