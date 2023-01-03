@@ -4,10 +4,8 @@
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
-extern Context* do_event(Event e, Context* c);//不知为何user_handler莫名会变成NULL，所以此处直接把do_event拿过来用了。
-
 Context* __am_irq_handle(Context *c) {
-  //if (do_event) {
+  if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
 			case -1: ev.event = EVENT_YIELD; break;
@@ -17,9 +15,9 @@ Context* __am_irq_handle(Context *c) {
       default: ev.event = EVENT_ERROR; break;
     }
 
-    c = do_event(ev, c);
+    c = user_handler(ev, c);
     assert(c != NULL);
-  //}
+  }
   return c;
 }
 
