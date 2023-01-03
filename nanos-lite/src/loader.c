@@ -113,4 +113,5 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	point[num_argv] = 0x0;
 	point = point - 1;
 	*point = (uintptr_t)num_argv;
+	printf("123\n");
 }
