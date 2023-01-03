@@ -12,6 +12,8 @@ void call_main(uintptr_t *args) {
   environ = envp;
 	printf("%d\n",*(args));
 	printf("%s\n",(char *)*(args + 1));
+	printf("%s\n",(char *)*(args + 2));
+	printf("%s\n",(char *)*(args + 3));
   exit(main(argc, argv, envp));
   assert(0);
 }
