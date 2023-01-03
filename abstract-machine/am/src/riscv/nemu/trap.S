@@ -49,6 +49,8 @@ __am_asm_trap:
 
   mv a0, sp
   jal __am_irq_handle
+	# 将新的上下文结构(保存在a0中)的栈指针传到堆栈寄存器sp，然后就能恢复新进程的上下文结构
+	mv sp, a0
 
   LOAD t1, OFFSET_STATUS(sp)
   LOAD t2, OFFSET_EPC(sp)
