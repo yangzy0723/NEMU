@@ -62,3 +62,55 @@ void context_kload(PCB *pcb, void(*entry)(void *), void *arg)
 	kstack.end = kstack.start + sizeof(PCB);
 	pcb->cp = kcontext(kstack, entry, arg);
 }
+
+void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
+{
+	Area ustack;
+	ustack.start = &(pcb->cp);
+	ustack.end = ustack.start + sizeof(PCB);
+	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
+	pcb->cp->GPRx = (uintptr_t)(heap.end);
+
+	//count
+	int num_argv = 0;
+	int num_envp = 0;
+	while(argv != NULL && argv[num_argv] != NULL)
+	{
+		num_argv++;
+	}
+	while(envp != NULL && envp[num_argv] != NULL)
+	{
+		num_envp++;
+	}
+
+	//deal with string-area
+	char *record_position_argv[num_argv];
+	char *record_position_envp[num_envp];
+	char *p = (char *)pcb->cp->GPRx;
+	for(int i = 0; i < num_argv; i++)
+	{
+		p = p - strlen(argv[i]) - 1;
+		strcpy(p, argv[i]);
+		record_position_argv[i] = p;
+	}
+	for(int i = 0; i < num_envp; i++)
+	{
+		p = p - strlen(envp[i]) - 1;
+		strcpy(p, envp[i]);
+		record_position_envp[i] = p;
+	}
+
+	//deal with envp array and argv array
+	p = (char *)((uint32_t)p - (uint32_t)p%4);//对齐
+	uintptr_t *point = (uintptr_t *)p;
+	point = point - num_envp - 1;
+	for(int i = 0; i < num_envp; i++)
+		point[i] = (uintptr_t)record_position_envp[i];
+	point[num_envp] = 0x0;
+	point = point - num_argv - 1;
+	for(int i = 0; i < num_argv; i++)
+		point[i] = (uintptr_t)record_position_argv[i];
+	point[num_argv] = 0x0;
+	point = point - 1;
+	*point = (uintptr_t)num_argv;
+}
