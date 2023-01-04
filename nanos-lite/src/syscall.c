@@ -74,7 +74,10 @@ void do_syscall(Context *c) {
 		
 		case SYS_execve:
 			{
-				c->GPRx = execve((char *)a[1], (char **)a[2], (char **)a[3]);
+				if(fs_open((char *)a[1], 0, 0) == -1)//检查文件是否存在
+					c->GPRx = -2;
+				else
+					c->GPRx = execve((char *)a[1], (char **)a[2], (char **)a[3]);
 			};break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
