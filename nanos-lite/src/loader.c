@@ -21,11 +21,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
 	int fd = fs_open(filename, 0, 0);
 
-	if(fd == -1)//当nterm进行无效输入时，仍然能正常运行
+	/*if(fd == -1)//当nterm进行无效输入时，仍然能正常运行
 	{
 		printf("can not find target file!\n");
 		return loader(pcb, "/bin/nterm");
-	}
+	}*/
 	
 	Elf_Ehdr elf;
 	
