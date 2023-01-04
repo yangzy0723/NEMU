@@ -25,9 +25,8 @@ void hello_fun(void *arg) {
 
 void init_proc() {
   switch_boot_pcb();
+	context_uload(&pcb[0], "/bin/nterm", NULL, NULL);
 	context_kload(&pcb[1], hello_fun, "yzy");
-	char *argv[] = {"/bin/exec-test", NULL};
-	context_uload(&pcb[0], "/bin/nterm", argv, NULL);
 
 	Log("Initializing processes...");
 }
