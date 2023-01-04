@@ -9,6 +9,7 @@ size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
 int fs_close(int fd);
 void naive_uload(PCB *pcb, const char *filename);
+int execve(char *filename, char *const argv[], char *const envp[]);
 
 void do_syscall(Context *c) {
 
@@ -73,8 +74,7 @@ void do_syscall(Context *c) {
 		
 		case SYS_execve:
 			{
-				naive_uload(NULL, (char *)a[1]);
-				c->GPRx = 0;
+				c->GPRx = execve((char *)a[1], (char **)a[2], (char **)a[3]);
 			};break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }

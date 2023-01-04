@@ -40,3 +40,11 @@ Context* schedule(Context *prev) {
 	current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
 	return current->cp;
 }
+
+int execve(char *filename, char *const argv[], char *const envp[])
+{
+	context_uload((current == &pcb[0] ? &pcb[1] : &pcb[0]), filename, argv, envp);
+	switch_boot_pcb();
+	yield();
+	return 0;
+}

@@ -3,8 +3,9 @@
 static void *pf = NULL;
 
 void* new_page(size_t nr_page) {
-  return NULL;
-}
+  pf = pf + nr_page * 4096;
+	return pf;
+}//每一页分配nr_page*4KB的连续内存区域
 
 #ifdef HAS_VME
 static void* pg_alloc(int n) {
