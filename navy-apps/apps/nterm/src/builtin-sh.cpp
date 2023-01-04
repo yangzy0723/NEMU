@@ -23,7 +23,7 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
-	char command_record[108];
+	char command_record[256];
 	memset(command_record, 0, sizeof(command_record));
 
 	int i = 0;
