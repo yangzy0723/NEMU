@@ -74,7 +74,9 @@ void do_syscall(Context *c) {
 		
 		case SYS_execve:
 			{
-				printf("123\n");
+				printf("%s\n", (char *)a[1]);
+				printf("%s\n", (char *)*(char **)(a[2]));
+				printf("%s\n", (char *)*(char **)(a[3]));
 				c->GPRx = execve((char *)a[1], (char **)a[2], (char **)a[3]);
 			};break;
     default: panic("Unhandled syscall ID = %d", a[0]);
