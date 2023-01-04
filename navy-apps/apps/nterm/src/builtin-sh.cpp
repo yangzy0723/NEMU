@@ -49,8 +49,9 @@ static void sh_handle_cmd(const char *cmd) {
 		j++;
 	}
 	argv[j] = NULL;//要求是argv最后一个必须是NULL
-	printf("%s\n", argv[0]);
-	printf("%s\n", (char *)(argv + 1));
+	printf("running %s\n", argv[0]);
+
+	printf("%c\n", **(argv + 1));
 	execvp(argv[0], argv + 1);//argv[0]是app的名字，&argv[1]是参数列表的起始地址
 }
 
