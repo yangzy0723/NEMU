@@ -71,7 +71,7 @@ void context_kload(PCB *pcb, void(*entry)(void *), void *arg)
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
-	//此处需要先进行栈的维护，进行argv和envp的处理，envp信息会丢失
+	//此处需要先进行栈的维护，进行argv和envp的处理，否则envp信息会丢失
 	//count
 	int num_argv = 0;
 	int num_envp = 0;
