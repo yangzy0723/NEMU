@@ -71,11 +71,11 @@ void context_kload(PCB *pcb, void(*entry)(void *), void *arg)
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
-	Area ustack;
+	/*Area ustack;
 	ustack.start = &(pcb->cp);
 	ustack.end = ustack.start + sizeof(PCB);
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
-	pcb->cp->GPRx = (uintptr_t)new_page(8);//32KB
+	pcb->cp->GPRx = (uintptr_t)new_page(8);//32KB*/
 	//count
 	int num_argv = 0;
 	int num_envp = 0;
