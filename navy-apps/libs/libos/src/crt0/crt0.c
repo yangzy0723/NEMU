@@ -11,9 +11,9 @@ void call_main(uintptr_t *args) {
 	char **envp = (char **)(args + 1 + argc + 1);
   environ = envp;
 	
-	printf("%d\n",*(args));
-	printf("%s\n",(char *)*(args + 1));
-	//printf("%s\n",(char *)*(args + 2));
+	printf("argv参数个数: %d\n",*(args));
+	printf("argv的第一个: %s\n",(char *)*(argv));
+	printf("envp的第一个: %s\n",(char *)*(envp));
 	//printf("%s\n",(char *)*(args + 3));
 	//printf("%s\n",(char *)*(args + 4));
 	//printf("%s\n",(char *)*(args + 5));
