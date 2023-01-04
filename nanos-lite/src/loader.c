@@ -87,6 +87,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	{
 		num_envp++;
 	}
+	printf("%s\n", filename);
+	printf("%s\n", argv[0]);
+	printf("%s\n", envp[0]);
 	printf("%d %d\n", num_argv, num_envp);
 	//deal with string-area
 	char *record_position_argv[num_argv];
