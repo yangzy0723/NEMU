@@ -88,7 +88,9 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		num_envp++;
 	}
 	printf("%s\n", filename);
+	if(argv != NULL)
 	printf("%s\n", argv[0]);
+	if(envp != NULL)
 	printf("%s\n", envp[0]);
 	printf("%d %d\n", num_argv, num_envp);
 	//deal with string-area
