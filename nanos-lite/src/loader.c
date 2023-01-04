@@ -71,7 +71,7 @@ void context_kload(PCB *pcb, void(*entry)(void *), void *arg)
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
-	if(envp[1] != NULL)
+	if(envp != NULL &&envp[1] != NULL)
 	printf("%s\n", envp[1]);
 	Area ustack;
 	ustack.start = &(pcb->cp);
