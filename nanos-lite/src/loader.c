@@ -71,8 +71,8 @@ void context_kload(PCB *pcb, void(*entry)(void *), void *arg)
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
-	if(envp != NULL)
-	printf("%s\n", envp[0]);
+	if(envp[1] != NULL)
+	printf("%s\n", envp[1]);
 	Area ustack;
 	ustack.start = &(pcb->cp);
 	ustack.end = ustack.start + sizeof(PCB);
