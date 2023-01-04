@@ -26,9 +26,8 @@ void hello_fun(void *arg) {
 void init_proc() {
   switch_boot_pcb();
 	context_kload(&pcb[0], hello_fun, "yzy");
-	char *argv[] = {"--skip", NULL};
 	//char *envp[] = {"pig", NULL};
-	context_uload(&pcb[1], "/bin/exec-test", argv, NULL);
+	context_uload(&pcb[1], "/bin/exec-test", NULL, NULL);
   //Log("Initializing processes...");
 
   // load program here
