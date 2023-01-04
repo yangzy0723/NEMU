@@ -76,7 +76,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.end = ustack.start + sizeof(PCB);
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
 	pcb->cp->GPRx = (uintptr_t)new_page(8);//32KB
-printf("ahiah\n");
 	//count
 	int num_argv = 0;
 	int num_envp = 0;
@@ -88,7 +87,7 @@ printf("ahiah\n");
 	{
 		num_envp++;
 	}
-
+	printf("%d %d\n", num_argv, num_envp);
 	//deal with string-area
 	char *record_position_argv[num_argv];
 	char *record_position_envp[num_envp];
