@@ -49,8 +49,10 @@ static void sh_handle_cmd(const char *cmd) {
 		j++;
 	}
 	argv[j] = NULL;//要求是argv最后一个必须是NULL
-	printf("running %s\n", argv[0]);
-	execve(argv[0], argv + 1, NULL);//argv[0]是app的名字，&argv[1]是参数列表的起始地址
+	char app[10] = "/bin/";
+	strcat(app, argv[0]);
+	printf("running %s\n", app);
+	execve(app, argv + 1, NULL);//argv[0]是app的名字，&argv[1]是参数列表的起始地址
 }
 
 void builtin_sh_run() {
