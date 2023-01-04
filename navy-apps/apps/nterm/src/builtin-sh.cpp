@@ -57,6 +57,7 @@ static void sh_handle_cmd(const char *cmd) {
 	char *envp[] = {NULL};
 	
 	printf("go to file: %s\n", app);
+	printf("%s\n", *argv);
 	execve(app, argv, envp);//学着menu的实现来
 }
 
