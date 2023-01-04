@@ -27,7 +27,7 @@ void init_proc() {
   switch_boot_pcb();
 	context_kload(&pcb[1], hello_fun, "yzy");
 	char *argv[] = {"/bin/exec-test", NULL};
-	context_uload(&pcb[0], "/bin/exec-test", argv, NULL);
+	context_uload(&pcb[0], "/bin/menu", argv, NULL);
 
 	Log("Initializing processes...");
 }
@@ -40,7 +40,6 @@ Context* schedule(Context *prev) {
 
 int execve(char *filename, char *const argv[], char *const envp[])
 {
-	assert(0);
 	context_uload(&pcb[0], filename, argv, envp);
 	switch_boot_pcb();
 	yield();
