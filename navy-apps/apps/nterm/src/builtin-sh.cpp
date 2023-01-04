@@ -48,7 +48,6 @@ static void sh_handle_cmd(const char *cmd) {
 		i++;
 		j++;
 	}
-	printf("%d\n", j);
   command_split[j] = NULL;//要求是argv最后一个必须是NULL
 	
 	char app[6] = "/bin/";
