@@ -53,15 +53,17 @@ static void sh_handle_cmd(const char *cmd) {
 	char app[16] = "/bin/";//这个不能开太小，不然装不下完整的应用程序
 	strcat(app, command_split[0]);//第一个是app的名字
 	char **argv = &command_split[1];
-	char *envp[] = {NULL};
+	//char *envp[] = {NULL};
 	
 	printf("go to file: %s\n", app);
-	execve(app, argv, envp);//学着menu的实现来
+	execvp(app, argv);//学着menu的实现来
 }
 
 void builtin_sh_run() {
   sh_banner();
   sh_prompt();
+
+	setenv("PATH", "/bin:/usr/bin", 0);
 
   while (1) {
     SDL_Event ev;
