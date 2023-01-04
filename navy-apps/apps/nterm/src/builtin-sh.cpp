@@ -50,11 +50,15 @@ static void sh_handle_cmd(const char *cmd) {
 	}
 	printf("%d\n", j);
   command_split[j] = NULL;//要求是argv最后一个必须是NULL
+	
 	char app[6] = "/bin/";
 	strcat(app, command_split[0]);//第一个是app的名字
+	
 	char **argv = &command_split[1];
+	char *envp[] = {NULL};
+	
 	printf("running %s\n", app);
-	execve(app, argv + 1, NULL);//学着menu的实现来
+	execve(app, argv, envp);//学着menu的实现来
 }
 
 void builtin_sh_run() {
