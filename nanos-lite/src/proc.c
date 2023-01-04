@@ -25,8 +25,8 @@ void hello_fun(void *arg) {
 
 void init_proc() {
   switch_boot_pcb();
-	context_uload(&pcb[0], "/bin/nterm", NULL, NULL);
-	context_kload(&pcb[1], hello_fun, "yzy");
+	context_kload(&pcb[0], hello_fun, "yzy && zqy");
+	context_uload(&pcb[1], "/bin/nterm", NULL, NULL);
 
 	Log("Initializing processes...");
 }
@@ -39,7 +39,7 @@ Context* schedule(Context *prev) {
 
 int execve(char *filename, char *const argv[], char *const envp[])
 {
-	context_uload(&pcb[0], filename, argv, envp);
+	context_uload(&pcb[1], filename, argv, envp);
 	switch_boot_pcb();
 	yield();
 	return 0;
