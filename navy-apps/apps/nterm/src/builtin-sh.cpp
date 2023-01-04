@@ -23,7 +23,7 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
-	char command_record[4096];
+	char command_record[108];
 	memset(command_record, 0, sizeof(command_record));
 
 	int i = 0;
@@ -50,7 +50,7 @@ static void sh_handle_cmd(const char *cmd) {
 	}
   command_split[j] = NULL;//要求是argv最后一个必须是NULL
 	
-	char app[] = "/bin/";//这个不能开太小，不然装不下完整的应用程序
+	char app[16] = "/bin/";//这个不能开太小，不然装不下完整的应用程序
 	strcat(app, command_split[0]);//第一个是app的名字
 	char **argv = &command_split[1];
 	char *envp[] = {NULL};
