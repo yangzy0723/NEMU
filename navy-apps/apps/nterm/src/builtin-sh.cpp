@@ -32,7 +32,6 @@ static void sh_handle_cmd(const char *cmd) {
 		command_record[i] = cmd[i];
 		i++;
 	}
-	printf("%s\n", command_record);
 	char *command_split[16];
 	i = 0;
 	int memory_i = 0;
@@ -53,7 +52,6 @@ static void sh_handle_cmd(const char *cmd) {
 	
 	char app[6] = "/bin/";
 	strcat(app, command_split[0]);//第一个是app的名字
-	
 	char **argv = &command_split[1];
 	char *envp[] = {NULL};
 	
