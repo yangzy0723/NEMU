@@ -32,7 +32,7 @@ static void sh_handle_cmd(const char *cmd) {
 		command_record[i] = cmd[i];
 		i++;
 	}
-	char *argv[16];
+	char *command_split[16];
 	i = 0;
 	int memory_i = 0;
 	int j = 0;
@@ -44,15 +44,17 @@ static void sh_handle_cmd(const char *cmd) {
 			i++;
 		}
 		command_record[i] = '\0';
-		argv[j] = &command_record[memory_i]; 
+		command_split[j] = &command_record[memory_i]; 
 		i++;
 		j++;
 	}
-	argv[j] = NULL;//要求是argv最后一个必须是NULL
-	char app[10] = "/bin/";
-	strcat(app, argv[0]);
+	printf("%d\n", j);
+  command_split[j] = NULL;//要求是argv最后一个必须是NULL
+	char app[6] = "/bin/";
+	strcat(app, command_split[0]);//第一个是app的名字
+	char **argv = &command_split[1];
 	printf("running %s\n", app);
-	execve(app, argv + 1, NULL);//argv[0]是app的名字，&argv[1]是参数列表的起始地址
+	execve(app, argv + 1, NULL);//学着menu的实现来
 }
 
 void builtin_sh_run() {
