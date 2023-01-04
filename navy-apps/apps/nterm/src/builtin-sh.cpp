@@ -32,6 +32,7 @@ static void sh_handle_cmd(const char *cmd) {
 		command_record[i] = cmd[i];
 		i++;
 	}
+	printf("%s\n", command_record);
 	char *command_split[16];
 	i = 0;
 	int memory_i = 0;
