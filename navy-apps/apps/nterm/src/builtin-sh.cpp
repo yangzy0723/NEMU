@@ -55,7 +55,7 @@ static void sh_handle_cmd(const char *cmd) {
 	char **argv = &command_split[1];
 	//char *envp[] = {NULL};
 	
-	printf("running app: %s\n", app);
+	printf("try running app: %s\n", app);
 	execvp(app, argv);//学着menu的实现来
 }
 
