@@ -66,7 +66,32 @@ void __am_switch(Context *c) {
   }
 }
 
+static inline uintptr_t GET_DIR(uintptr_t p)//页目录索引
+{
+	return (p & (uintptr_t)0xffc00000) >> 22;
+}
+
+static inline uintptr_t GET_PAGE(uintptr_t p)//页表索引
+{
+	return (p & (uintptr_t)0x003ff000) >> 12;
+}
+
+static inline uintptr_t GET_OFFSET(uintptr_t p)//页内偏移量
+{
+	return p & 0x00000fff;
+}
+
 void map(AddrSpace *as, void *va, void *pa, int prot) {
+	//参考ICS课本图6.45
+	/*uintptr_t page_directory_entry = get_satp();
+	
+	PTE *page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)va) * 4;
+	//此处需要*4得到对应的页目录项，因为每个页目录项都是4个字节的
+	
+	if((*page_directory_item_entry) & 1 == 0)//研究其有效位是否为0,若为0说明二级表未分配
+	{
+		(*page_directory_item_entry) = 
+	}*/
 }
 
 Context *ucontext(AddrSpace *as, Area ustack, void *entry) {

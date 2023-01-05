@@ -3,13 +3,17 @@
 static void *pf = NULL;
 
 void* new_page(size_t nr_page) {
-  pf = pf + nr_page * 4096;
+  pf = pf + nr_page * PGSIZE;
+	printf("%p\n", (uintptr_t)pf);
 	return pf;
-}//每一页分配nr_page*4KB的连续内存区域
+}//每一页分配nr_page*4KB的连续内存区域，得到的是末尾地址
 
 #ifdef HAS_VME
 static void* pg_alloc(int n) {
-  return NULL;
+	int nr_apge = n / PGSIZE;
+	void *ret_point = new_page(nr_page);
+	memset(ret_point - nr_page * PGSIZE, 0, nr_page * PGSIZE);
+	return ret_point - nr_page * PGSIZE;
 }
 #endif
 
