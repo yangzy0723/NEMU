@@ -81,17 +81,34 @@ static inline uintptr_t GET_OFFSET(uintptr_t p)//页内偏移量
 	return p & 0x00000fff;
 }
 
+static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
+{
+	return (uintptr_t)p & 0xfffffc00;
+}
+
+//先只考虑有效位
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-	//参考ICS课本图6.45
-	/*uintptr_t page_directory_entry = get_satp();
+	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
 	
-	PTE *page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)va) * 4;
+	uintptr_t page_directory_entry = get_satp();//页目录的地址
+	
+	PTE *page_directory_item_entry = (PTE *)(page_directory_entry + GET_DIR((uintptr_t)va) * 4);
+	//10位*4,正好4096字节，一页
 	//此处需要*4得到对应的页目录项，因为每个页目录项都是4个字节的
 	
-	if((*page_directory_item_entry) & 1 == 0)//研究其有效位是否为0,若为0说明二级表未分配
+	if(((*page_directory_item_entry) & PTE_V) == 0)//研究其有效位是否为0,若为0说明二级表未分配
 	{
-		(*page_directory_item_entry) = 
-	}*/
+		(*page_directory_item_entry) = ((*page_directory_item_entry) & 0x000003ff) + (PTE)pgalloc_usr(PGSIZE);
+		//高22位，存页表的地址，低2位一定为0
+		(*page_directory_item_entry) = ((*page_directory_item_entry) | PTE_V);//有效位为1,说明这个页目录项对应的页表有在工作了
+	}
+
+	uintptr_t page_table_entry = GET_BASE_ADDR(*page_directory_item_entry);//得到页表基地址
+	
+	PTE *page_table_item_entry = (PTE *)(page_table_entry + GET_PAGE((uintptr_t)va) * 4);//得到页表项的地址
+	(*page_table_item_entry) = ((*page_table_item_entry) & 0x000003ff) + (PTE)GET_BASE_ADDR((uintptr_t)pa >> 2);//取34位的高22位填充
+	(*page_table_item_entry) = (*page_table_item_entry) | PTE_V;
+	
 }
 
 Context *ucontext(AddrSpace *as, Area ustack, void *entry) {
