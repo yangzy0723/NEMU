@@ -71,6 +71,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		map(&(pcb->as), (pcb->as).area.end - i * PGSIZE, alloc_p_end - i * PGSIZE, 1);//都是以页为单位	
 	//此处需要先进行栈的维护，进行argv和envp的处理，否则envp信息会丢失
 	//count
+	printf("123\n");
 	int num_argv = 0;
 	int num_envp = 0;
 	while(argv != NULL && argv[num_argv] != NULL)
@@ -118,5 +119,4 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.end = ustack.start + sizeof(PCB);
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
 	pcb->cp->GPRx = (uintptr_t)point;
-	printf("finish!");
 }
