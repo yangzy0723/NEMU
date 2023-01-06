@@ -35,17 +35,16 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		if(segment.p_type == PT_LOAD)
 		{
 			int num_page = segment.p_memsz / PGSIZE + 1;
-			void *start = new_page(num_page) - num_page * PGSIZE; 
+			void *start = new_page(num_page) - num_page * PGSIZE;
+			printf("申请了%d页内存，起始地址为%p\n", num_page, (uintptr_t)start);
 			void *vaddr = (void *)segment.p_vaddr;
 			for(int i = 0; i < num_page; i++)
 			{	
 				map(&(pcb->as), (void *)(((uint32_t)vaddr & 0xfffff000) + i * PGSIZE), (void *)(start + i * PGSIZE), 0);
 				printf("va : %p, pa : %p\n", ((uint32_t)vaddr&0xfffff000) + i * PGSIZE, start + i * PGSIZE);
 			}
-			printf("123\n");
 			fs_lseek(fd, segment.p_offset, SEEK_SET);
 			fs_read(fd, vaddr, segment.p_filesz);
-			printf("123\n");	
 			memset(vaddr + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
 		}
 	}
