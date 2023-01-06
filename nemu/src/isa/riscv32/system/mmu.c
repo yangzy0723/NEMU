@@ -14,7 +14,6 @@
 ***************************************************************************************/
 
 #include <isa.h>
-#include <isa-def.h>
 #include <memory/paddr.h>
 #include <memory/vaddr.h>
 
@@ -61,11 +60,10 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	return pa;
 }
 
-/*int isa_mmu_check(vaddr_t vaddr, int len, int type)
+int isa_mmu_check(vaddr_t vaddr, int len, int type)
 {
-	printf("%p\n", vaddr);
-	if(((uint32_t)(cpu.satp & 0x80000000)) >> 31)
+	if(((uint32_t)(cpu.satp & 0x80000000)) >> 31 == 1)
 		return MMU_TRANSLATE;
 	else
 		return MMU_DIRECT;
-}*/
+}
