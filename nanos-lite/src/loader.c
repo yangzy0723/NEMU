@@ -98,13 +98,13 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		strcpy(p, envp[i]);
 		record_position_envp[i] = p;
 	}
-	printf("123\n");
 	//deal with envp array and argv array
 	p = (char *)((uint32_t)p - (uint32_t)p%4);//对齐
 	uintptr_t *point = (uintptr_t *)p;
 	point = point - num_envp - 1;
 	for(int i = 0; i < num_envp; i++)
 		point[i] = (uintptr_t)record_position_envp[i];
+	printf("123\n");
 	point[num_envp] = 0x0;
 	point = point - num_argv - 1;
 	for(int i = 0; i < num_argv; i++)
