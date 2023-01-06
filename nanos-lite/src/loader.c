@@ -86,7 +86,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	char *record_position_argv[num_argv];
 	char *record_position_envp[num_envp];
 	char *p = (pcb->as).area.end;
-	printf("123\n");
 	for(int i = 0; i < num_argv; i++)
 	{
 		p = p - strlen(argv[i]) - 1;
@@ -113,7 +112,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	point[num_argv] = 0x0;
 	point = point - 1;
 	*point = (uintptr_t)num_argv;
-
+	printf("123\n");
 	Area ustack;
 	ustack.start = &(pcb->cp);
 	ustack.end = ustack.start + sizeof(PCB);
