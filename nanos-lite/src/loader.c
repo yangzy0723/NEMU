@@ -35,7 +35,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		if(segment.p_type == PT_LOAD)
 		{
 			int num_page = segment.p_memsz / PGSIZE + 1;
-			void *start = new_page(num_page * PGSIZE) - num_page * PGSIZE; 
+			void *start = new_page(num_page) - num_page * PGSIZE; 
 			void *vaddr = (void *)segment.p_vaddr;
 			for(int i = 0; i < num_page; i++)
 				map(&(pcb->as), (void *)(((uint32_t)vaddr & 0xfffff000) + i * PGSIZE), (void *)(start + i * PGSIZE), 0); 
