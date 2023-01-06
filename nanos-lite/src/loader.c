@@ -104,11 +104,11 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	point = point - num_envp - 1;
 	for(int i = 0; i < num_envp; i++)
 		point[i] = (uintptr_t)record_position_envp[i];
-	printf("123\n");
 	point[num_envp] = 0x0;
 	point = point - num_argv - 1;
 	for(int i = 0; i < num_argv; i++)
 		point[i] = (uintptr_t)record_position_argv[i];
+	printf("123\n");
 	point[num_argv] = 0x0;
 	point = point - 1;
 	*point = (uintptr_t)num_argv;
