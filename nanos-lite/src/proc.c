@@ -26,14 +26,14 @@ void hello_fun(void *arg) {
 void init_proc() {
   switch_boot_pcb();
 	context_kload(&pcb[0], hello_fun, "yzy && zqy");
-	context_uload(&pcb[1], "/bin/nterm", NULL, NULL);
+	context_uload(&pcb[1], "/bin/dummy", NULL, NULL);
 
 	Log("Initializing processes...");
 }
 
 Context* schedule(Context *prev) {
-	current->cp = prev;
-	current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+	//current->cp = prev;
+	current = &pcb[1];
 	return current->cp;
 }
 

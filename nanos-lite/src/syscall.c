@@ -23,7 +23,7 @@ void do_syscall(Context *c) {
 	a[2] = c->GPR3;//_syscall_第三个参数,a1
 	a[3] = c->GPR4;//_syscall_第四个参数,a2
   switch (a[0]) {
-		case SYS_exit: execve("/bin/nterm", NULL, NULL); c->GPRx = 0; break;
+		case SYS_exit: halt(0);/*execve("/bin/nterm", NULL, NULL); c->GPRx = 0;*/ break;
 
 		case SYS_yield: yield(); c->GPRx = 0; break; 
 
