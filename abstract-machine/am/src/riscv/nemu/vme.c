@@ -98,10 +98,12 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	
 	if(((*page_directory_item_entry) & PTE_V) == 0)//研究其有效位是否为0,若为0说明二级表未分配
 	{
+		printf("%p\n", *page_directory_item_entry);
 		(*page_directory_item_entry) = ((*page_directory_item_entry) & 0x000003ff) + (PTE)pgalloc_usr(PGSIZE);
 		//高22位，存页表的地址，低2位一定为0
 		(*page_directory_item_entry) = ((*page_directory_item_entry) | PTE_V);
 		//有效位为1,说明这个页目录项对应的页表有在工作了
+		printf("%p\n", *page_directory_item_entry);
 	}
 
 	uintptr_t page_table_entry = GET_BASE_ADDR(*page_directory_item_entry);//得到页表基地址
