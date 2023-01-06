@@ -86,7 +86,6 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 
 //先只考虑有效位
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-	printf("map vaddr:%p paddr:%p\n", va, pa);
 	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
 	
 	uintptr_t page_directory_entry = (uintptr_t)as->ptr;//页目录的基地址
