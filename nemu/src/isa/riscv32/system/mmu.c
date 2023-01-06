@@ -41,6 +41,7 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 
 //此处不能用指针操作了，因为连接到的是本机的linux系统上
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
+	printf("vaddr : %x ", vaddr);
 
   uintptr_t page_directory_entry = cpu.satp << 12; 
 
@@ -59,7 +60,9 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	assert(page_table_item & 1);//检查valid位
 
 	paddr_t pa = (paddr_t)((GET_BASE_ADDR(page_table_item) << 2) + GET_OFFSET((uintptr_t)vaddr));
-	assert(vaddr == pa);
+
+	printf("paddr : %x\n", pa);
+
 	return pa;
 }
 
