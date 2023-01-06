@@ -65,6 +65,10 @@ void context_kload(PCB *pcb, void(*entry)(void *), void *arg)
 
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[])
 {
+	protect(&(pcb->as));//可以理解为创建了一个进程的页目录，同时腾出了(0x40000000, 0x80000000)的用户进程空间
+	void *alloc_p_end = new_page(8);//32KB
+	for(int i = 1; i <= 8; i++)
+		map(&(pcb->as), (pcb->as).area.end - i * PGSIZE, alloc_p_end - i * PGSIZE, 1);//都是以页为单位	
 	//此处需要先进行栈的维护，进行argv和envp的处理，否则envp信息会丢失
 	//count
 	int num_argv = 0;
@@ -77,10 +81,11 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	{
 		num_envp++;
 	}
+
 	//deal with string-area
 	char *record_position_argv[num_argv];
 	char *record_position_envp[num_envp];
-	char *p = (char *)new_page(8);//32KB
+	char *p = (pcb->as).area.end;
 	for(int i = 0; i < num_argv; i++)
 	{
 		p = p - strlen(argv[i]) - 1;
