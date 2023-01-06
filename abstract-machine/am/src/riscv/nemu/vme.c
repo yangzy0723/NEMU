@@ -92,10 +92,9 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	PTE *page_directory_item_entry = (PTE *)(page_directory_entry + GET_DIR((uintptr_t)va) * 4);
 	//10位*4,正好4096字节，一页
 	//此处需要*4得到对应的页目录项，因为每个页目录项都是4个字节的
-	
+	printf("页目录值%p\n", (*page_directory_item_entry));	
 	if(((*page_directory_item_entry) & PTE_V) == 0)//研究其有效位是否为0,若为0说明二级表未分配
 	{
-		printf("二级页表未分配\n");
 		(*page_directory_item_entry) = ((*page_directory_item_entry) & 0x000003ff) + (PTE)pgalloc_usr(PGSIZE);
 		//高22位，存页表的地址，低2位一定为0
 		(*page_directory_item_entry) = ((*page_directory_item_entry) | PTE_V);
