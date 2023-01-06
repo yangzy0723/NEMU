@@ -41,7 +41,6 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 
 //此处不能用指针操作了，因为连接到的是本机的linux系统上
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
-	printf("转换内存%x\n", vaddr);
   uintptr_t page_directory_entry = cpu.satp << 12; 
 
 	paddr_t page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)vaddr) * 4;
