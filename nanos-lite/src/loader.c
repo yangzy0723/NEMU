@@ -98,7 +98,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		strcpy(p, envp[i]);
 		record_position_envp[i] = p;
 	}
-
+	printf("123\n");
 	//deal with envp array and argv array
 	p = (char *)((uint32_t)p - (uint32_t)p%4);//对齐
 	uintptr_t *point = (uintptr_t *)p;
@@ -112,7 +112,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	point[num_argv] = 0x0;
 	point = point - 1;
 	*point = (uintptr_t)num_argv;
-	printf("123\n");
 	Area ustack;
 	ustack.start = &(pcb->cp);
 	ustack.end = ustack.start + sizeof(PCB);
