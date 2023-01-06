@@ -55,7 +55,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	PTE page_table_item = paddr_read(page_table_item_entry, 4);
 
 	paddr_t pa = (paddr_t)((GET_BASE_ADDR(page_table_item) << 2) + GET_OFFSET((uintptr_t)vaddr));
-	
+	printf("123\n");	
 	assert(vaddr == pa);
 	return pa;
 }
