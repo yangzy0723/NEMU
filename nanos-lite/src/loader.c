@@ -40,9 +40,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			void *vaddr = (void *)segment.p_vaddr;
 			for(int i = 0; i < num_page; i++)
 				map(&(pcb->as), (void *)(((uint32_t)vaddr & 0xfffff000) + i * PGSIZE), (void *)(start + i * PGSIZE), 0);
+			
+			//此时不能用虚地址，因为satp寄存器还是原来的值，需要用实际地址填充
 			fs_lseek(fd, segment.p_offset, SEEK_SET);
-			fs_read(fd, vaddr, segment.p_filesz);
-			memset(vaddr + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
+			fs_read(fd, start + ((uintptr_t)vaddr & 0xfff), segment.p_filesz);
+			memset(start + ((uintptr_t)vaddr & 0xfff) + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
 		}
 	}
 
