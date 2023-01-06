@@ -89,7 +89,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
 	//printf("处理v:%p, p:%p\n", (uintptr_t)va, (uintptr_t)pa);	
 	uintptr_t page_directory_entry = (uintptr_t)as->ptr;//页目录的基地址
-	printf("基地址%p\n", page_directory_entry);	
+	//printf("基地址%p\n", page_directory_entry);	
 	PTE *page_directory_item_entry = (PTE *)(page_directory_entry + GET_DIR((uintptr_t)va) * 4);
 	//10位*4,正好4096字节，一页
 	//此处需要*4得到对应的页目录项，因为每个页目录项都是4个字节的
@@ -112,6 +112,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 }
 
 Context *ucontext(AddrSpace *as, Area ustack, void *entry) {
+	printf("123\n");
   Context *context = ustack.end - sizeof(Context);
 	context->mepc = (uintptr_t)entry;
 	context->mstatus = 0x1800;
