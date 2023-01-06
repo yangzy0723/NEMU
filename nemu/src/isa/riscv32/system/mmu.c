@@ -14,9 +14,58 @@
 ***************************************************************************************/
 
 #include <isa.h>
+#include <isa-def.h>
 #include <memory/paddr.h>
 #include <memory/vaddr.h>
 
-paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
-  return MEM_RET_FAIL;
+typedef uint32_t PTE;
+
+static inline uintptr_t GET_DIR(uintptr_t p)//页目录索引
+{
+	return (p & (uintptr_t)0xffc00000) >> 22;
 }
+
+static inline uintptr_t GET_PAGE(uintptr_t p)//页表索引
+{
+	return (p & (uintptr_t)0x003ff000) >> 12;
+}
+
+static inline uintptr_t GET_OFFSET(uintptr_t p)//页内偏移量
+{
+	return p & 0x00000fff;
+}
+
+static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
+{
+	return (uintptr_t)p & 0xfffffc00;
+}
+
+//此处不能用指针操作了，因为连接到的是本机的linux系统上
+paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
+
+  uintptr_t page_directory_entry = cpu.satp << 12; 
+
+	paddr_t page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)vaddr) * 4;
+
+	PTE page_directory_item = paddr_read(page_directory_item_entry, 4);
+
+	uintptr_t page_table_entry = GET_BASE_ADDR(page_directory_item);
+
+	paddr_t page_table_item_entry = page_table_entry + GET_PAGE((uintptr_t)vaddr) * 4;
+
+	PTE page_table_item = paddr_read(page_table_item_entry, 4);
+
+	paddr_t pa = (paddr_t)((GET_BASE_ADDR(page_table_item) << 2) + GET_OFFSET((uintptr_t)vaddr));
+	
+	assert(vaddr == pa);
+	return pa;
+}
+
+/*int isa_mmu_check(vaddr_t vaddr, int len, int type)
+{
+	printf("%p\n", vaddr);
+	if(((uint32_t)(cpu.satp & 0x80000000)) >> 31)
+		return MMU_TRANSLATE;
+	else
+		return MMU_DIRECT;
+}*/

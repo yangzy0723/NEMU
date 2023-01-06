@@ -90,7 +90,7 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
 	
-	uintptr_t page_directory_entry = get_satp();//页目录的地址
+	uintptr_t page_directory_entry = (uintptr_t)as->ptr;//页目录的基地址
 	
 	PTE *page_directory_item_entry = (PTE *)(page_directory_entry + GET_DIR((uintptr_t)va) * 4);
 	//10位*4,正好4096字节，一页
@@ -100,7 +100,8 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	{
 		(*page_directory_item_entry) = ((*page_directory_item_entry) & 0x000003ff) + (PTE)pgalloc_usr(PGSIZE);
 		//高22位，存页表的地址，低2位一定为0
-		(*page_directory_item_entry) = ((*page_directory_item_entry) | PTE_V);//有效位为1,说明这个页目录项对应的页表有在工作了
+		(*page_directory_item_entry) = ((*page_directory_item_entry) | PTE_V);
+		//有效位为1,说明这个页目录项对应的页表有在工作了
 	}
 
 	uintptr_t page_table_entry = GET_BASE_ADDR(*page_directory_item_entry);//得到页表基地址

@@ -77,6 +77,10 @@ void csrrs_function(word_t csr, word_t src1, word_t dest)
 				t = cpu.mtvec;
 				cpu.mtvec = t | src1;
 				break;
+		case 0x180:
+				t = cpu.satp;
+				cpu.satp = t | src1;
+				break;
 	}
 	R(dest) = t;
 	return;
@@ -101,6 +105,10 @@ void csrrw_function(word_t csr, word_t src1, word_t dest)
 		case 0x305:
 				t = cpu.mtvec;
 				cpu.mtvec = src1;
+				break;
+		case 0x180:
+				t = cpu.satp;
+				cpu.satp = src1;
 				break;
 	}
 	R(dest) = t;
@@ -127,6 +135,10 @@ void csrrc_function(word_t csr, word_t src1, word_t dest)
 		case 0x305:
 				t = cpu.mtvec;
 				cpu.mtvec = t & (~src1);
+				break;
+		case 0x180:
+				t = cpu.satp;
+				cpu.satp = t & (~src1);
 				break;
 	}
 	R(dest) = t;
