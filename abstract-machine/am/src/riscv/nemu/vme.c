@@ -115,7 +115,7 @@ Context *ucontext(AddrSpace *as, Area ustack, void *entry) {
   Context *context = ustack.end - sizeof(Context);
 	context->mepc = (uintptr_t)entry;
 	context->mstatus = 0x1800;
-	printf("123\n");
+	printf("%p\n", as->ptr);
 	context->pdir = as->ptr;
 	return context;
 }
