@@ -49,7 +49,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	}
 
 	fs_close(fd);
-	printf("123\n"); 
 	return elf.e_entry;
 }
 
@@ -120,4 +119,5 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.end = ustack.start + sizeof(PCB);
 	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
 	pcb->cp->GPRx = (uintptr_t)point;
+	printf("123\n");
 }
