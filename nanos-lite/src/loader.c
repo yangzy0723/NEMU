@@ -117,6 +117,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	Area ustack;
 	ustack.start = &(pcb->cp);
 	ustack.end = ustack.start + sizeof(PCB);
-	pcb->cp = ucontext(NULL, ustack, (void *)loader(pcb, filename));
+	pcb->cp = ucontext(&(pcb->as), ustack, (void *)loader(pcb, filename));
 	pcb->cp->GPRx = (uintptr_t)point;
 }
