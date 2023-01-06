@@ -42,6 +42,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 				map(&(pcb->as), (void *)(((uint32_t)vaddr & 0xfffff000) + i * PGSIZE), (void *)(start + i * PGSIZE), 0);
 				printf("va : %p, pa : %p\n", ((uint32_t)vaddr&0xfffff000) + i * PGSIZE, start + i * PGSIZE);
 			}
+			printf("123\n");
 			fs_lseek(fd, segment.p_offset, SEEK_SET);
 			fs_read(fd, vaddr, segment.p_filesz);
 			printf("123\n");	
