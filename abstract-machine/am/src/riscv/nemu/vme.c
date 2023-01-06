@@ -37,8 +37,6 @@ bool vme_init(void* (*pgalloc_f)(int), void (*pgfree_f)(void*)) {
       map(&kas, va, va, 0);
     }
   }
-	printf("finish vme init!\n");
-	assert(0);
   set_satp(kas.ptr);
   vme_enable = 1;
 
@@ -89,6 +87,7 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 
 //先只考虑有效位
 void map(AddrSpace *as, void *va, void *pa, int prot) {
+	printf("map: vaddr: %p paddr: %p\n", va, pa);
 	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
 	
 	uintptr_t page_directory_entry = (uintptr_t)as->ptr;//页目录的基地址
