@@ -42,11 +42,11 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 //此处不能用指针操作了，因为连接到的是本机的linux系统上
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   uintptr_t page_directory_entry = cpu.satp << 12; 
-
 	paddr_t page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)vaddr) * 4;
 
 	PTE page_directory_item = paddr_read(page_directory_item_entry, 4);
 	
+	printf("%x nemu 页目录值\n", page_directory_item);
 	assert(page_directory_item & 1);//检查valid位
 
 	uintptr_t page_table_entry = GET_BASE_ADDR(page_directory_item);
