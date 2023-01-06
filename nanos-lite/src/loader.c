@@ -3,7 +3,7 @@
 #include <fs.h>
 
 //声明一下
-size_t ramdisk_read(void *buf, size_t offset, size_t len);//声明一下
+size_t ramdisk_read(void *buf, size_t offset, size_t len);
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_lseek(int fd, size_t offset, int whence);
 size_t fs_read(int fd, void *buf, size_t len);
