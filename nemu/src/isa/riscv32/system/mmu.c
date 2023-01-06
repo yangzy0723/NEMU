@@ -43,7 +43,7 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   uintptr_t page_directory_entry = cpu.satp << 12; 
 	paddr_t page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)vaddr) * 4;
-
+	printf("%x 页目录地址\n", page_directory_item_entry);
 	PTE page_directory_item = paddr_read(page_directory_item_entry, 4);
 	
 	printf("%x nemu 页目录值\n", page_directory_item);
