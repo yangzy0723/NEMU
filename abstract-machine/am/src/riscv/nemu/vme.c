@@ -87,14 +87,14 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 //先只考虑有效位
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
-	printf("处理v:%p, p:%p\n", (uintptr_t)va, (uintptr_t)pa);	
+	//printf("处理v:%p, p:%p\n", (uintptr_t)va, (uintptr_t)pa);	
 	uintptr_t page_directory_entry = (uintptr_t)as->ptr;//页目录的基地址
-printf("基地址%p\n", page_directory_entry);	
+	printf("基地址%p\n", page_directory_entry);	
 	PTE *page_directory_item_entry = (PTE *)(page_directory_entry + GET_DIR((uintptr_t)va) * 4);
 	//10位*4,正好4096字节，一页
 	//此处需要*4得到对应的页目录项，因为每个页目录项都是4个字节的
-	printf("页目录值%p\n", (*page_directory_item_entry));	
-	printf("页目录地址%p\n", page_directory_item_entry);
+	//printf("页目录值%p\n", (*page_directory_item_entry));	
+	//printf("页目录地址%p\n", page_directory_item_entry);
 	if(((*page_directory_item_entry) & PTE_V) == 0)//研究其有效位是否为0,若为0说明二级表未分配
 	{
 		(*page_directory_item_entry) = ((*page_directory_item_entry) & 0x000003ff) + (PTE)pgalloc_usr(PGSIZE);
