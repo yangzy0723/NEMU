@@ -114,6 +114,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 Context *ucontext(AddrSpace *as, Area ustack, void *entry) {
   Context *context = ustack.end - sizeof(Context);
 	context->mepc = (uintptr_t)entry;
+	printf("123\n");
 	context->mstatus = 0x1800;
 	printf("%p\n", as->ptr);
 	context->pdir = as->ptr;
