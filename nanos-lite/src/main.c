@@ -16,6 +16,7 @@ int main() {
   init_mm();
 
   init_device();
+
   init_ramdisk();
 
 #ifdef HAS_CTE
@@ -23,7 +24,7 @@ int main() {
 #endif
 
   init_fs();
-	printf("123\n");
+
   init_proc();
 
   Log("Finish initialization");
