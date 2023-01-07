@@ -1,4 +1,4 @@
-/*#include <proc.h>
+#include <proc.h>
 #include <elf.h>
 #include <fs.h>
 
@@ -121,4 +121,4 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	ustack.end = ustack.start + sizeof(PCB);
 	pcb->cp = ucontext(&(pcb->as), ustack, (void *)loader(pcb, filename));
 	pcb->cp->GPRx = (uintptr_t)point;
-}*/
+}
