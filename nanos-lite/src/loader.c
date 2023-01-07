@@ -38,7 +38,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			void *start = new_page(num_page) - num_page * PGSIZE;
 			//printf("%s申请了%d页内存，起始地址为%p\n", filename, num_page, (uintptr_t)start);
 			void *vaddr = (void *)segment.p_vaddr;
-			for(int i = 0; i < 10000; i++)
+			for(int i = 0; i < 100; i++)
 				map(&(pcb->as), (void *)(((uint32_t)vaddr & 0xfffff000) + i * PGSIZE), (void *)(start + i * PGSIZE), 0);
 			
 			//此时不能用虚地址，因为satp寄存器还是原来的值，需要用实际地址填充
