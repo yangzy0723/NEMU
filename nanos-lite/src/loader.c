@@ -36,7 +36,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			int num_page = segment.p_memsz / PGSIZE + 1;
 			void *start = new_page(num_page) - num_page * PGSIZE;
 			void *vaddr = (void *)segment.p_vaddr;
-			pcb->max_brk = (uintptr_t)(vaddr + segment.p_memsz);
+			printf("pcb->max_brk的初值:%p\n", pcb->max_brk);
+			pcb->max_brk = pcb->max_brk + num_page * PGSIZE;
 			printf("pcb->max_brk in loader:%p\n", pcb->max_brk);
 			//printf("%s申请了%d页内存，虚地址为%p，起始地址为%p\n", filename, num_page, (uintptr_t)vaddr, (uintptr_t)start);
 			for(int i = 0; i < num_page; i++)
