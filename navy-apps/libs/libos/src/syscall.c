@@ -68,7 +68,6 @@ int _write(int fd, void *buf, size_t count) {
 extern char end;
 void *program_break = NULL;
 void *_sbrk(intptr_t increment) {
-	printf("申请内存 %p\n", increment);
   if(program_break == NULL)
 		program_break = (void *)&end;
 	if(_syscall_(SYS_brk, increment, 0, 0) == 0)
