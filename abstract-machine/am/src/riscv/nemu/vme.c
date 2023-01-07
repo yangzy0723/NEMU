@@ -59,7 +59,7 @@ void __am_get_cur_as(Context *c) {
 
 void __am_switch(Context *c) {
   if (vme_enable && c->pdir != NULL) {
-		//printf("设置当前pdir寄存器%p\n", (uintptr_t)c->pdir);
+		printf("设置当前pdir寄存器%p\n", (uintptr_t)c->pdir);
     set_satp(c->pdir);
   }
 }
