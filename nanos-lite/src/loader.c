@@ -38,8 +38,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			void *start = new_page(num_page) - num_page * PGSIZE;
 			//printf("%s申请了%d页内存，起始地址为%p\n", filename, num_page, (uintptr_t)start);
 			void *vaddr = (void *)segment.p_vaddr;
-			printf("in loader\n");
-			for(int i = 0; i < num_page; i++)
+			for(int i = 0; i < 100; i++)
 				map(&(pcb->as), (void *)(((uint32_t)vaddr & 0xfffff000) + i * PGSIZE), (void *)(start + i * PGSIZE), 0);
 			
 			//此时不能用虚地址，因为satp寄存器还是原来的值，需要用实际地址填充
@@ -71,7 +70,6 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 {
 	protect(&(pcb->as));//可以理解为创建了一个进程的页目录，同时腾出了(0x40000000, 0x80000000)的用户进程空间
 	void *alloc_p_end = new_page(8);//32KB
-																	printf("in context_uload\n");
 	for(int i = 1; i <= 8; i++)
 		map(&(pcb->as), (pcb->as).area.end - i * PGSIZE, alloc_p_end - i * PGSIZE, 1);//都是以页为单位
 	//此处需要先进行栈的维护，进行argv和envp的处理，否则envp信息会丢失
