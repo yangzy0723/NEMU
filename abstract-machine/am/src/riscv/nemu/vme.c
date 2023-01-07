@@ -59,7 +59,7 @@ void __am_get_cur_as(Context *c) {
 
 void __am_switch(Context *c) {
   if (vme_enable && c->pdir != NULL) {
-		printf("设置当前pdir寄存器%p\n", (uintptr_t)c->pdir);
+		//printf("设置当前pdir寄存器%p\n", (uintptr_t)c->pdir);
     set_satp(c->pdir);
   }
 }
@@ -89,7 +89,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
 	//printf("处理v:%p, p:%p\n", (uintptr_t)va, (uintptr_t)pa);	
 	uintptr_t page_directory_entry = (uintptr_t)as->ptr;//页目录的基地址
-	printf("基地址%p\n", page_directory_entry);	
+	//printf("基地址%p\n", page_directory_entry);	
 	PTE *page_directory_item_entry = (PTE *)(page_directory_entry + GET_DIR((uintptr_t)va) * 4);
 	//10位*4,正好4096字节，一页
 	//此处需要*4得到对应的页目录项，因为每个页目录项都是4个字节的
