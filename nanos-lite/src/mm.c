@@ -24,7 +24,7 @@ void free_page(void *p) {
 /* The brk() system call handler. */
 //我的理解，传入的参数直接是增量
 extern PCB *current;
-int mm_brk(uintptr_t brk) {
+/*int mm_brk(uintptr_t brk) {
 	if((int32_t)brk < 0)
 		return 0;
 	else
@@ -39,7 +39,24 @@ int mm_brk(uintptr_t brk) {
 		current->max_brk = current->max_brk + brk;
 		return 0;
 	}
+}*/
+int mm_brk(uintptr_t brk) {
+  uintptr_t max_page_end = current->max_brk; 
+  uintptr_t max_page_pn = (max_page_end >> 12) - 1;
+  uintptr_t brk_pn = brk >> 12;//12
+  if (brk >= max_page_end){
+    void *allocted_page =  new_page(brk_pn - max_page_pn + 1);
+    for (int i = 0; i < brk_pn - max_page_pn + 1; ++i){
+      map(&current->as, (void *)(max_page_end + i * 0xfff),
+       (void *)(allocted_page + i * 0xfff), 1);
+    }
+
+    current->max_brk = (brk_pn + 1) << 12;
+    assert(current->max_brk > brk);
+  }
+  return 0;
 }
+
 
 void init_mm() {
   pf = (void *)ROUNDUP(heap.start, PGSIZE);//赋初值的时候就对齐了，低12位为0
