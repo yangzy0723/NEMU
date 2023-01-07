@@ -38,7 +38,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			void *vaddr = (void *)segment.p_vaddr;
 			pcb->max_brk = ROUNDUP(vaddr + segment.p_memsz, 0xfff);
 			printf("pcb->max_brk in loader:%p\n", pcb->max_brk);
-			//printf("%s申请了%d页内存，虚地址为%p，起始地址为%p\n", filename, num_page, (uintptr_t)vaddr, (uintptr_t)start);
+			printf("%s申请了%d页内存，虚地址为%p，起始地址为%p\n", filename, num_page, (uintptr_t)vaddr, (uintptr_t)start);
 			for(int i = 0; i < num_page; i++)
 				map(&(pcb->as), (void *)(((uint32_t)vaddr & 0xfffff000) + i * PGSIZE), (void *)(start + i * PGSIZE), 0);
 			
