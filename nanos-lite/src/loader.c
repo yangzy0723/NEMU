@@ -15,7 +15,6 @@ int fs_close(int fd);
 # define Elf_Ehdr Elf32_Ehdr
 # define Elf_Phdr Elf32_Phdr
 #endif
-
 static uintptr_t loader(PCB *pcb, const char *filename) {
 
 	int fd = fs_open(filename, 0, 0);
@@ -27,7 +26,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	assert(*(uint32_t*)elf.e_ident == 0x464c457f);//小端方式
 	for(int i = 0; i < elf.e_phnum; i++)
 	{
-		printf("123\n");
 		Elf_Phdr segment;
 		
 		fs_lseek(fd, i * elf.e_phentsize + elf.e_phoff, SEEK_SET);
