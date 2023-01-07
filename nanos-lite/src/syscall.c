@@ -28,7 +28,7 @@ void do_syscall(Context *c) {
 
 		case SYS_yield: yield(); c->GPRx = 0; break; 
 
-		case SYS_brk: printf("123\n");c->GPRx = mm_brk((uintptr_t)a[1]); break;
+		case SYS_brk: c->GPRx = mm_brk((uintptr_t)a[1]); break;
 
 		case SYS_open: 
 			{
