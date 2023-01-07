@@ -16,7 +16,7 @@ int main() {
   init_mm();
 
   init_device();
-
+printf("123\n");
   init_ramdisk();
 
 #ifdef HAS_CTE
@@ -30,7 +30,6 @@ int main() {
   Log("Finish initialization");
 
 #ifdef HAS_CTE
-	printf("123456\n");
   yield();
 #endif
 
