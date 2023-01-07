@@ -32,9 +32,9 @@ void init_proc() {
 }
 
 Context* schedule(Context *prev) {
-	//current->cp = prev;
+	current->cp = prev;
 	//current = &pcb[1];
-	return prev;
+	return current->cp;
 }
 
 int execve(char *filename, char *const argv[], char *const envp[])
