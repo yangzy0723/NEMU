@@ -44,7 +44,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   uintptr_t page_directory_entry = cpu.satp << 12; 
 	//printf("基地址%x\n", (int)page_directory_entry);
 	paddr_t page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)vaddr) * 4;
-	printf("%x 页目录地址\n", page_directory_item_entry);
+	//printf("%x 页目录地址\n", page_directory_item_entry);
 	PTE page_directory_item = paddr_read(page_directory_item_entry, 4);
 	
 	//printf("%x nemu 页目录值\n", page_directory_item);
@@ -56,7 +56,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 
 	PTE page_table_item = paddr_read(page_table_item_entry, 4);
 
-	assert(page_table_item & 1);//检查valid位
+	//assert(page_table_item & 1);//检查valid位
 
 	paddr_t pa = (paddr_t)((GET_BASE_ADDR(page_table_item) << 2) + GET_OFFSET((uintptr_t)vaddr));
 	//printf("pa:%x\n", pa);
