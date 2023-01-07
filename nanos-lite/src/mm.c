@@ -37,6 +37,7 @@ int mm_brk(uintptr_t brk) {
 		for(int i = 0; i < num_new_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + PGSIZE + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
 		current->max_brk = current->max_brk + brk;
+		printf("123\n");
 		return 0;
 	}
 }
