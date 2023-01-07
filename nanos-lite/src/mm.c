@@ -29,7 +29,7 @@ int mm_brk(uintptr_t brk) {
 		return 0;
 	else
 	{
-		printf("%p\n", brk);
+		printf("current -> max_brk :\n", current->max_brk);
 		int pre_page = (current->max_brk)/PGSIZE;
 		int now_page = (current->max_brk + brk)/PGSIZE;
 		int num_new_page = now_page - pre_page;
@@ -37,7 +37,6 @@ int mm_brk(uintptr_t brk) {
 		for(int i = 0; i < num_new_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + PGSIZE + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
 		current->max_brk = current->max_brk + brk;
-		printf("123\n");
 		return 0;
 	}
 }
