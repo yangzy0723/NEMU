@@ -59,6 +59,7 @@ void __am_get_cur_as(Context *c) {
 
 void __am_switch(Context *c) {
   if (vme_enable && c->pdir != NULL) {
+		printf("设置当前pdir寄存器%p\n", (uintptr_t)c->pdir);
     set_satp(c->pdir);
   }
 }
@@ -115,6 +116,5 @@ Context *ucontext(AddrSpace *as, Area ustack, void *entry) {
 	context->mepc = (uintptr_t)entry;
 	context->mstatus = 0x1800;
 	context->pdir = as->ptr;
-	printf("上下文基地址%p\n", (uintptr_t)as->ptr);
 	return context;
 }
