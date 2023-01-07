@@ -59,7 +59,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	assert(page_table_item & 1);//检查valid位
 
 	paddr_t pa = (paddr_t)((GET_BASE_ADDR(page_table_item) << 2) + GET_OFFSET((uintptr_t)vaddr));
-	printf("pa:%x\n", pa);
+	//printf("pa:%x\n", pa);
 	return pa;
 }
 
