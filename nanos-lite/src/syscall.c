@@ -10,6 +10,7 @@ size_t fs_write(int fd, const void *buf, size_t len);
 int fs_close(int fd);
 void naive_uload(PCB *pcb, const char *filename);
 int execve(char *filename, char *const argv[], char *const envp[]);
+int mm_brk(uintptr_t brk);
 
 void do_syscall(Context *c) {
 
@@ -27,7 +28,7 @@ void do_syscall(Context *c) {
 
 		case SYS_yield: yield(); c->GPRx = 0; break; 
 
-		case SYS_brk: c->GPRx = 0; break;
+		case SYS_brk: c->GPRx = mm_brk((uintptr_t)a[1]); break;
 
 		case SYS_open: 
 			{

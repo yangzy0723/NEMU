@@ -1,4 +1,5 @@
 #include <memory.h>
+#include <proc.h>
 
 static void *pf = NULL;
 
@@ -21,8 +22,22 @@ void free_page(void *p) {
 }
 
 /* The brk() system call handler. */
+//我的理解，传入的参数直接是增量
+extern PCB *current;
 int mm_brk(uintptr_t brk) {
-  return 0;
+	if((int32_t)brk < 0)
+		return 0;
+	else
+	{
+		int pre_page = (current->max_brk)/PGSIZE;
+		int now_page = (current->max_brk + brk)/PGSIZE;
+		int num_new_page = now_page - pre_page;
+		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
+		for(int i = 0; i < num_new_page; i++)
+			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + PGSIZE + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
+		current->max_brk = current->max_brk + brk;
+		return 0;
+	}
 }
 
 void init_mm() {
