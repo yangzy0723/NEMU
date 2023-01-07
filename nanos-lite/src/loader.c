@@ -101,6 +101,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 		strcpy(p, envp[i]);
 		record_position_envp[i] = p;
 	}
+
 	//deal with envp array and argv array
 	p = (char *)((uint32_t)p - (uint32_t)p%4);//对齐
 	uintptr_t *point = (uintptr_t *)p;
