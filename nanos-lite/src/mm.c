@@ -29,7 +29,7 @@ int mm_brk(uintptr_t addr) {
 		return 0;
 	else
 	{
-		int pre_page = (current->max_brk)/PGSIZE - 1;
+		int pre_page = (current->max_brk)/PGSIZE;
 		int now_page = addr/PGSIZE;
 		int num_new_page = now_page - pre_page;
 		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
