@@ -29,6 +29,7 @@ int mm_brk(uintptr_t brk) {
 		return 0;
 	else
 	{
+		printf("%p\n", brk);
 		int pre_page = (current->max_brk)/PGSIZE;
 		int now_page = (current->max_brk + brk)/PGSIZE;
 		int num_new_page = now_page - pre_page;
