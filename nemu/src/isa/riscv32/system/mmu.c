@@ -53,7 +53,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	uintptr_t page_table_entry = GET_BASE_ADDR(page_directory_item);
 
 	paddr_t page_table_item_entry = page_table_entry + GET_PAGE((uintptr_t)vaddr) * 4;
-
+	printf("page table item entry: %x\n", page_table_item_entry);
 	PTE page_table_item = paddr_read(page_table_item_entry, 4);
 	printf("page table item: %x\n", page_table_item);
 	assert(page_table_item & 1);//检查valid位
