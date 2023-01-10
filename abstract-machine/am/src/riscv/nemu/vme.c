@@ -82,47 +82,9 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 {
 	return (uintptr_t)p & 0xfffffc00;
 }
-#define VA_VPN_0(x) (((uintptr_t)x & 0x003FF000u) >> 12)
-#define VA_VPN_1(x) (((uintptr_t)x & 0xFFC00000u) >> 22)
-#define VA_OFFSET(x) ((uintptr_t)x & 0x00000FFFu)
 
-#define PTE_PPN_MASK (0xFFFFFC00u)
-#define PTE_PPN(x) (((uintptr_t)x & PTE_PPN_MASK) >> 10)
-
-void map(AddrSpace *as, void *va, void *pa, int prot) {
-  va = (void *)(((uintptr_t)va) & (~0xfff));
-  pa = (void *)(((uintptr_t)pa) & (~0xfff));
-  PTE *page_table_entry = as->ptr + VA_VPN_1(va) * 4;
-  // assert((uintptr_t)as->ptr + VA_VPN_1(va) * 4 == get_satp() + VA_VPN_1(va) * 4);
-
-  if (!(*page_table_entry & PTE_V)){ // 说明二级表未分配
-    void *alloced_page = pgalloc_usr(PGSIZE);
-    *page_table_entry = (*page_table_entry & ~PTE_PPN_MASK) | (PTE_PPN_MASK & ((uintptr_t)alloced_page >> 2));
-    *page_table_entry = (*page_table_entry | PTE_V);
-    // printf("二级表未分配\t二级表项地址:%p\t虚拟地址:%p\n", page_table_entry, va);
-    //assert(((PTE_PPN(*page_table_entry) * 4096 + VA_VPN_0(va) * 4) & ~0xFFFFFF) == ((uintptr_t)alloced_page& ~0xFFFFFF));
-  }
-  // 找到二级表中的表项
-  PTE *leaf_page_table_entry = (PTE *)(PTE_PPN(*page_table_entry) * 4096 + VA_VPN_0(va) * 4);
-  // if ((uintptr_t)va <= 0x40100000){
-  //   printf("设置二级表项\t虚拟地址:%p\t实际地址:%p\t表项:%p\n", va, pa, leaf_page_table_entry);
-  // }
-  // 设置PPN
-  *leaf_page_table_entry = (PTE_PPN_MASK & ((uintptr_t)pa >> 2)) | (PTE_V | PTE_R | PTE_W | PTE_X) | (prot ? PTE_U : 0);
-  //assert(PTE_PPN(*leaf_page_table_entry) * 4096 + VA_OFFSET(va) == (uintptr_t)pa);
-}
-
-Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
-  Context *context = kstack.end - sizeof(Context);
-  context->mstatus = 0xC0000 | 0x80;//MPP设置为U模式，MXR=1，SUM=1
-  context->mepc    = (uintptr_t)entry;
-  context->pdir    = as->ptr;
-  //在loader中设置sp
-
-  return context;
-}
 //先只考虑有效位
-/*void map(AddrSpace *as, void *va, void *pa, int prot) {
+void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
 	
 	//printf("处理v:%p, p:%p\n", (uintptr_t)va, (uintptr_t)pa);	
@@ -157,4 +119,4 @@ Context *ucontext(AddrSpace *as, Area ustack, void *entry) {
 	context->mstatus = 0x1800;
 	context->pdir = as->ptr;
 	return context;
-}*/
+}
