@@ -30,7 +30,7 @@ int mm_brk(uintptr_t increment) {
 	else
 	{
 		printf("increment: %p\n", increment);
-		int num_new_page = increment/PGSIZE + 1;
+		int num_new_page = increment/PGSIZE + 2;
 		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
 		for(int i = 0; i < num_new_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
