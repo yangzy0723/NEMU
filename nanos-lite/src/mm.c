@@ -25,6 +25,7 @@ void free_page(void *p) {
 //我的理解，传入的参数是地址
 extern PCB *current;
 int mm_brk(uintptr_t addr) {
+	printf("mm_brk:%p\n", addr);
 	if(addr < current->max_brk)
 		return 0;
 	else
