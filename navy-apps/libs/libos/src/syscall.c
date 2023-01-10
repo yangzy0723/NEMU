@@ -70,7 +70,7 @@ void *program_break = NULL;
 void *_sbrk(intptr_t increment) {
   if(program_break == NULL)
 		program_break = (void *)&end;
-	if(_syscall_(SYS_brk, (intptr_t)increment, 0, 0) == 0)//此处我直接传变化量
+	if(_syscall_(SYS_brk, (intptr_t)increment, 0, 0) == 0)
 	{
 		program_break += increment;
 		return program_break-increment;//就是return old_program_break
