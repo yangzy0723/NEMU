@@ -44,7 +44,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			//此时不能用虚地址，因为satp寄存器还是原来的值，需要用实际地址填充
 			fs_lseek(fd, segment.p_offset, SEEK_SET);
 			fs_read(fd, start + ((uintptr_t)vaddr & 0xfff), segment.p_filesz);
-			memset(start + ((uintptr_t)vaddr & 0xfff) + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
+			//memset(start + ((uintptr_t)vaddr & 0xfff) + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
 	if(segment.p_filesz < segment.p_memsz)
 				pcb->max_brk = (segment.p_vaddr + segment.p_memsz) % PGSIZE == 0 ? segment.p_vaddr + segment.p_memsz : ((segment.p_vaddr + segment.p_memsz) & ~0xfff) + 0xfff;
 		}
