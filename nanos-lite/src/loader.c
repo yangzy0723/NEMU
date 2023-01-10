@@ -29,7 +29,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		Elf_Phdr segment;
 		
 		fs_lseek(fd, i * elf.e_phentsize + elf.e_phoff, SEEK_SET);
-		fs_read(fd, &segment, sizeof(segment));
+		fs_read(fd, &segment, sizeof(elf));
 		
 		if(segment.p_type == PT_LOAD)
 		{
