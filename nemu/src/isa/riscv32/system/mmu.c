@@ -65,9 +65,9 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 		printf("页表项: %x匹配不上，该项地址为%x\n", page_table_item, page_table_item_entry);
 		assert(0);
 	}
-	paddr_t pa = (paddr_t)((GET_BASE_ADDR(page_table_item) << 2) + GET_OFFSET((uintptr_t)vaddr));
-
-	return pa;
+	paddr_t paddr = (paddr_t)((GET_BASE_ADDR(page_table_item) << 2) + GET_OFFSET((uintptr_t)vaddr));
+	printf("vaddr: %x is translated to paddr: %x\n", vaddr, paddr);
+	return paddr;
 }
 
 int isa_mmu_check(vaddr_t vaddr, int len, int type)
