@@ -29,7 +29,6 @@ int mm_brk(uintptr_t increment) {
 		return 0;
 	else
 	{
-		printf("123\n");
 		int num_new_page = increment/PGSIZE + 1;
 		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
 		for(int i = 0; i < num_new_page; i++)
