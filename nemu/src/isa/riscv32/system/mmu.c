@@ -50,7 +50,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	//printf("%x nemu 页目录值\n", page_directory_item);
 	if((page_directory_item & 1) == 0)//检查valid位
 	{
-		printf("页目录项: %x匹配不上，有效位为0\n", page_directory_item);
+		printf("页目录项: %x匹配不上，该项地址为%x\n", page_directory_item, page_directory_item_entry);
 		assert(0);
 	}
 
@@ -62,7 +62,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	//printf("page table item: %x\n", page_table_item);
 	if((page_table_item & 1) == 0)//检查valid位
 	{
-		printf("页表项: %x匹配不上，有效位为0\n", page_table_item);
+		printf("页表项: %x匹配不上，该项地址为%x\n", page_table_item, page_table_item_entry);
 		assert(0);
 	}
 	paddr_t pa = (paddr_t)((GET_BASE_ADDR(page_table_item) << 2) + GET_OFFSET((uintptr_t)vaddr));
