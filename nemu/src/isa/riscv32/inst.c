@@ -87,6 +87,7 @@ void csrrs_function(word_t csr, word_t src1, word_t dest)
 }
 void csrrw_function(word_t csr, word_t src1, word_t dest)
 {
+	printf("123\n");
 	word_t t = 0;
 	switch(csr)
 	{
