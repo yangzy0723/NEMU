@@ -42,7 +42,7 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 //此处不能用指针操作了，因为连接到的是本机的linux系统上
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   uintptr_t page_directory_entry = cpu.satp << 12; 
-	printf("vaddr: %x\n", vaddr);
+	//printf("vaddr: %x\n", vaddr);
 	//printf("基地址%x\n", (int)page_directory_entry);
 	paddr_t page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)vaddr) * 4;
 	//printf("%x 页目录地址\n", page_directory_item_entry);
