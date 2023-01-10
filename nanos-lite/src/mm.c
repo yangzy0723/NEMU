@@ -22,21 +22,19 @@ void free_page(void *p) {
 }
 
 /*The brk() system call handler. */
-//我的理解，传入的参数是地址
+//我的理解，传入的参数是地址变化量
 extern PCB *current;
-int mm_brk(uintptr_t addr) {
+int mm_brk(uintptr_t brk) {
 	//printf("brk:%p, current->max_brk:%p\n", addr, current->max_brk);
-	if(addr < current->max_brk)
+	if((int32_t)brk < 0)
 		return 0;
 	else
 	{
-		int pre_page = (current->max_brk)/PGSIZE;
-		int now_page = addr/PGSIZE;
-		int num_new_page = now_page - pre_page + 1;
+		int num_new_page = brk/PGSIZE + 1;
 		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
 		for(int i = 0; i < num_new_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
-		current->max_brk = addr;
+		current->max_brk += brk;
 		return 0;
 	}
 }
