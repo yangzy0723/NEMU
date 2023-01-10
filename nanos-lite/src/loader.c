@@ -36,8 +36,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			int num_page = segment.p_memsz % PGSIZE == 0 ? segment.p_memsz / PGSIZE : segment.p_memsz / PGSIZE + 1;
 			void *start = new_page(num_page) - num_page * PGSIZE;
 			void *vaddr = (void *)segment.p_vaddr;
-			if(segment.p_filesz < segment.p_memsz)
-				pcb->max_brk = (segment.p_vaddr + segment.p_memsz) % PGSIZE == 0 ? segment.p_vaddr + segment.p_memsz : ((segment.p_vaddr + segment.p_memsz) & ~0xfff) + 0xfff;
 			//printf("pcb->max_brk in loader:%p\n", pcb->max_brk);
 			printf("%s申请了%d页内存，虚地址为%p，起始地址为%p\n", filename, num_page, (uintptr_t)vaddr, (uintptr_t)start);
 			for(int i = 0; i < num_page; i++)
@@ -47,6 +45,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			fs_lseek(fd, segment.p_offset, SEEK_SET);
 			fs_read(fd, start/* + ((uintptr_t)vaddr & 0xfff)*/, segment.p_filesz);
 			memset(start/* + ((uintptr_t)vaddr & 0xfff)*/ + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
+	if(segment.p_filesz < segment.p_memsz)
+				pcb->max_brk = (segment.p_vaddr + segment.p_memsz) % PGSIZE == 0 ? segment.p_vaddr + segment.p_memsz : ((segment.p_vaddr + segment.p_memsz) & ~0xfff) + 0xfff;
 		}
 	}
 
