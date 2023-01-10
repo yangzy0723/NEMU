@@ -110,7 +110,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	(*page_table_item_entry) = ((*page_table_item_entry) & 0x000003ff) + (PTE)GET_BASE_ADDR((uintptr_t)pa >> 2);//取34位的高22位填充
 	(*page_table_item_entry) = (*page_table_item_entry) | PTE_V;
 
-	printf("page_table_item_entry: %p\n", page_table_item_entry);
+	//printf("page_table_item_entry: %p\n", page_table_item_entry);
 }
 
 Context *ucontext(AddrSpace *as, Area ustack, void *entry) {
