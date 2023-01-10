@@ -90,7 +90,7 @@ void context_uload(PCB *pcb, const char *filename, char *const argv[], char *con
 	//deal with string-area
 	char *record_position_argv[num_argv];
 	char *record_position_envp[num_envp];
-	char *p = (char *)(alloc_p_end-4);
+	char *p = (char *)(alloc_p_end);
 	for(int i = 0; i < num_argv; i++)
 	{
 		p = p - strlen(argv[i]) - 1;
