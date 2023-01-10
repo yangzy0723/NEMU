@@ -25,14 +25,14 @@ void free_page(void *p) {
 //我的理解，传入的参数是地址
 extern PCB *current;
 int mm_brk(uintptr_t addr) {
+	printf("brk:%p, current->maxn_brk:%p\n", addr, current->max_brk);
 	if(addr < current->max_brk)
-	{printf("123\n");return 0;}
+		return 0;
 	else
 	{
 		int pre_page = (current->max_brk)/PGSIZE;
 		int now_page = addr/PGSIZE;
-		int num_new_page = now_page - pre_page + 1;
-		printf("%d\n", num_new_page);
+		int num_new_page = now_page - pre_page;
 		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
 		for(int i = 0; i < num_new_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
