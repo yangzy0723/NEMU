@@ -25,6 +25,7 @@ void free_page(void *p) {
 //我的理解，传入的参数是brk的改变量
 extern PCB *current;
 int mm_brk(uintptr_t increment) {
+	printf("123\n");
 	if((int32_t)increment < 0)//此时没有大于等于，不需要申请新的
 		return 0;
 	else
