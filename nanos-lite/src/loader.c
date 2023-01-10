@@ -45,7 +45,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			fs_lseek(fd, segment.p_offset, SEEK_SET);
 			fs_read(fd, start + ((uintptr_t)vaddr & 0xfff), segment.p_filesz);
 			memset(start + ((uintptr_t)vaddr & 0xfff) + segment.p_filesz, 0, segment.p_memsz - segment.p_filesz);
-	if(segment.p_filesz == segment.p_memsz)
+	if(segment.p_filesz < segment.p_memsz)
 	{				pcb->max_brk = (segment.p_vaddr + segment.p_memsz) % PGSIZE == 0 ? segment.p_vaddr + segment.p_memsz : ((segment.p_vaddr + segment.p_memsz) & ~0xfff) + 0xfff;
 	printf("set max_brk:%p\n", pcb->max_brk);	
 	}}
