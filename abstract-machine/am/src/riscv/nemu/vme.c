@@ -112,6 +112,7 @@ printf("1\n");
   printf("2\n");
   *leaf_page_table_entry = (PTE_PPN_MASK & ((uintptr_t)pa >> 2)) | (PTE_V | PTE_R | PTE_W | PTE_X) | (prot ? PTE_U : 0);
   //assert(PTE_PPN(*leaf_page_table_entry) * 4096 + VA_OFFSET(va) == (uintptr_t)pa);
+  printf("3\n");
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
