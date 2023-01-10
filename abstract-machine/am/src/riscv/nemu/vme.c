@@ -92,7 +92,7 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   va = (void *)(((uintptr_t)va) & (~0xfff));
   pa = (void *)(((uintptr_t)pa) & (~0xfff));
-
+printf("1\n");
   PTE *page_table_entry = as->ptr + VA_VPN_1(va) * 4;
   // assert((uintptr_t)as->ptr + VA_VPN_1(va) * 4 == get_satp() + VA_VPN_1(va) * 4);
 
@@ -109,6 +109,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
   //   printf("设置二级表项\t虚拟地址:%p\t实际地址:%p\t表项:%p\n", va, pa, leaf_page_table_entry);
   // }
   // 设置PPN
+  printf("2\n");
   *leaf_page_table_entry = (PTE_PPN_MASK & ((uintptr_t)pa >> 2)) | (PTE_V | PTE_R | PTE_W | PTE_X) | (prot ? PTE_U : 0);
   //assert(PTE_PPN(*leaf_page_table_entry) * 4096 + VA_OFFSET(va) == (uintptr_t)pa);
 }
