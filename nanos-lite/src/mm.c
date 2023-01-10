@@ -26,7 +26,7 @@ void free_page(void *p) {
 extern PCB *current;
 int mm_brk(uintptr_t addr) {
 	if(addr < current->max_brk)
-		return 0;
+	{printf("123\n");return 0;}
 	else
 	{
 		int pre_page = (current->max_brk)/PGSIZE;
