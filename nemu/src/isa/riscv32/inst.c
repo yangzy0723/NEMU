@@ -86,7 +86,7 @@ void csrrs_function(word_t csr, word_t src1, word_t dest)
 	return;
 }
 void csrrw_function(word_t csr, word_t src1, word_t dest)
-{printf("cpu.pc %x\n", cpu.pc);
+{
 	word_t t = 0;
 	switch(csr)
 	{
