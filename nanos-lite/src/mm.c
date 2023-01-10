@@ -25,11 +25,11 @@ void free_page(void *p) {
 //我的理解，传入的参数是brk的改变量
 extern PCB *current;
 int mm_brk(uintptr_t increment) {
-	printf("123\n");
 	if((int32_t)increment < 0)//此时没有大于等于，不需要申请新的
 		return 0;
 	else
 	{
+		printf("increment: %p\n", increment);
 		int num_new_page = increment/PGSIZE + 1;
 		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
 		for(int i = 0; i < num_new_page; i++)
