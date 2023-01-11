@@ -87,7 +87,7 @@ static inline uintptr_t GET_BASE_ADDR(PTE p)//得到基地址
 void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//参考ICS课本图6.45和jianshu.com/6780c4ac272e，但要注意这里是riscv32架构
 	//printf("va %p, pa %p\n", (uintptr_t)va, (uintptr_t)pa);	
-	printf("处理v:%p, p:%p\n", (uintptr_t)va, (uintptr_t)pa);	
+	//printf("处理v:%p, p:%p\n", (uintptr_t)va, (uintptr_t)pa);	
 	uintptr_t page_directory_entry = (uintptr_t)as->ptr;//页目录的基地址
 	//printf("基地址%p\n", page_directory_entry);	
 	PTE *page_directory_item_entry = (PTE *)(page_directory_entry + GET_DIR((uintptr_t)va) * 4);
