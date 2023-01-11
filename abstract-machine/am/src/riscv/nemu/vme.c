@@ -96,9 +96,9 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	
 	//printf("页目录项值%p\n", (*page_directory_item_entry));	
 	//printf("页目录项地址%p\n", page_directory_item_entry);
+	printf("123\n");
 	if(((*page_directory_item_entry) & PTE_V) == 0)//研究其有效位是否为0,若为0说明二级表未分配
 	{
-		printf("123\n");
 		(*page_directory_item_entry) = ((*page_directory_item_entry) & 0x000003ff) + (PTE)pgalloc_usr(PGSIZE);
 		//高22位，存页表的地址，低2位一定为0
 		(*page_directory_item_entry) = ((*page_directory_item_entry) | PTE_V);
