@@ -29,13 +29,13 @@ int mm_brk(uintptr_t increment) {
 		return 0;
 	else
 	{
-		int num_page = increment/PGSIZE + 1;
+		int num_page = increment/PGSIZE;
 		void *alloc_p_start = new_page(num_page) - PGSIZE * num_page;
 		//printf("max_brk:%p\n", current->max_brk);
 		//printf("%d\n", num_page);
 		for(int i = 0; i < num_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
-		current->max_brk = ((current->max_brk + increment)/PGSIZE + 1)*PGSIZE;
+		current->max_brk = current->max_brk + increment;
 		//printf("finish mm_brk!\n");
 		return 0;
 	}
