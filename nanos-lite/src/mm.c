@@ -24,6 +24,8 @@ void free_page(void *p) {
 /*The brk() system call handler. */
 extern PCB *current;
 int mm_brk(uintptr_t brk) {
+	if(current -> max_brk == 0)
+		return 0;
 	if(brk < current->max_brk)//此时没有大于等于，不需要申请新的
 		return 0;
 	else
@@ -33,7 +35,7 @@ int mm_brk(uintptr_t brk) {
 		int num_page = now_page - pre_page + 1;
 		void *alloc_p_start = new_page(num_page) - PGSIZE * num_page;
 		//printf("max_brk:%p\n", current->max_brk);
-		printf("%d\n", num_page);
+		//printf("%d\n", num_page);
 		for(int i = 0; i < num_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
 		current->max_brk = brk;
