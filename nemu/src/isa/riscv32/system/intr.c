@@ -16,7 +16,7 @@
 #include <isa.h>
 #include <stdio.h>
 
-#define IRQ_TIMER -2;
+#define IRQ_TIMER 0x80000007;
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 
@@ -35,7 +35,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 }
 
 word_t isa_query_intr() {
-	if((cpu.mstatus&0x80) >> 7)//MPIE所在的位置
+	if((cpu.mstatus & 0x80) >> 7)//MPIE所在的位置
 	{
 		cpu.INTR = false;
 		return IRQ_TIMER;
