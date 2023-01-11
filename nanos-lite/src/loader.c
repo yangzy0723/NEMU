@@ -33,7 +33,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		
 		if(segment.p_type == PT_LOAD)
 		{
-			int num_page = segment.p_memsz / PGSIZE + 1;
+			int num_page = 0;
+			if(segment.p_memsz % PGSIZE == 0)
+				num_page = segment.p_memsz / PGSIZE;
+			else
+				num_page = segment.p_memsz / PGSIZE + 1;
 			void *start = new_page(num_page) - num_page * PGSIZE;
 			void *vaddr = (void *)segment.p_vaddr;
 			//printf("pcb->max_brk in loader:%p\n", pcb->max_brk);
