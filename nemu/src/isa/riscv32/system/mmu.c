@@ -45,10 +45,10 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	//printf("vaddr: %x\n", vaddr);
 	//printf("基地址%x\n", (int)page_directory_entry);
 	paddr_t page_directory_item_entry = page_directory_entry + GET_DIR((uintptr_t)vaddr) * 4;
-	//printf("%x 页目录地址\n", page_directory_item_entry);
+	printf("%x 页目录地址\n", page_directory_item_entry);
 	PTE page_directory_item = paddr_read(page_directory_item_entry, 4);
 	
-	//printf("%x nemu 页目录值\n", page_directory_item);
+	printf("%x nemu 页目录值\n", page_directory_item);
 	if((page_directory_item & 1) == 0)//检查valid位
 	{
 		printf("页目录项: %x匹配不上，该项地址为%x\n", page_directory_item, page_directory_item_entry);
