@@ -29,12 +29,10 @@ int mm_brk(uintptr_t increment) {
 		return 0;
 	else
 	{
-		printf("123\n");
 		int num_new_page = increment/PGSIZE + 1;
 		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
 		for(int i = 0; i < num_new_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
-		printf("1\n");
 		current->max_brk += increment;
 		printf("456\n");
 		return 0;
