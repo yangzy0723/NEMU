@@ -26,10 +26,7 @@ void free_page(void *p) {
 extern PCB *current;
 int mm_brk(uintptr_t increment) {
 	if((int32_t)increment < 0)//此时没有大于等于，不需要申请新的
-	{
-		printf("123\n");
 		return 0;
-	}
 	else
 	{
 		int num_page = increment/PGSIZE + 1;
