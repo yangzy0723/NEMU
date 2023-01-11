@@ -16,7 +16,7 @@
 #include <isa.h>
 #include <stdio.h>
 
-#define IRQ_TIMER 0x80000007;
+#define IRQ_TIMER 0x80000007
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 
@@ -24,7 +24,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 	printf("\nAt PC_ADDRESS " FMT_WORD ", an error is triggered. The error_num(cpu.mcause) is " FMT_WORD "\n\n", epc, NO);
 #endif
 	
-	if(NO >= -1 && NO <= 19)//一共而是种软中断错误
+	if(NO != IRQ_TIMER && NO != -1)//一共而是种软中断错误
 		cpu.mepc = epc + 4;
 	else
 		cpu.mepc = epc;
