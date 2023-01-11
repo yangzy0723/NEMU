@@ -95,7 +95,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//此处需要*4得到对应的页目录项，因为每个页目录项都是4个字节的
 	
 	//printf("页目录项值%p\n", (*page_directory_item_entry));	
-	printf("页目录项地址%p\n", page_directory_item_entry);
+	//printf("页目录项地址%p\n", page_directory_item_entry);
 	if(((*page_directory_item_entry) & PTE_V) == 0)//研究其有效位是否为0,若为0说明二级表未分配
 	{
 		(*page_directory_item_entry) = ((*page_directory_item_entry) & 0x000003ff) + (PTE)pgalloc_usr(PGSIZE);
