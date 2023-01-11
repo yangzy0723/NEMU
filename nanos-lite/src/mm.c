@@ -22,20 +22,19 @@ void free_page(void *p) {
 }
 
 /*The brk() system call handler. */
-//我的理解，传入的参数是brk的改变量
 extern PCB *current;
-int mm_brk(uintptr_t increment) {
-	if((int32_t)increment < 0)//此时没有大于等于，不需要申请新的
+int mm_brk(uintptr_t brk) {
+	if(brk < current->max_brk)//此时没有大于等于，不需要申请新的
 		return 0;
 	else
 	{
-		printf("current->max_brk: %p\n", current->max_brk);
-		int num_new_page = increment/PGSIZE + 1;
-		void *alloc_p_start = new_page(num_new_page) - PGSIZE * num_new_page;
-		for(int i = 0; i < num_new_page; i++)
+		int pre_page = current->max_brk/PGSIZE;
+		int now_page = (current->max_brk + brk)/PGSIZE;
+		int num_page = now_page - pre_page + 1;
+		void *alloc_p_start = new_page(num_page) - PGSIZE * num_page;
+		for(int i = 0; i < num_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
-		current->max_brk += increment;
-		printf("456\n");
+		current->max_brk = brk;
 		return 0;
 	}
 }
