@@ -98,6 +98,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	//printf("页目录项地址%p\n", page_directory_item_entry);
 	if(((*page_directory_item_entry) & PTE_V) == 0)//研究其有效位是否为0,若为0说明二级表未分配
 	{
+		printf("123\n");
 		(*page_directory_item_entry) = ((*page_directory_item_entry) & 0x000003ff) + (PTE)pgalloc_usr(PGSIZE);
 		//高22位，存页表的地址，低2位一定为0
 		(*page_directory_item_entry) = ((*page_directory_item_entry) | PTE_V);
@@ -105,7 +106,6 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
 	}
 
 	uintptr_t page_table_entry = GET_BASE_ADDR(*page_directory_item_entry);//得到页表基地址
-printf("123\n");	
 	PTE *page_table_item_entry = (PTE *)(page_table_entry + GET_PAGE((uintptr_t)va) * 4);//得到页表项的地址
 	(*page_table_item_entry) = ((*page_table_item_entry) & 0x000003ff) + (PTE)GET_BASE_ADDR((uintptr_t)pa >> 2);//取34位的高22位填充
 	(*page_table_item_entry) = (*page_table_item_entry) | PTE_V;
