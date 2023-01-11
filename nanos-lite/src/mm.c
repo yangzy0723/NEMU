@@ -37,7 +37,6 @@ int mm_brk(uintptr_t increment) {
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
 		current->max_brk = current->max_brk + increment;
 		//printf("finish mm_brk!\n");
-		printf("123\n");
 		return 0;
 	}
 }
