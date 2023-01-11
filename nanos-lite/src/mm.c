@@ -34,11 +34,12 @@ int mm_brk(uintptr_t brk) {
 		int now_page = brk/PGSIZE;
 		int num_page = now_page - pre_page + 1;
 		void *alloc_p_start = new_page(num_page) - PGSIZE * num_page;
-		printf("max_brk:%p\n", current->max_brk);
+		//printf("max_brk:%p\n", current->max_brk);
 		//printf("%d\n", num_page);
 		for(int i = 0; i < num_page; i++)
 			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
 		current->max_brk = brk;
+		printf("finish mm_brk!\n");
 		return 0;
 	}
 }
