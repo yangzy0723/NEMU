@@ -15,6 +15,9 @@
 
 #include <isa.h>
 #include <stdio.h>
+
+#define IRQ_TIMER -2;
+
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 
 #ifdef CONFIG_ETRACE
@@ -23,9 +26,19 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 
 	cpu.mepc = epc;
 	cpu.mcause = NO;
+	if((cpu.mstatus & 0x8) >> 3)
+		cpu.mstatus = cpu.mstatus | 0x80;
+	else
+		cpu.mstatus = cpu.mstatus & (~0x80);
+	cpu.mstatus = cpu.mstatus & (~0x8);//将MIE保存到MPIE中，将MIE置为0
 	return cpu.mtvec;
 }
 
 word_t isa_query_intr() {
-  return INTR_EMPTY;
+	if((cpu.mstatus&0x80) >> 7)//MPIE所在的位置
+	{
+		cpu.INTR = false;
+		return IRQ_TIMER;
+	}
+	return INTR_EMPTY;
 }

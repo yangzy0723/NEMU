@@ -145,6 +145,15 @@ void csrrc_function(word_t csr, word_t src1, word_t dest)
 	return;
 }
 
+void deal_with_IRQ_TIMER()
+{
+	if((cpu.mstatus & 0x80) >> 7)
+		cpu.mstatus = cpu.mstatus | 0x8;
+	else
+		cpu.mstatus = cpu.mstatus & (~0x8);
+	cpu.mstatus = cpu.mstatus | 0x80;//将MPIE保存到MIE中，将MPIE置为0
+}
+
 static int decode_exec(Decode *s) {
   int dest = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -217,7 +226,7 @@ static int decode_exec(Decode *s) {
 	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, csrrw_function(imm, src1, dest));	
 	INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , I, csrrc_function(imm, src1, dest));
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(isa_reg_str2val("a7", &success), s->pc));
-	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc + 4);
+	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, deal_with_IRQ_TIMER(), s->dnpc = cpu.mepc + 4);
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 

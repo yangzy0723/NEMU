@@ -48,7 +48,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			if(segment.p_filesz < segment.p_memsz)
 			{
 				pcb->max_brk = segment.p_vaddr + segment.p_memsz;
-				printf("%s set max_brk %p\n", filename, pcb->max_brk);
+				//printf("%s set max_brk %p\n", filename, pcb->max_brk);
 			}
 		}
 	}

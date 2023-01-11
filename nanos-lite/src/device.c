@@ -14,14 +14,13 @@ static const char *keyname[256] __attribute__((used)) = {
   AM_KEYS(NAME)
 };
 
-size_t serial_write(const void *buf, size_t offset, size_t len) {yield();
+size_t serial_write(const void *buf, size_t offset, size_t len) {
   for(int i = 0; i < len; i++)
 		putch(*(((char *)buf) + i));
 	return len;
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
-	yield();
 	AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
 	if(ev.keycode == AM_KEY_NONE)
 		return 0;
@@ -48,7 +47,6 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-	yield();
 	io_write(AM_GPU_FBDRAW, offset / 4 % w, offset / 4 / w, (uint32_t *)buf, len/4, 1, true);//按一行一行，将颜色信息写入，快好多
 	return len;
 }
