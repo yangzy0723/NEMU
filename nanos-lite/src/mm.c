@@ -29,7 +29,7 @@ int mm_brk(uintptr_t increment) {
 		return 0;
 	else
 	{
-		int num_page = increment/PGSIZE + 1;
+		int num_page = increment/PGSIZE + 2;
 		void *alloc_p_start = new_page(num_page) - PGSIZE * num_page;
 		printf("max_brk:%p\n", current->max_brk);
 		//printf("%d\n", num_page);
