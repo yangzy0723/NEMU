@@ -24,8 +24,8 @@ void free_page(void *p) {
 /*The brk() system call handler. */
 extern PCB *current;
 int mm_brk(uintptr_t brk) {
-	if(current->max_brk == 0)
-		current->max_brk = brk;
+	//if(current->max_brk == 0)
+		//current->max_brk = brk;
 	if(brk < current->max_brk)//此时没有大于等于，不需要申请新的
 		return 0;
 	else
