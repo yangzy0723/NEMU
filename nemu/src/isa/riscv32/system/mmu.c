@@ -17,9 +17,6 @@
 #include <memory/paddr.h>
 #include <memory/vaddr.h>
 
-#define PTE_V 0x01
-#define PTE_A 0x40
-#define PTE_D 0x80
 typedef uint32_t PTE;
 
 static inline uintptr_t GET_DIR(uintptr_t p)//页目录索引
@@ -52,7 +49,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	PTE page_directory_item = paddr_read(page_directory_item_entry, 4);
 	
 	//printf("%x nemu 页目录值\n", page_directory_item);
-	if((page_directory_item & PTE_V) == 0)//检查valid位
+	if((page_directory_item & 1) == 0)//检查valid位
 	{
 		printf("页目录项: %x匹配不上，该项地址为%x\n", page_directory_item, page_directory_item_entry);
 		assert(0);
@@ -64,12 +61,8 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 	//printf("page table item entry: %x\n", page_table_item_entry);
 	PTE page_table_item = paddr_read(page_table_item_entry, 4);
 	//printf("page table item: %x\n", page_table_item);
-	if(type == 0)//读
-		paddr_write(page_table_item_entry, 4, page_table_item | PTE_A);
-	else if(type == 1)//写
-		paddr_write(page_table_item_entry, 4, page_table_item | PTE_D);
 
-	if((page_table_item & PTE_V) == 0)//检查valid位
+	if((page_table_item & 1) == 0)//检查valid位
 	{
 		printf("页表项: %x匹配不上，该项地址为%x\n", page_table_item, page_table_item_entry);
 		assert(0);
