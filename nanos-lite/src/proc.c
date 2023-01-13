@@ -25,7 +25,7 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	context_uload(&pcb[0], "/bin/pal", NULL, NULL);
-	context_kload(&pcb[1], hello_fun, "yzy & zqy");
+	context_uload(&pcb[1], "/bin/hello", NULL, NULL);
   switch_boot_pcb();
 	Log("Initializing processes...");
 }
