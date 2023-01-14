@@ -86,7 +86,6 @@ static struct {
 	{ "p", "p EXPR: expression evaluation", cmd_p},
 	{ "w", "w EXPR: Pause the program when the value of expression EXPR changes", cmd_w},
 	{ "d", "d N: Delete the watchpoint N", cmd_d}
-  /* TODO: Add more commands */
 
 };
 

@@ -74,7 +74,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
 
 int isa_mmu_check(vaddr_t vaddr, int len, int type)
 {
-	if(((uint32_t)(cpu.satp & 0x80000000)) >> 31 == 1)
+	if(((uint32_t)(cpu.satp & 0x80000000)) >> 31)
 		return MMU_TRANSLATE;
 	else
 		return MMU_DIRECT;
