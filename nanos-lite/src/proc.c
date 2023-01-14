@@ -32,7 +32,7 @@ void init_proc() {
 	Log("Initializing processes...");
 }
 
-int which_app = 3;
+int which_app = 1;
 
 void switch_to_pal()
 {
