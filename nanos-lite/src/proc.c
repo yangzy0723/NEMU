@@ -50,7 +50,7 @@ void switch_to_menu()
 }
 Context* schedule(Context *prev) {
 	current->cp = prev;
-	current = current == &pcb[which_app] ? &pcb[0] : &pcb[1];
+	current = current == &pcb[0] ? &pcb[which_app] : &pcb[0];
 	//current = &pcb[0];
 	return current->cp;
 }
