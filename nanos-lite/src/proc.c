@@ -25,8 +25,8 @@ void hello_fun(void *arg) {
 
 void init_proc() {
 	context_kload(&pcb[0], hello_fun, "yzy & zqy");
-	context_uload(&pcb[1], "/bin/bird", NULL, NULL);
-	context_uload(&pcb[2], "/bin/pal", NULL, NULL);
+	context_uload(&pcb[1], "/bin/pal", NULL, NULL);
+	context_uload(&pcb[2], "/bin/bird", NULL, NULL);
 	context_uload(&pcb[3], "/bin/menu", NULL, NULL);
   switch_boot_pcb();
 	Log("Initializing processes...");
