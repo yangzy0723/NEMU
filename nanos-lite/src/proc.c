@@ -6,9 +6,10 @@ void naive_uload(PCB *pcb, const char *filename);
 void context_kload(PCB *pcb, void(*entry)(void *), void *arg);
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]);
 
-static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
+PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 PCB *current = NULL;
+int now_pcb = 1;
 
 void switch_boot_pcb() {
   current = &pcb_boot;
@@ -32,24 +33,23 @@ void init_proc() {
 	Log("Initializing processes...");
 }
 
-int which_app = 1;
 void switch_to_pal()
 {
-	which_app = 1;
+	now_pcb = 1;
 }
 
 void switch_to_bird()
 {
-	which_app = 2;
+	now_pcb = 2;
 }
 
 void switch_to_menu()
 {
-	which_app = 3;
+	now_pcb = 3;
 }
 Context* schedule(Context *prev) {
 	current->cp = prev;
-	current = current == &pcb[0] ? &pcb[which_app] : &pcb[0];
+	current = current == &pcb[0] ? &pcb[now_pcb] : &pcb[0];
 	//current = &pcb[0];
 	return current->cp;
 }

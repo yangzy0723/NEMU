@@ -1,6 +1,8 @@
 #include <memory.h>
 #include <proc.h>
 
+#define MAX_NR_PROC 4
+
 static void *pf = NULL;
 
 void* new_page(size_t nr_page) {
@@ -23,7 +25,8 @@ void free_page(void *p) {
 
 /*The brk() system call handler. */
 //理解为传入brk的变化量
-extern PCB *current;
+extern PCB pcb[MAX_NR_PROC];
+extern int now_pcb;
 int mm_brk(uintptr_t increment) {
 	if((int32_t)increment < 0)//此时没有大于等于，不需要申请新的
 		return 0;
@@ -34,7 +37,7 @@ int mm_brk(uintptr_t increment) {
 		//printf("max_brk:%p\n", current->max_brk);
 		//printf("%d\n", num_page);
 		for(int i = 0; i < num_page; i++)
-			map(&(current->as), (void *)((current->max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
+			map(&(current->as), (void *)((pcb[now_pcb].max_brk & 0xfffff000) + i * PGSIZE), alloc_p_start + i * PGSIZE, 0);
 		current->max_brk = current->max_brk + increment;
 		//printf("finish mm_brk!\n");
 		return 0;
