@@ -1,5 +1,8 @@
 #include <common.h>
 
+void switch_to_pal();
+void switch_to_bird();
+void switch_to_menu();
 #if defined(MULTIPROGRAM) && !defined(TIME_SHARING)
 # define MULTIPROGRAM_YIELD() yield()
 #else
@@ -24,15 +27,33 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
 	if(ev.keycode == AM_KEY_NONE)
 		return 0;
-	memset((char *)buf, 0, strlen((char *)buf));//每用完一次，将整个以buf指针为首的字符串清0
-	if(ev.keydown)
-		strcat((char*)buf, "kd ");
+	else if(ev.keycode == AM_KEY_F1)
+	{
+		switch_to_pal();
+		return 0;
+	}
+	else if(ev.keycode == AM_KEY_F2)
+	{
+		switch_to_bird();
+		return 0;
+	}
+	else if(ev.keycode == AM_KEY_F3)
+	{
+		switch_to_menu();
+		return 0;
+	}
 	else
-		strcat((char*)buf, "ku ");
-	strcat((char*)buf, keyname[ev.keycode]);
-	*(char *)(buf + strlen((char *)buf)) = '\n';//一个事件以换行符\n结束
-	*(char *)(buf + strlen((char *)buf)+ 1) = 0;
-	return strlen((char *)buf);
+	{
+		memset((char *)buf, 0, strlen((char *)buf));//每用完一次，将整个以buf指针为首的字符串清0
+		if(ev.keydown)
+			strcat((char*)buf, "kd ");
+		else
+			strcat((char*)buf, "ku ");
+		strcat((char*)buf, keyname[ev.keycode]);
+		*(char *)(buf + strlen((char *)buf)) = '\n';//一个事件以换行符\n结束
+		*(char *)(buf + strlen((char *)buf)+ 1) = 0;
+		return strlen((char *)buf);
+	}
 }
 
 static int w;

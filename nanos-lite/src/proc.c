@@ -24,15 +24,33 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-	context_uload(&pcb[0], "/bin/nterm", NULL, NULL);
-	context_kload(&pcb[1], hello_fun, "yzy & zqy");
+	context_kload(&pcb[0], hello_fun, "yzy & zqy");
+	context_uload(&pcb[1], "/bin/pal", NULL, NULL);
+	context_uload(&pcb[2], "/bin/bird", NULL, NULL);
+	context_uload(&pcb[3], "/bin/menu", NULL, NULL);
   switch_boot_pcb();
 	Log("Initializing processes...");
 }
 
+int which_app = 1;
+
+void switch_to_pal()
+{
+	which_app = 1;
+}
+
+void switch_to_bird()
+{
+	which_app = 2;
+}
+
+void switch_to_menu()
+{
+	which_app = 3;
+}
 Context* schedule(Context *prev) {
 	current->cp = prev;
-	current = current == &pcb[1] ? &pcb[0] : &pcb[1];
+	current = current == &pcb[which_app] ? &pcb[0] : &pcb[1];
 	//current = &pcb[0];
 	return current->cp;
 }
