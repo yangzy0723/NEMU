@@ -7,7 +7,7 @@
 
 size_t strlen(const char* s);
 
-int write_10(int x)
+int write_10(int x)//以10进制方式去写一个数
 {
 	int num = 0;
 	if(x < 0)

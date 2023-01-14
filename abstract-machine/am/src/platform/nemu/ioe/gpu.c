@@ -26,15 +26,15 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl)
 	uint32_t get_information = inl(VGACTL_ADDR);//获取设备长宽信息
 	uint32_t Width = (get_information >> 16) & 0x0000ffff;
 	/*uint32_t Height = get_information & 0x0000ffff; 用不到*/
-	uint32_t dy_x = ctl -> x;
-	uint32_t dy_y = ctl -> y;
-	uint32_t *pixels_live = (uint32_t *)ctl -> pixels;
+	uint32_t dy_x = ctl->x;
+	uint32_t dy_y = ctl->y;
+	uint32_t *pixels_live = (uint32_t *)ctl->pixels;
   if (ctl->sync) 
     outl(SYNC_ADDR, 1);
-	for(int i = 0; i < ctl -> h; i++)
+	for(int i = 0; i < ctl->h; i++)
 	{
-		for(int j = 0; j < ctl -> w; j++)
-			outl(FB_ADDR + (Width * dy_y + dy_x + j)*4, pixels_live[i * ctl->w + j]);
+		for(int j = 0; j < ctl->w; j++)
+			outl(FB_ADDR + (Width * dy_y + dy_x + j) * 4, pixels_live[i * ctl->w + j]);
 		dy_y++;
 	}
 }
