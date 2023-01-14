@@ -6,7 +6,7 @@ void naive_uload(PCB *pcb, const char *filename);
 void context_kload(PCB *pcb, void(*entry)(void *), void *arg);
 void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]);
 
-PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
+static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
 
@@ -32,7 +32,7 @@ void init_proc() {
 	Log("Initializing processes...");
 }
 
-int which_app = 2;
+int which_app = 1;
 void switch_to_pal()
 {
 	which_app = 1;
